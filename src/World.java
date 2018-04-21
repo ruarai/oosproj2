@@ -1,3 +1,4 @@
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 
 import java.util.ArrayList;
@@ -42,6 +43,10 @@ public class World {
     }
 	
 	public void update(Input input, int delta) {
+	    if(input.isKeyDown(Input.KEY_S))
+	        delta *= 5;
+
+
 	    //clear the list of entities to add/remove
         newEntities.clear();
         deadEntities.clear();
@@ -57,10 +62,17 @@ public class World {
         entities.removeAll(deadEntities);
 	}
 	
-	public void render() {
+	public void render(Graphics g) {
 	    //render each entity
         for(Entity e : entities) {
             e.render();
+
+            if(e instanceof Sprite)
+            {
+                Sprite s = (Sprite)e;
+
+                g.draw(s.getBoundingBox());
+            }
         }
 	}
 }

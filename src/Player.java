@@ -4,7 +4,7 @@ import org.newdawn.slick.geom.Vector2f;
 
 //Sprite that represents the player and associated logic
 class Player extends Sprite {
-    private final float MOVE_ACCEL = 0.001f;
+    private final float MOVE_ACCEL = 0.01f;
 
     private final float ROTATION_SPEED = 0.1f;
 
@@ -13,24 +13,37 @@ class Player extends Sprite {
     }
     public Player(Image img, Vector2f v, World parent) { super(img, v, parent); }
 
+    //indicates number of ms left until player can shoot a laser again
+    private int shotDelay = 0;
+
     @Override
     public void update(Input input, int delta) {
         move(input, delta);
 
         //See if we need to shoot a laser
         //Use isKeyPressed to ensure 1 laser per key press
-        if(input.isKeyPressed(Input.KEY_SPACE))
+        if(input.isKeyDown(Input.KEY_SPACE) && shotDelay <= 0)
         {
             //So shoot a laser!
-            parentWorld.addEntity(new Laser(Resources.shot,this.getCentre(),parentWorld));
+
+            Laser laser = new Laser(Resources.shot,this.getCentre(),parentWorld, rotation);
+            parentWorld.addEntity(laser);
+
+            shotDelay = 250;
         }
+
+        if(shotDelay > 0)
+            shotDelay -= delta;
     }
 
 
     //Method to calculate movement
-    //Separate this so that we can perform more complex logic later
     private void move(Input input, int delta)
     {
+        Vector2f friction = new Vector2f(velocity);
+        friction.scale(0.01f);
+        velocity.sub(friction);
+
         Vector2f thrust = new Vector2f();
 
         //respond to key inputs
@@ -43,11 +56,16 @@ class Player extends Sprite {
         if(input.isKeyDown(Input.KEY_RIGHT))
             rotation += ROTATION_SPEED * delta;
 
-        velocity = velocity.add(thrust);
 
-        location = location.add(velocity);
+        Vector2f drift = new Vector2f();
+        velocity.projectOntoUnit(new Vector2f(rotation - 90),drift);
+        drift.sub(velocity);
+        drift.scale(1.5f);
 
+        velocity.add(thrust);
+        velocity.add(drift);
 
+        location.add(velocity);
 
 
         //handle the literal edgecases:
