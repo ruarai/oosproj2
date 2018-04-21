@@ -1,12 +1,17 @@
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
+import org.newdawn.slick.geom.Vector2f;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 
 public class World {
 
     public ArrayList<Entity> entities = new ArrayList<>();
+
+    private final boolean RENDER_BOUNDING_BOX = false;
 
 	public World() {
 	    //Load in all the imagery
@@ -67,7 +72,7 @@ public class World {
         for(Entity e : entities) {
             e.render();
 
-            if(e instanceof Sprite)
+            if(RENDER_BOUNDING_BOX && e instanceof Sprite)
             {
                 Sprite s = (Sprite)e;
 
@@ -75,4 +80,16 @@ public class World {
             }
         }
 	}
+
+    public void createExplosion(Image img, Vector2f location, int num)
+    {
+        for (int i = 0; i < num; i ++)
+        {
+            Image subImage = Utility.getRandomSubImage(img);
+
+            ExplosionParticle particle = new ExplosionParticle(subImage,location,this);
+
+            newEntities.add(particle);
+        }
+    }
 }

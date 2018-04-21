@@ -3,6 +3,8 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.geom.Vector2f;
 
+import java.util.Random;
+
 //A laser Sprite that moves upwards and destroys enemies
 public class Laser extends Sprite {
 
@@ -34,6 +36,8 @@ public class Laser extends Sprite {
                 {
                     //Kill the enemy, it intersects with us, the laser
                     parentWorld.killEntity(enemy);
+
+                    parentWorld.createExplosion(enemy.image,enemy.getCentre(),10);
                 }
             }
         }
