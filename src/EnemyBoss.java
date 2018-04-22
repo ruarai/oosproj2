@@ -18,7 +18,7 @@ public class EnemyBoss extends Enemy {
         super(Resources.boss, location, parent);
     }
 
-    public State currentState = State.InitialWalk;
+    private State currentState = State.InitialWalk;
     private float xGoal;
     private boolean xGoalHigher;
 
@@ -131,7 +131,7 @@ public class EnemyBoss extends Enemy {
     }
 
 
-    public enum State {
+    private enum State {
         InitialWalk,
         FirstWait,
         RandomXWalk,

@@ -6,7 +6,7 @@ import org.newdawn.slick.geom.Vector2f;
 //Sprite that represents the player and associated logic
 class Player extends Sprite {
     private static final float MOVE_ACCEL = 0.01f;
-    private static final float RECOIL_ACCEL = 0.1f;
+    private static final float RECOIL_ACCEL = 0.01f;
     private static final float ROTATION_SPEED = 0.1f;
     private static final float FRICTION_SCALE = 0.01f;
     private static final float DRIFT_SCALE = 1.7f;

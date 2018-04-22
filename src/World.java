@@ -3,7 +3,11 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.geom.Vector2f;
 
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.stream.Stream;
 
 
 public class World {
@@ -23,8 +27,32 @@ public class World {
         Vector2f playerDefault = new Vector2f(480,688);
         entities.add(new Player(playerDefault,this));
 
-        entities.add(new EnemyBoss(new Vector2f(480,0),this));
+        createWorld();
 	}
+
+	private void createWorld(){
+	    try(Stream<String> lines = Files.lines(Paths.get("res","waves.txt"))){
+
+	        for (String line : (Iterable<String>)lines::iterator){
+	            //Ignore comments:
+	            if(line.startsWith("#"))
+	                continue;
+
+	            //Parse the line for name, pos and delay
+                String[] parts = line.split(",");
+                String name = parts[0];
+                int xPosition = Integer.parseInt(parts[1]);
+                int delay = Integer.parseInt(parts[2]);
+
+                //Add a new spawner that will spawn the enemy
+                entities.add(new EnemySpawner(name,xPosition,delay,this));
+            }
+
+        } catch (IOException e){
+	        System.out.println("Failed to read the waves file.");
+	        System.out.println(e);
+        }
+    }
 
 	//temporary list that we can add entities to during enumeration of actual entities list
     //prevents a concurrentModificationException
@@ -66,7 +94,9 @@ public class World {
         entities.removeAll(deadEntities);
 	}
 	
-	public void render(Graphics graphics) {
+	public void render(Graphics graphics, int scale) {
+	    graphics.scale(scale,scale);
+
 	    //render each entity
         for(Entity e : entities) {
             e.render(graphics);

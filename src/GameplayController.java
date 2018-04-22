@@ -44,7 +44,7 @@ public class GameplayController extends Entity {
 
     public void render(Graphics graphics) {
 
-        graphics.translate(shakeLife * 7f * (float)Math.sin(timeElapsed),shakeLife * 7f * (float)Math.cos(timeElapsed));
+        graphics.translate(shakeLife * 3f * (float)Math.sin(timeElapsed),shakeLife * 3f * (float)Math.cos(timeElapsed));
 
 
         graphics.drawString("Score:" + playerScore,SCORE_OFFSET.x,SCORE_OFFSET.y);
@@ -55,7 +55,6 @@ public class GameplayController extends Entity {
         for (int i = 0; i < playerLives; i ++)
         {
             Resources.spaceship.draw(LIVES_OFFSET.x + LIVES_GAP * i,LIVES_OFFSET.y,0.5f);
-
         }
     }
 

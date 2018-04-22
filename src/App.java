@@ -19,6 +19,8 @@ public class App extends BasicGame {
     public static final int SCREEN_WIDTH = 1024;
     /** screen height, in pixels */
     public static final int SCREEN_HEIGHT = 768;
+
+    public static final int SCREEN_SCALE = 2;
     
     private World world;
 
@@ -50,7 +52,7 @@ public class App extends BasicGame {
      */
     public void render(GameContainer gc, Graphics g)
     		throws SlickException {
-    	world.render(g);
+    	world.render(g, SCREEN_SCALE);
     }
 
     /** Start-up method. Creates the game and runs it.
@@ -60,7 +62,7 @@ public class App extends BasicGame {
     		throws SlickException {
         AppGameContainer app = new AppGameContainer(new App());
         app.setShowFPS(true);
-        app.setDisplayMode(SCREEN_WIDTH, SCREEN_HEIGHT, false);
+        app.setDisplayMode(SCREEN_WIDTH * SCREEN_SCALE, SCREEN_HEIGHT * SCREEN_SCALE, false);
         app.start();
     }
 
