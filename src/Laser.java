@@ -37,7 +37,7 @@ public class Laser extends Sprite {
                     //Kill the enemy, it intersects with us, the laser
                     parentWorld.killEntity(enemy);
 
-                    parentWorld.createExplosion(enemy.image,enemy.getCentre(),10);
+                    parentWorld.createExplosion(enemy.image,enemy.getCentre(),100);
                 }
             }
         }

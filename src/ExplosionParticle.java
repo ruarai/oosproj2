@@ -16,7 +16,7 @@ public class ExplosionParticle extends Sprite {
     private final float LIFE_START_RANDOM_SCALE = 0.3f;
 
     private float rotationSpeed;
-    private float life = 1;
+    private float life;
 
     public ExplosionParticle(Image img, Vector2f location, World parent) {
         super(img, location, parent);
@@ -26,7 +26,7 @@ public class ExplosionParticle extends Sprite {
 
         rotationSpeed = (Utility.random.nextFloat()-0.5f) * ROTATION_SCALE;
 
-        life = life + (Utility.random.nextFloat()-0.5f) * LIFE_START_RANDOM_SCALE;
+        life = 1f + (Utility.random.nextFloat()-0.5f) * LIFE_START_RANDOM_SCALE;
     }
 
 
@@ -38,16 +38,10 @@ public class ExplosionParticle extends Sprite {
 
         life -= delta * LIFE_DECAY;
 
-        if(Utility.offScreen(location))
+        if(Utility.offScreen(location) || life < 0)
         {
             parentWorld.killEntity(this);
         }
-
-        if(life < 0)
-        {
-            parentWorld.killEntity(this);
-            parentWorld.createExplosion(Resources.shot,location,5);
-        } 
     }
 
 

@@ -8,10 +8,10 @@ class Player extends Sprite {
 
     private final float ROTATION_SPEED = 0.1f;
 
-    public Player(Image img, float x, float y, World parent) {
-        super(img, x, y, parent);
+    public Player(float x, float y, World parent) {
+        super(Resources.spaceship, x, y, parent);
     }
-    public Player(Image img, Vector2f v, World parent) { super(img, v, parent); }
+    public Player(Vector2f v, World parent) { super(Resources.spaceship, v, parent); }
 
     //indicates number of ms left until player can shoot a laser again
     private int shotDelay = 0;
@@ -19,6 +19,8 @@ class Player extends Sprite {
     @Override
     public void update(Input input, int delta) {
         move(input, delta);
+
+        keepOnScreen();
 
         //See if we need to shoot a laser
         //Use isKeyPressed to ensure 1 laser per key press
@@ -66,8 +68,11 @@ class Player extends Sprite {
         velocity.add(drift);
 
         location.add(velocity);
+    }
 
-
+    //Method to keep the object on the screen
+    private void keepOnScreen()
+    {
         //handle the literal edgecases:
         if(location.x > App.SCREEN_WIDTH - image.getWidth())
             location.x = App.SCREEN_WIDTH - image.getWidth();
@@ -80,7 +85,6 @@ class Player extends Sprite {
 
         if(location.y < 0)
             location.y = 0;
-
     }
 
 }

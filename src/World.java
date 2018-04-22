@@ -20,12 +20,12 @@ public class World {
 	    entities.add(new Background());
 
 	    //Create a Player sprite centred on (480,688)
-        entities.add(new Player(Resources.spaceship,480,688,this));
+        entities.add(new Player(480,688,this));
 
         //Create 8 Enemy sprites
         for (int i = 0; i < 8; i++)
         {
-            entities.add(new Enemy(Resources.enemy,64 + i * 128,28,this));
+            entities.add(new BasicEnemy(64 + i * 128,28,this));
         }
 	}
 
