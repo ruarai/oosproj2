@@ -27,7 +27,7 @@ public class World {
         for (int i = 0; i < 8; i++)
         {
             Vector2f enemyLocation = new Vector2f(64 + i * 128,28);
-            entities.add(new EnemyBasic(enemyLocation,this));
+            entities.add(new EnemySine(enemyLocation,this));
         }
 	}
 
@@ -83,6 +83,7 @@ public class World {
                 graphics.draw(s.getBoundingBox());
             }
         }
+
 	}
 
 	//Allows for the creation of an explosion

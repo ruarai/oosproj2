@@ -1,7 +1,4 @@
-import org.newdawn.slick.Color;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
-import org.newdawn.slick.Input;
+import org.newdawn.slick.*;
 import org.newdawn.slick.geom.Vector2f;
 
 //A laser Sprite that moves upwards and destroys enemies
@@ -12,6 +9,8 @@ public class Laser extends Sprite {
 
     private static final int ENEMY_EXPLOSION_SIZE = 100;
     private static final float ENEMY_EXPLOSION_SCALE = 0.15f;
+    private static final int LASER_EXPLOSION_SIZE = 200;
+    private static final float LASER_EXPLOSION_SCALE = 0.4f;
 
     public Laser(Image img, Vector2f location, World parent, float rotation)
     {
@@ -36,6 +35,9 @@ public class Laser extends Sprite {
 
                 //Create a cool explosion (very very important!)
                 parentWorld.createExplosion(enemy.image,location,ENEMY_EXPLOSION_SIZE,ENEMY_EXPLOSION_SCALE, velocity);
+                parentWorld.createExplosion(Resources.shot,location,LASER_EXPLOSION_SIZE,LASER_EXPLOSION_SCALE, new Vector2f(velocity).scale(2));
+
+                parentWorld.getEntity(GameplayController.class).shakeScreen();
 
                 parentWorld.getEntity(GameplayController.class).enemyDeath(enemy);
             }

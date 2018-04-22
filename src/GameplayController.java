@@ -25,9 +25,28 @@ public class GameplayController extends Entity {
         if(shieldTime > 0){
             shieldTime -= delta;
         }
+
+        timeElapsed += delta;
+
+        if(shakeLife > 0)
+            shakeLife -= delta * 0.001f;
+        else
+            shakeLife = 0;
+
     }
 
+    public void shakeScreen(){
+        shakeLife = 1;
+    }
+
+    private float timeElapsed = 0;
+    private float shakeLife = 0;
+
     public void render(Graphics graphics) {
+
+        graphics.translate(shakeLife * 7f * (float)Math.sin(timeElapsed),shakeLife * 7f * (float)Math.cos(timeElapsed));
+
+
         graphics.drawString("Score:" + playerScore,SCORE_OFFSET.x,SCORE_OFFSET.y);
 
         //Make sure the spaceship is upright:

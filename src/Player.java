@@ -6,8 +6,10 @@ import org.newdawn.slick.geom.Vector2f;
 //Sprite that represents the player and associated logic
 class Player extends Sprite {
     private static final float MOVE_ACCEL = 0.01f;
-
+    private static final float RECOIL_ACCEL = 0.1f;
     private static final float ROTATION_SPEED = 0.1f;
+    private static final float FRICTION_SCALE = 0.01f;
+    private static final float DRIFT_SCALE = 1.7f;
 
     private static final int SHIELD_OFFSET = 16;
 
@@ -33,6 +35,9 @@ class Player extends Sprite {
             Laser laser = new Laser(Resources.shot,this.getCentre(),parentWorld, rotation);
             parentWorld.addEntity(laser);
 
+            Vector2f recoil = new Vector2f(rotation - 90).scale(-RECOIL_ACCEL * delta);
+            velocity.add(recoil);
+
             shotDelay = SHOT_DELAY;
         }
 
@@ -57,10 +62,12 @@ class Player extends Sprite {
     private void move(Input input, int delta)
     {
         Vector2f friction = new Vector2f(velocity);
-        friction.scale(0.01f);
+        friction.scale(FRICTION_SCALE);//fix???
         velocity.sub(friction);
 
         Vector2f thrust = new Vector2f();
+
+        float rotationScale = Math.max(3-velocity.lengthSquared()/5f,1f);
 
         //respond to key inputs
         if(input.isKeyDown(Input.KEY_UP))
@@ -68,15 +75,15 @@ class Player extends Sprite {
         if(input.isKeyDown(Input.KEY_DOWN))
             thrust = new Vector2f(rotation - 90).scale(-MOVE_ACCEL * delta);
         if(input.isKeyDown(Input.KEY_LEFT))
-            rotation += -ROTATION_SPEED * delta;
+            rotation += -ROTATION_SPEED * delta * rotationScale;
         if(input.isKeyDown(Input.KEY_RIGHT))
-            rotation += ROTATION_SPEED * delta;
+            rotation += ROTATION_SPEED * delta * rotationScale;
 
 
         Vector2f drift = new Vector2f();
         velocity.projectOntoUnit(new Vector2f(rotation - 90),drift);
         drift.sub(velocity);
-        drift.scale(1.5f);
+        drift.scale(DRIFT_SCALE);
 
         velocity.add(thrust);
         velocity.add(drift);

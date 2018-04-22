@@ -25,6 +25,8 @@ abstract class Enemy extends Sprite {
             //If so, 'kill' the player
             parentWorld.getEntity(GameplayController.class).playerDeath();
 
+            player.velocity.add(new Vector2f(velocity).scale(0.1f));
+
 
             //Create a cool explosion also, if we haven't recently
             if(explosionDelay <= 0)
