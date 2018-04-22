@@ -23,12 +23,7 @@ public class World {
         Vector2f playerDefault = new Vector2f(480,688);
         entities.add(new Player(playerDefault,this));
 
-        //Create 8 Enemy sprites
-        for (int i = 0; i < 8; i++)
-        {
-            Vector2f enemyLocation = new Vector2f(64 + i * 128,28);
-            entities.add(new EnemySine(enemyLocation,this));
-        }
+        entities.add(new EnemyBoss(new Vector2f(480,0),this));
 	}
 
 	//temporary list that we can add entities to during enumeration of actual entities list
