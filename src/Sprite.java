@@ -1,3 +1,4 @@
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.geom.Polygon;
@@ -33,12 +34,6 @@ abstract class Sprite implements Entity {
     }
 
 
-    //Create a new sprite from specified file with a default location x, y
-    //Leave the work to the other constructor
-    public Sprite(Image img, float x, float y, World parent) {
-        this(img,new Vector2f(x,y),parent);
-	}
-
     //Create a new sprite from specified file with a default location vector v
     public Sprite(Image img, Vector2f v, World parent) {
         this.image = img;
@@ -54,7 +49,7 @@ abstract class Sprite implements Entity {
 	abstract public void update(Input input, int delta);
 
 	//but rendering is the same across all sprites
-	public void render()
+	public void render(Graphics graphics)
     {
         image.setRotation(rotation);
         image.draw(location.x,location.y);

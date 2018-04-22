@@ -1,3 +1,4 @@
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 
@@ -30,7 +31,7 @@ class Background implements Entity {
         scroll = (scroll + delta * SCROLL_SPEED) % (yRepeats * backgroundImage.getHeight());
     }
 
-    public void render() {
+    public void render(Graphics graphics) {
 
         //Tile horizontally from left to right
         for (int x = 0; x < xRepeats;x++)

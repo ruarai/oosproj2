@@ -2,10 +2,7 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.geom.Vector2f;
 
-class Enemy extends Sprite {
-    public Enemy(Image img, float x, float y, World parent) {
-        super(img, x, y, parent);
-    }
+abstract class Enemy extends Sprite {
     public Enemy(Image img, Vector2f v, World parent) { super(img, v, parent); }
 
     public void update(Input input, int delta) {
@@ -26,4 +23,10 @@ class Enemy extends Sprite {
             }
         }
     }
+
+    //Returns the score value of the enemy
+    public abstract int getScoreValue();
+
+    //Returns whether the enemy can be destroyed by the players laser shots
+    public abstract boolean getDestroyable();
 }

@@ -4,7 +4,6 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.geom.Vector2f;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 
 public class World {
@@ -18,14 +17,17 @@ public class World {
 	    Resources.loadResources();
 
 	    entities.add(new Background());
+	    entities.add(new GameplayController());
 
 	    //Create a Player sprite centred on (480,688)
-        entities.add(new Player(480,688,this));
+        Vector2f playerDefault = new Vector2f(480,688);
+        entities.add(new Player(playerDefault,this));
 
         //Create 8 Enemy sprites
         for (int i = 0; i < 8; i++)
         {
-            entities.add(new BasicEnemy(64 + i * 128,28,this));
+            Vector2f enemyLocation = new Vector2f(64 + i * 128,28);
+            entities.add(new EnemyShooter(enemyLocation,this));
         }
 	}
 
@@ -49,7 +51,9 @@ public class World {
 	
 	public void update(Input input, int delta) {
 	    if(input.isKeyDown(Input.KEY_S))
-	        delta *= 5;
+	        delta *= 5f;
+        if(input.isKeyDown(Input.KEY_D))
+            delta /= 5f;
 
 
 	    //clear the list of entities to add/remove
@@ -67,20 +71,22 @@ public class World {
         entities.removeAll(deadEntities);
 	}
 	
-	public void render(Graphics g) {
+	public void render(Graphics graphics) {
 	    //render each entity
         for(Entity e : entities) {
-            e.render();
+            e.render(graphics);
 
             if(RENDER_BOUNDING_BOX && e instanceof Sprite)
             {
                 Sprite s = (Sprite)e;
 
-                g.draw(s.getBoundingBox());
+                graphics.draw(s.getBoundingBox());
             }
         }
 	}
 
+	//Allows for the creation of an explosion
+    //Obviously very important
     public void createExplosion(Image img, Vector2f location, int num)
     {
         for (int i = 0; i < num; i ++)

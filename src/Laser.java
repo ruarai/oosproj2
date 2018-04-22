@@ -1,4 +1,5 @@
 import org.newdawn.slick.Color;
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.geom.Vector2f;
@@ -32,7 +33,7 @@ public class Laser extends Sprite {
             {
                 Enemy enemy = (Enemy)e;
 
-                if(enemy.getBoundingBox().intersects(this.getBoundingBox()))
+                if(enemy.getDestroyable() && enemy.getBoundingBox().intersects(this.getBoundingBox()))
                 {
                     //Kill the enemy, it intersects with us, the laser
                     parentWorld.killEntity(enemy);
@@ -49,7 +50,7 @@ public class Laser extends Sprite {
             parentWorld.killEntity(this);
     }
 
-    public void render() {
+    public void render(Graphics graphics) {
         Vector2f behind = new Vector2f(velocity);
         behind.scale(-0.1f);
 

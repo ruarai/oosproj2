@@ -1,3 +1,4 @@
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 
 //Basic interface for any 'object' that appears on screen and has logic/rendering
@@ -6,5 +7,5 @@ public interface Entity {
     public void update(Input input, int delta);
 
     //called every frame render
-    public void render();
+    public void render(Graphics g);
 }

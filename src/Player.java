@@ -8,9 +8,8 @@ class Player extends Sprite {
 
     private final float ROTATION_SPEED = 0.1f;
 
-    public Player(float x, float y, World parent) {
-        super(Resources.spaceship, x, y, parent);
-    }
+    private final int SHOT_DELAY = 250;
+
     public Player(Vector2f v, World parent) { super(Resources.spaceship, v, parent); }
 
     //indicates number of ms left until player can shoot a laser again
@@ -31,9 +30,10 @@ class Player extends Sprite {
             Laser laser = new Laser(Resources.shot,this.getCentre(),parentWorld, rotation);
             parentWorld.addEntity(laser);
 
-            shotDelay = 250;
+            shotDelay = SHOT_DELAY;
         }
 
+        //Run down the delay
         if(shotDelay > 0)
             shotDelay -= delta;
     }
