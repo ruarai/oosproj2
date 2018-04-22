@@ -3,7 +3,7 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 
 //The background is a separate entity that renders the scrolling background without sprite logic (e.g. fixed location)
-class Background implements Entity {
+class Background extends Entity {
 
     private Image backgroundImage;
 
@@ -13,10 +13,11 @@ class Background implements Entity {
     private int xRepeats;
     private int yRepeats;
 
-    private final float SCROLL_SPEED = 0.2f;
+    private static final float SCROLL_SPEED = 0.2f;
 
-    public Background()
+    public Background(World parentWorld)
     {
+        super(parentWorld);
         backgroundImage = Resources.space;
 
         //Calculate the number of times we can tile the background

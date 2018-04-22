@@ -45,7 +45,7 @@ public class EnemyShooter extends Enemy {
             if(shotDelay <= 0)
             {
                 //Yep, let's shoot a laser and reset our delay
-                parentWorld.addEntity(new EnemyShot(location,parentWorld));
+                parentWorld.addEntity(new EnemyShot(getCentre(),parentWorld));
                 shotDelay = SHOT_DELAY;
             }
             else {

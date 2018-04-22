@@ -4,13 +4,14 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.geom.Vector2f;
 
-import java.util.Random;
-
 //A laser Sprite that moves upwards and destroys enemies
 public class Laser extends Sprite {
 
     //The speed that the laser moves upwards on the screen
-    private final float VELOCITY_MAGNITUDE = 3f;
+    private static final float VELOCITY_MAGNITUDE = 3f;
+
+    private static final int ENEMY_EXPLOSION_SIZE = 100;
+    private static final float ENEMY_EXPLOSION_SCALE = 0.15f;
 
     public Laser(Image img, Vector2f location, World parent, float rotation)
     {
@@ -28,18 +29,15 @@ public class Laser extends Sprite {
         location.add(velocity);
 
         //Look for enemies to kill:
-        for (Entity e : parentWorld.entities) {
-            if(e instanceof Enemy)
-            {
-                Enemy enemy = (Enemy)e;
+        for (Enemy enemy : parentWorld.getEntitiesOfType(Enemy.class)) {
+            if (enemy.getDestroyable() && enemy.getBoundingBox().intersects(this.getBoundingBox())) {
+                //Kill the enemy
+                parentWorld.killEntity(enemy);
 
-                if(enemy.getDestroyable() && enemy.getBoundingBox().intersects(this.getBoundingBox()))
-                {
-                    //Kill the enemy, it intersects with us, the laser
-                    parentWorld.killEntity(enemy);
+                //Create a cool explosion (very very important!)
+                parentWorld.createExplosion(enemy.image,location,ENEMY_EXPLOSION_SIZE,ENEMY_EXPLOSION_SCALE, velocity);
 
-                    parentWorld.createExplosion(enemy.image,enemy.getCentre(),100);
-                }
+                parentWorld.getEntity(GameplayController.class).enemyDeath(enemy);
             }
         }
 

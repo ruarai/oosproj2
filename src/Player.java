@@ -1,14 +1,17 @@
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.geom.Vector2f;
 
 //Sprite that represents the player and associated logic
 class Player extends Sprite {
-    private final float MOVE_ACCEL = 0.01f;
+    private static final float MOVE_ACCEL = 0.01f;
 
-    private final float ROTATION_SPEED = 0.1f;
+    private static final float ROTATION_SPEED = 0.1f;
 
-    private final int SHOT_DELAY = 250;
+    private static final int SHIELD_OFFSET = 16;
+
+    private static final int SHOT_DELAY = 250;
 
     public Player(Vector2f v, World parent) { super(Resources.spaceship, v, parent); }
 
@@ -36,6 +39,17 @@ class Player extends Sprite {
         //Run down the delay
         if(shotDelay > 0)
             shotDelay -= delta;
+    }
+
+    public void render(Graphics graphics) {
+        super.render(graphics);
+
+        //Check if we have a shield active, and if so, draw it
+        if(parentWorld.getEntity(GameplayController.class).getIsShieldActive())
+        {
+            Resources.shield.setRotation(rotation);
+            Resources.shield.draw(location.x - SHIELD_OFFSET,location.y - SHIELD_OFFSET);
+        }
     }
 
 
@@ -85,6 +99,11 @@ class Player extends Sprite {
 
         if(location.y < 0)
             location.y = 0;
+    }
+
+    public void onDeath()
+    {
+
     }
 
 }

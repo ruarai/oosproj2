@@ -7,11 +7,7 @@ import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Vector2f;
 
 //Sprites are basic entities with some kind of image and location
-abstract class Sprite implements Entity {
-
-    //Pointer to allow sprites to interact with world
-    protected World parentWorld;
-
+abstract class Sprite extends Entity {
     //Holds the image resource to be rendered
     protected Image image;
 
@@ -36,6 +32,7 @@ abstract class Sprite implements Entity {
 
     //Create a new sprite from specified file with a default location vector v
     public Sprite(Image img, Vector2f v, World parent) {
+        super(parent);
         this.image = img;
 
         //We will move the sprite such that its centre lay upon the vector coordinate

@@ -8,16 +8,16 @@ import java.util.ArrayList;
 
 public class World {
 
-    public ArrayList<Entity> entities = new ArrayList<>();
+    private ArrayList<Entity> entities = new ArrayList<>();
 
-    private final boolean RENDER_BOUNDING_BOX = false;
+    private static final boolean RENDER_BOUNDING_BOX = false;
 
 	public World() {
 	    //Load in all the imagery
 	    Resources.loadResources();
 
-	    entities.add(new Background());
-	    entities.add(new GameplayController());
+	    entities.add(new Background(this));
+	    entities.add(new GameplayController(this));
 
 	    //Create a Player sprite centred on (480,688)
         Vector2f playerDefault = new Vector2f(480,688);
@@ -27,7 +27,7 @@ public class World {
         for (int i = 0; i < 8; i++)
         {
             Vector2f enemyLocation = new Vector2f(64 + i * 128,28);
-            entities.add(new EnemyShooter(enemyLocation,this));
+            entities.add(new EnemyBasic(enemyLocation,this));
         }
 	}
 
@@ -87,15 +87,46 @@ public class World {
 
 	//Allows for the creation of an explosion
     //Obviously very important
-    public void createExplosion(Image img, Vector2f location, int num)
+    public void createExplosion(Image img, Vector2f location, int num, float scale, Vector2f force)
     {
         for (int i = 0; i < num; i ++)
         {
             Image subImage = Utility.getRandomSubImage(img);
 
-            ExplosionParticle particle = new ExplosionParticle(subImage,location,this);
+            ExplosionParticle particle = new ExplosionParticle(subImage,location,this, scale, force);
 
             newEntities.add(particle);
         }
+    }
+
+    //Generic method that allows us to query the entity list for entities of a certain type 'type'
+    //Really simplifies code elsewhere
+    public <T> ArrayList<T> getEntitiesOfType(Class<T> type)
+    {
+        ArrayList<T> addedEntities = new ArrayList<>();
+
+        for (Entity e : entities)
+        {
+            if(type.isInstance(e))
+            {
+                addedEntities.add((T)e);
+            }
+        }
+        return addedEntities;
+    }
+
+    //Similar to above, but only returns a single entity
+    //Useful for singular entities like player/gamecontroller
+    public <T> T getEntity(Class<T> type)
+    {
+        for (Entity e : entities)
+        {
+            if(type.isInstance(e))
+            {
+                return (T)e;
+            }
+        }
+
+        return null;
     }
 }
