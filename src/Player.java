@@ -3,18 +3,21 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.geom.Vector2f;
 
 //Sprite that represents the player and associated logic
-class Player extends Sprite {
+class Player extends Sprite implements Collidable
+{
     private static final float MOVE_ACCEL = 0.01f;
     private static final float RECOIL_ACCEL = 0.01f;
     private static final float ROTATION_SPEED = 0.1f;
     private static final float FRICTION_SCALE = 0.01f;
     private static final float DRIFT_SCALE = 1.7f;
 
-    private static final float DIR_FORWARDS = -90;
+    private static final float DIR_FORWARDS = -90f;
 
     private static final int SHIELD_OFFSET = 16;
 
     private static final int SHOT_DELAY = 250;
+
+    private static final float PLAYER_HIT_BOUNCE_SCALE = 0.1f;
 
     public Player(Vector2f v, World parent) { super(Resources.spaceship, v, parent); }
 
@@ -113,4 +116,11 @@ class Player extends Sprite {
             location.y = 0;
     }
 
+    public void onCollision(Sprite collidingSprite) {
+        //We handle any player related logic related to being hit by enemy on this end
+        if(collidingSprite instanceof Enemy) {
+            parentWorld.getEntity(GameplayController.class).playerDeath();
+            velocity.add(new Vector2f(velocity).scale(PLAYER_HIT_BOUNCE_SCALE));
+        }
+    }
 }

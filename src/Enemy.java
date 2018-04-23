@@ -2,14 +2,13 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.geom.Vector2f;
 
-abstract class Enemy extends Sprite {
+abstract class Enemy extends Sprite implements Collidable {
 
     private static final int HIT_EXPLOSION_SIZE = 40;
     private static final int HIT_EXPLOSION_DELAY = 150;
     private static final float HIT_EXPLOSION_SCALE = 0.1f;
 
     private static final float PLAYER_HIT_SCREEN_SHAKE = 1.5f;
-    private static final float PLAYER_HIT_BOUNCE_SCALE = 0.1f;
 
 
     public Enemy(Image img, Vector2f v, World parent) {
@@ -25,23 +24,7 @@ abstract class Enemy extends Sprite {
         if(player == null)
             return;
 
-        //Do we intersect with the player?
-        if (player.getBoundingBox().intersects(this.getBoundingBox())) {
-            //If so, 'kill' the player
-            parentWorld.getEntity(GameplayController.class).playerDeath();
-
-            player.velocity.add(new Vector2f(velocity).scale(PLAYER_HIT_BOUNCE_SCALE));
-
-
-            //Create a cool explosion also, if we haven't recently
-            if(explosionDelay <= 0)
-            {
-                parentWorld.createExplosion(Resources.enemyShot,getCentre(), HIT_EXPLOSION_SIZE,HIT_EXPLOSION_SCALE, velocity);
-                explosionDelay = HIT_EXPLOSION_DELAY;
-                parentWorld.getEntity(GameplayController.class).shakeScreen(PLAYER_HIT_SCREEN_SHAKE);
-            }
-        }
-
+        //Run down the explosion delay for collisions
         if(explosionDelay > 0)
             explosionDelay -= delta;
     }
@@ -53,4 +36,23 @@ abstract class Enemy extends Sprite {
 
     //Returns whether the enemy can be destroyed by the players laser shots
     public abstract boolean getDestroyable();
+
+    public void onCollision(Sprite collidingSprite) {
+        //The player death is handled within Player, so we just handle the cool effects
+        if(collidingSprite instanceof Player) {
+            //Create a cool explosion and screen shake, if we haven't recently
+            if(explosionDelay <= 0)
+            {
+                parentWorld.createExplosion(Resources.enemyShot,getCentre(), HIT_EXPLOSION_SIZE,HIT_EXPLOSION_SCALE, velocity);
+                parentWorld.getEntity(GameplayController.class).shakeScreen(PLAYER_HIT_SCREEN_SHAKE);
+
+                explosionDelay = HIT_EXPLOSION_DELAY;
+            }
+        } else if (collidingSprite instanceof Laser) {
+            if(getDestroyable()){
+                parentWorld.killEntity(this);
+                parentWorld.getEntity(GameplayController.class).enemyDeath(this);
+            }
+        }
+    }
 }

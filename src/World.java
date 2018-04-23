@@ -89,6 +89,8 @@ public class World {
 	    for(Entity e : entities)
             e.update(input, delta);
 
+	    handleCollisions();
+
         //Add/remove any new entities that have been added/removed by other entities
         entities.addAll(newEntities);
         entities.removeAll(deadEntities);
@@ -108,6 +110,34 @@ public class World {
 
 	}
 
+	private void handleCollisions() {
+	    //Create a list of all collidable objects, then take the list as an array
+	    ArrayList<Collidable> collidables = getEntitiesOfType(Collidable.class);
+
+	    //PS: Java sucks at this
+        Collidable[] collidableArray = new Collidable[collidables.size()];
+        collidableArray = collidables.toArray(collidableArray);
+
+        //We perform this on an array such that the collision checks are not performed twice per Sprite
+        for (int x = 0; x < collidableArray.length; x++){
+            for(int y = x + 1; y < collidableArray.length; y++){
+                //Not pretty, but we need a copy of both the collidable and sprite reference
+                Collidable collidableA = collidableArray[x];
+                Collidable collidableB = collidableArray[y];
+
+                Sprite spriteA = (Sprite)collidableA;
+                Sprite spriteB = (Sprite)collidableB;
+
+                //Check if the sprites intersect
+                if(spriteA.getBoundingBox().intersects(spriteB.getBoundingBox())){
+                    //If they do, call the collision method on the collidables
+                    collidableA.onCollision(spriteB);
+                    collidableB.onCollision(spriteA);
+                }
+            }
+        }
+    }
+
 	//Allows for the creation of an explosion
     //Obviously very important
     public void createExplosion(Image img, Vector2f location, int num, float scale, Vector2f force)
@@ -124,7 +154,7 @@ public class World {
 
     //Generic method that allows us to query the entity list for entities of a certain type 'type'
     //Really simplifies code elsewhere
-    public <T extends Entity> ArrayList<T> getEntitiesOfType(Class<T> type)
+    public <T> ArrayList<T> getEntitiesOfType(Class<T> type)
     {
         ArrayList<T> addedEntities = new ArrayList<>();
 
@@ -140,7 +170,7 @@ public class World {
 
     //Similar to above, but only returns a single entity
     //Useful for singular entities like player/gamecontroller
-    public <T extends Entity> T getEntity(Class<T> type)
+    public <T> T getEntity(Class<T> type)
     {
         for (Entity e : entities)
         {

@@ -2,7 +2,7 @@ import org.newdawn.slick.*;
 import org.newdawn.slick.geom.Vector2f;
 
 //A laser Sprite that moves upwards and destroys enemies
-public class Laser extends Sprite {
+public class Laser extends Sprite implements Collidable {
 
     //The speed that the laser moves upwards on the screen
     private static final float VELOCITY_MAGNITUDE = 3f;
@@ -30,23 +30,6 @@ public class Laser extends Sprite {
 
         location.add(velocity);
 
-        //Look for enemies to kill:
-        for (Enemy enemy : parentWorld.getEntitiesOfType(Enemy.class)) {
-            if (enemy.getDestroyable() && enemy.getBoundingBox().intersects(this.getBoundingBox())) {
-                //Kill the enemy
-                parentWorld.killEntity(enemy);
-
-                //Create a cool explosion (very very important!)
-                parentWorld.createExplosion(enemy.image,location,ENEMY_EXPLOSION_SIZE,ENEMY_EXPLOSION_SCALE, velocity);
-                parentWorld.createExplosion(Resources.shot,location,LASER_EXPLOSION_SIZE,LASER_EXPLOSION_SCALE, new Vector2f(velocity).scale(2));
-
-                //parentWorld.getEntity(GameplayController.class).shakeScreen(1f);
-
-                parentWorld.getEntity(GameplayController.class).enemyDeath(enemy);
-            }
-        }
-
-
         //If the laser goes off the screen, add it do the dead entities list
         //This will remove it from memory once the update is complete
         if(Utility.offScreen(location))
@@ -66,6 +49,17 @@ public class Laser extends Sprite {
             Color filter = new Color(1,1,1,(BLUR_STEPS-i)/ (float)BLUR_STEPS);
 
             image.draw(location.x + behind.x * i,location.y + behind.y * i, filter);
+        }
+    }
+
+    public void onCollision(Sprite collidingSprite) {
+        if(collidingSprite instanceof Enemy) {
+            Enemy enemy = (Enemy)collidingSprite;
+
+            parentWorld.createExplosion(enemy.image,location,ENEMY_EXPLOSION_SIZE,ENEMY_EXPLOSION_SCALE, velocity);
+            parentWorld.createExplosion(Resources.shot,location,LASER_EXPLOSION_SIZE,LASER_EXPLOSION_SCALE, new Vector2f(velocity).scale(2));
+
+            parentWorld.getEntity(GameplayController.class).shakeScreen(ENEMY_DEATH_SCREEN_SHAKE);
         }
     }
 }
