@@ -7,6 +7,8 @@ abstract class Enemy extends Sprite {
     private static final int PLAYER_HIT_EXPLOSION_SIZE = 40;
     private static final int EXPLOSION_DELAY = 150;
 
+    private static final float PLAYER_HIT_SCREEN_SHAKE = 1.5f;
+
     public Enemy(Image img, Vector2f v, World parent) {
         super(img, v, parent);
     }
@@ -33,6 +35,7 @@ abstract class Enemy extends Sprite {
             {
                 parentWorld.createExplosion(Resources.enemyShot,getCentre(), PLAYER_HIT_EXPLOSION_SIZE,0.1f, velocity);
                 explosionDelay = EXPLOSION_DELAY;
+                parentWorld.getEntity(GameplayController.class).shakeScreen(PLAYER_HIT_SCREEN_SHAKE);
             }
         }
 

@@ -14,6 +14,9 @@ public class GameplayController extends Entity {
 
     private static final int PLAYER_DEATH_EXPLOSION_SIZE = 500;
 
+    private static final float SCREEN_SHAKE_DECAY = 0.001f;
+    private static final float SCREEN_SHAKE_MAGNITUDE = 3f;
+
     private int playerScore = 0;
     private int playerLives = PLAYER_INIT_LIVES;
 
@@ -28,40 +31,48 @@ public class GameplayController extends Entity {
 
         timeElapsed += delta;
 
+        //Try to run down the shakeLife, and if it's less than zero make sure it's exactly zer
         if(shakeLife > 0)
-            shakeLife -= delta * 0.001f;
+            shakeLife -= delta * SCREEN_SHAKE_DECAY;
         else
             shakeLife = 0;
-
     }
 
-    public void shakeScreen(){
-        shakeLife = 1;
+    //Method to allow shaking of the screen on some important event
+    public void shakeScreen(float shakeMagnitude){
+        shakeLife = shakeMagnitude;
     }
 
     private float timeElapsed = 0;
     private float shakeLife = 0;
 
     public void render(Graphics graphics) {
+        //Calculate how much the screen will shake
+        float xOffset = shakeLife * SCREEN_SHAKE_MAGNITUDE * (float)Math.sin(timeElapsed);
+        float yOffset = shakeLife * SCREEN_SHAKE_MAGNITUDE * (float)Math.cos(timeElapsed);
 
-        graphics.translate(shakeLife * 3f * (float)Math.sin(timeElapsed),shakeLife * 3f * (float)Math.cos(timeElapsed));
+        //Perform a transform that will 'shake' the screen
+        graphics.translate(xOffset,yOffset);
 
-
+        //Draw in the players score
         graphics.drawString("Score:" + playerScore,SCORE_OFFSET.x,SCORE_OFFSET.y);
 
         //Make sure the spaceship is upright:
         Resources.spaceship.setRotation(0);
 
+        //Draw in each of the player's lives
         for (int i = 0; i < playerLives; i ++)
         {
             Resources.spaceship.draw(LIVES_OFFSET.x + LIVES_GAP * i,LIVES_OFFSET.y,0.5f);
         }
     }
 
+    //Method called when an enemy is killed, adds score to the player
     public void enemyDeath(Enemy e) {
         playerScore += e.getScoreValue();
     }
 
+    //Method called when the player is killed
     public void playerDeath(){
 
         //Is the shield active?
@@ -79,14 +90,15 @@ public class GameplayController extends Entity {
                 shieldTime = PLAYER_DEATH_SHIELD_TIME;
             }
             else {
+                //The player is out of lives, remove the entity and create a very big explosion
                 parentWorld.killEntity(player);
-
                 parentWorld.createExplosion(player.image,player.getCentre(), PLAYER_DEATH_EXPLOSION_SIZE, 2f, player.velocity);
             }
         }
 
     }
 
+    //Returns if the player's shield is active, allows for it to be rendered elsewhere
     public boolean getIsShieldActive(){
         return shieldTime > 0;
     }

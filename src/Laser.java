@@ -9,6 +9,7 @@ public class Laser extends Sprite {
 
     private static final int ENEMY_EXPLOSION_SIZE = 100;
     private static final float ENEMY_EXPLOSION_SCALE = 0.15f;
+    private static final float ENEMY_DEATH_SCREEN_SHAKE = 0.8f;
     private static final int LASER_EXPLOSION_SIZE = 200;
     private static final float LASER_EXPLOSION_SCALE = 0.4f;
 
@@ -37,7 +38,7 @@ public class Laser extends Sprite {
                 parentWorld.createExplosion(enemy.image,location,ENEMY_EXPLOSION_SIZE,ENEMY_EXPLOSION_SCALE, velocity);
                 parentWorld.createExplosion(Resources.shot,location,LASER_EXPLOSION_SIZE,LASER_EXPLOSION_SCALE, new Vector2f(velocity).scale(2));
 
-                parentWorld.getEntity(GameplayController.class).shakeScreen();
+                parentWorld.getEntity(GameplayController.class).shakeScreen(ENEMY_DEATH_SCREEN_SHAKE);
 
                 parentWorld.getEntity(GameplayController.class).enemyDeath(enemy);
             }
