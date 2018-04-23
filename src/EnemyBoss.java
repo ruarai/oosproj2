@@ -19,40 +19,52 @@ public class EnemyBoss extends Enemy {
     }
 
     private State currentState = State.InitialWalk;
+    //The target x coordinate for the ship to move to
     private float xGoal;
+
+    //Whether the target x goal is higher than the initial x goal
+    //Used to tell when the goal has been reached
     private boolean xGoalHigher;
 
     public void update(Input input, int delta) {
         super.update(input, delta);
 
+        //Check which state we are in
         switch (currentState) {
             case InitialWalk:
+                //In this state, we perform a simple walk towards a y-value
                 initialWalk(delta);
                 break;
             case FirstWait:
+                //In this state, we wait 5000 milliseconds
                 if(waited(5000, delta))
                 {
+                    //Move to the next state, calculating a new random xGoal and thus xGoalHigher
                     currentState = State.RandomXWalk;
                     xGoal = Utility.random.nextFloat() * (X_RAND_MAX-X_RAND_MIN) + X_RAND_MIN;
                     xGoalHigher =  location.x < xGoal;
                 }
                 break;
             case RandomXWalk:
+                //Perform a walk horizontally towards xGoal
                 randomWalk(delta, State.SecondWait);
                 break;
             case SecondWait:
                 if(waited(2000, delta))
                 {
+                    //Move to the next state, calculating again the random xGoal and xGoalHigher
                     currentState = State.RandomXWalkShooting;
                     xGoal = Utility.random.nextFloat() * (X_RAND_MAX-X_RAND_MIN) + X_RAND_MIN;
                     xGoalHigher =  location.x < xGoal;
                 }
                 break;
             case RandomXWalkShooting:
+                //Perform a walk horizontally towards xGoal, shooting whilst doing so
                 randomWalk(delta, State.ShootingWait);
                 shoot(delta);
                 break;
             case ShootingWait:
+                //Wait for 3000 milliseconds, shooting whilst doing so
                 shoot(delta);
 
                 if(waited(3000, delta))

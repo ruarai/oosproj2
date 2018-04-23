@@ -13,6 +13,8 @@ public class Laser extends Sprite {
     private static final int LASER_EXPLOSION_SIZE = 200;
     private static final float LASER_EXPLOSION_SCALE = 0.4f;
 
+    private static final int BLUR_STEPS = 10;
+
     public Laser(Image img, Vector2f location, World parent, float rotation)
     {
         super(img, location, parent);
@@ -38,7 +40,7 @@ public class Laser extends Sprite {
                 parentWorld.createExplosion(enemy.image,location,ENEMY_EXPLOSION_SIZE,ENEMY_EXPLOSION_SCALE, velocity);
                 parentWorld.createExplosion(Resources.shot,location,LASER_EXPLOSION_SIZE,LASER_EXPLOSION_SCALE, new Vector2f(velocity).scale(2));
 
-                parentWorld.getEntity(GameplayController.class).shakeScreen(ENEMY_DEATH_SCREEN_SHAKE);
+                //parentWorld.getEntity(GameplayController.class).shakeScreen(1f);
 
                 parentWorld.getEntity(GameplayController.class).enemyDeath(enemy);
             }
@@ -51,17 +53,19 @@ public class Laser extends Sprite {
             parentWorld.killEntity(this);
     }
 
+    //override rendering so that we can create a cool blur effect
     public void render(Graphics graphics) {
+        //Create a vector pointing in opposite direction of velocity
         Vector2f behind = new Vector2f(velocity);
-        behind.scale(-0.1f);
+        behind.scale(-1f / (float)BLUR_STEPS);
 
-        for (int i = 0; i < 10; i++)
+
+
+        for (int i = 0; i < BLUR_STEPS; i++)
         {
-            Color filter = new Color(1,1,1,(10-i)/10f);
+            Color filter = new Color(1,1,1,(BLUR_STEPS-i)/ (float)BLUR_STEPS);
 
             image.draw(location.x + behind.x * i,location.y + behind.y * i, filter);
         }
-
-
     }
 }

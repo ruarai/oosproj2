@@ -4,10 +4,13 @@ import org.newdawn.slick.geom.Vector2f;
 
 abstract class Enemy extends Sprite {
 
-    private static final int PLAYER_HIT_EXPLOSION_SIZE = 40;
-    private static final int EXPLOSION_DELAY = 150;
+    private static final int HIT_EXPLOSION_SIZE = 40;
+    private static final int HIT_EXPLOSION_DELAY = 150;
+    private static final float HIT_EXPLOSION_SCALE = 0.1f;
 
     private static final float PLAYER_HIT_SCREEN_SHAKE = 1.5f;
+    private static final float PLAYER_HIT_BOUNCE_SCALE = 0.1f;
+
 
     public Enemy(Image img, Vector2f v, World parent) {
         super(img, v, parent);
@@ -27,14 +30,14 @@ abstract class Enemy extends Sprite {
             //If so, 'kill' the player
             parentWorld.getEntity(GameplayController.class).playerDeath();
 
-            player.velocity.add(new Vector2f(velocity).scale(0.1f));
+            player.velocity.add(new Vector2f(velocity).scale(PLAYER_HIT_BOUNCE_SCALE));
 
 
             //Create a cool explosion also, if we haven't recently
             if(explosionDelay <= 0)
             {
-                parentWorld.createExplosion(Resources.enemyShot,getCentre(), PLAYER_HIT_EXPLOSION_SIZE,0.1f, velocity);
-                explosionDelay = EXPLOSION_DELAY;
+                parentWorld.createExplosion(Resources.enemyShot,getCentre(), HIT_EXPLOSION_SIZE,HIT_EXPLOSION_SCALE, velocity);
+                explosionDelay = HIT_EXPLOSION_DELAY;
                 parentWorld.getEntity(GameplayController.class).shakeScreen(PLAYER_HIT_SCREEN_SHAKE);
             }
         }

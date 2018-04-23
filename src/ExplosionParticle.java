@@ -40,6 +40,10 @@ public class ExplosionParticle extends Sprite {
 
         life -= delta * LIFE_DECAY;
 
+        if(life < 0){
+            parentWorld.createExplosion(Resources.shot,location,10,0.5f, new Vector2f(0.1f,0.1f));
+        }
+
         if(Utility.offScreen(location) || life < 0)
         {
             parentWorld.killEntity(this);
