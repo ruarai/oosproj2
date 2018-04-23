@@ -124,7 +124,7 @@ public class World {
 
     //Generic method that allows us to query the entity list for entities of a certain type 'type'
     //Really simplifies code elsewhere
-    public <T> ArrayList<T> getEntitiesOfType(Class<T> type)
+    public <T extends Entity> ArrayList<T> getEntitiesOfType(Class<T> type)
     {
         ArrayList<T> addedEntities = new ArrayList<>();
 
@@ -140,7 +140,7 @@ public class World {
 
     //Similar to above, but only returns a single entity
     //Useful for singular entities like player/gamecontroller
-    public <T> T getEntity(Class<T> type)
+    public <T extends Entity> T getEntity(Class<T> type)
     {
         for (Entity e : entities)
         {
