@@ -14,6 +14,7 @@ public class World {
 
     private ArrayList<Entity> entities = new ArrayList<>();
 
+    //Allow for debug rendering of the bounding boxes of any sprites
     private static final boolean RENDER_BOUNDING_BOX = false;
 
 	public World() {
@@ -27,12 +28,14 @@ public class World {
         Vector2f playerDefault = new Vector2f(480,688);
         entities.add(new Player(playerDefault,this));
 
+        //Load in the world from the waves.txt file
         createWorld();
 	}
 
 	private void createWorld(){
+	    //Load the waves file and split it into a stream of lines
 	    try(Stream<String> lines = Files.lines(Paths.get("res","waves.txt"))){
-
+	        //Iterate through the Stream by accessing its iterator
 	        for (String line : (Iterable<String>)lines::iterator){
 	            //Ignore comments:
 	            if(line.startsWith("#"))
@@ -47,7 +50,6 @@ public class World {
                 //Add a new spawner that will spawn the enemy
                 entities.add(new EnemySpawner(name,xPosition,delay,this));
             }
-
         } catch (IOException e){
 	        System.out.println("Failed to read the waves file.");
 	        System.out.println(e);
@@ -85,9 +87,7 @@ public class World {
 
 	    //update each entity
 	    for(Entity e : entities)
-        {
             e.update(input, delta);
-        }
 
         //Add/remove any new entities that have been added/removed by other entities
         entities.addAll(newEntities);
@@ -102,11 +102,8 @@ public class World {
             e.render(graphics);
 
             if(RENDER_BOUNDING_BOX && e instanceof Sprite)
-            {
-                Sprite s = (Sprite)e;
+                graphics.draw(((Sprite)e).getBoundingBox());
 
-                graphics.draw(s.getBoundingBox());
-            }
         }
 
 	}
