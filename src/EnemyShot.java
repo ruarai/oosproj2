@@ -18,6 +18,9 @@ public class EnemyShot extends Enemy {
         velocity.scale(VELOCITY * delta);
 
         location.add(velocity);
+
+        if(location.y > App.SCREEN_HEIGHT)
+            parentWorld.killEntity(this);
     }
 
     public int getScoreValue() {

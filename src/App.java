@@ -20,7 +20,7 @@ public class App extends BasicGame {
     /** screen height, in pixels */
     public static final int SCREEN_HEIGHT = 768;
 
-    public static final int SCREEN_SCALE = 2;
+    public static final int SCREEN_SCALE = 1;
     
     private World world;
 

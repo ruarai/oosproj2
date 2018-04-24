@@ -2,8 +2,6 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.geom.Polygon;
-import org.newdawn.slick.geom.Rectangle;
-import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Vector2f;
 
 //Sprites are basic entities with some kind of image and location
@@ -19,6 +17,10 @@ abstract class Sprite extends Entity {
 
     //rotation of the sprite, affect rendering of the sprite
     protected float rotation = 0f;
+
+    //We can record, if we'd like, the last movement of the sprite (purely optional)
+    //This is then used in the bounding box code
+    protected Vector2f lastMovement = new Vector2f(0,0);
 
     //Returns the centre point of the image according to the size of the sprite
     protected Vector2f getCentre()
@@ -67,6 +69,8 @@ abstract class Sprite extends Entity {
         //Generate two vectors that are parallel/perpendicular to our /rotated/ image, of half lengths each
         Vector2f left = new Vector2f(rotation).scale(halfWidth);
         Vector2f down = new Vector2f(rotation + 90).scale(halfHeight);
+
+        down.add(lastMovement);
 
         //Calculate the four vectors by adding our new perpendicular vectors to our centre
         Vector2f a = new Vector2f(centre).sub(left).sub(down);

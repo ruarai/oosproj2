@@ -29,6 +29,7 @@ public class Laser extends Sprite implements Collidable {
         velocity.scale(VELOCITY_MAGNITUDE * delta);
 
         location.add(velocity);
+        lastMovement = velocity;
 
         //If the laser goes off the screen, add it do the dead entities list
         //This will remove it from memory once the update is complete

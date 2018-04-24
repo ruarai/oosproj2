@@ -15,7 +15,7 @@ public class World {
     private ArrayList<Entity> entities = new ArrayList<>();
 
     //Allow for debug rendering of the bounding boxes of any sprites
-    private static final boolean RENDER_BOUNDING_BOX = false;
+    private static final boolean RENDER_BOUNDING_BOX = true;
 
 	public World() {
 	    //Load in all the imagery
