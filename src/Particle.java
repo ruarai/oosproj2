@@ -5,28 +5,31 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.geom.Vector2f;
 
 
-public class ExplosionParticle extends Sprite {
+public class Particle extends Sprite {
 
     private static final float ROTATION_SCALE = 0.5f;
 
     private static final float FULL_CIRCLE = 360f;
 
-    private static final float LIFE_DECAY = 0.0001f;
+    private static final float DEFAULT_LIFE_DECAY = 0.0001f;
     private static final float LIFE_POWER = 4f;
     private static final float LIFE_START_RANDOM_SCALE = 0.3f;
 
     private float rotationSpeed;
     private float life;
 
-    public ExplosionParticle(Image img, Vector2f location, World parent,float scale, Vector2f force) {
+    protected float lifeDecayRate = DEFAULT_LIFE_DECAY;
+
+    public Particle(Image img, Vector2f location, World parent, float randomScale, Vector2f force) {
         super(img, location, parent);
 
         velocity = new Vector2f(Utility.random.nextFloat() * FULL_CIRCLE);
-        velocity.scale(scale * Utility.random.nextFloat());
+        velocity.scale(randomScale * Utility.random.nextFloat());
 
         velocity.add(new Vector2f(force).scale(0.01f));
-
         rotationSpeed = (Utility.random.nextFloat()-0.5f) * ROTATION_SCALE;
+
+        rotation = (float)velocity.getTheta() - 90f;
 
         life = 1f + (Utility.random.nextFloat()-0.5f) * LIFE_START_RANDOM_SCALE;
     }
@@ -38,8 +41,9 @@ public class ExplosionParticle extends Sprite {
 
         rotation += rotationSpeed * delta;
 
-        life -= delta * LIFE_DECAY;
+        life -= delta * lifeDecayRate;
 
+        //Have we moved off the screen/ran out of life? We should remove ourselves
         if(Utility.offScreen(location) || life < 0)
         {
             parentWorld.killEntity(this);

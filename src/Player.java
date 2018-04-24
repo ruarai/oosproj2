@@ -19,6 +19,9 @@ class Player extends Sprite implements Collidable
 
     private static final float PLAYER_HIT_BOUNCE_SCALE = 0.1f;
 
+    private static final float EXHAUST_SPEED_REQUIRED = 2f;
+    private static final float EXHAUST_OFFSET_Y = 24f;
+
     public Player(Vector2f v, World parent) { super(Resources.spaceship, v, parent); }
 
     //indicates number of ms left until player can shoot a laser again
@@ -70,14 +73,17 @@ class Player extends Sprite implements Collidable
     private void move(Input input, int delta)
     {
         Vector2f friction = new Vector2f(velocity);
-        friction.scale(FRICTION_SCALE);//fix???
+
+        //Calculate a friction vector to remove from the velocity
+        //This sadly isn't frame-independent, but implementing this correctly seems difficult
+        friction.scale(FRICTION_SCALE);
         velocity.sub(friction);
 
         Vector2f thrust = new Vector2f();
 
         float rotationScale = Math.max(3-velocity.lengthSquared()/5f,1f);
 
-        //respond to key inputs
+        //respond to key inputs, changing the thrust vector
         if(input.isKeyDown(Input.KEY_UP))
             thrust = new Vector2f(rotation  + DIR_FORWARDS).scale(MOVE_ACCEL * delta);
         if(input.isKeyDown(Input.KEY_DOWN))
@@ -87,16 +93,31 @@ class Player extends Sprite implements Collidable
         if(input.isKeyDown(Input.KEY_RIGHT))
             rotation += ROTATION_SPEED * delta * rotationScale;
 
-
+        //We now calculate a vector we'll call 'drift'
+        /*This is kind of complicated, but here's a basic explanation:
+        / Moving in a straight line, the ship's direction (rotation) and the ship's velocity are parallel
+          Say the ship moves to a new rotation. The ships velocity wouldn't normally adjust for this at all,
+          and just keep moving in the direction of the velocity.
+          We can change this for more fun/intuitive movement by creating a 'drift' vector,
+          whilst is the projection of the velocity onto the unit vector of the rotation. If we then subtract the
+          original velocity, we get just the component of the velocity that is perpendicular to the ship's rotation.
+          Scaling this down a little such that it's not excessive, we can then add it to the velocity, making the ship
+          turn 'naturally' around corners. You'll just need to ignore that this doesn't make any sense in space.*/
         Vector2f drift = new Vector2f();
         velocity.projectOntoUnit(new Vector2f(rotation + DIR_FORWARDS),drift);
         drift.sub(velocity);
         drift.scale(DRIFT_SCALE);
 
+        //Add our new vectors
         velocity.add(thrust);
         velocity.add(drift);
 
+        //Move our ship according to our now-updated velocity
         location.add(velocity);
+
+        //Are we moving fast enough? Create some exhaust particles for fun.
+        if(velocity.length() > EXHAUST_SPEED_REQUIRED)
+            parentWorld.addEntity(new ExhaustParticle(getCentre().add(new Vector2f(rotation + 90).scale(EXHAUST_OFFSET_Y)),parentWorld,velocity));
     }
 
     //Method to keep the object on the screen

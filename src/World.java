@@ -146,7 +146,7 @@ public class World {
         {
             Image subImage = Utility.getRandomSubImage(img);
 
-            ExplosionParticle particle = new ExplosionParticle(subImage,location,this, scale, force);
+            Particle particle = new Particle(subImage,location,this, scale, force);
 
             newEntities.add(particle);
         }
