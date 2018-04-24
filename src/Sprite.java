@@ -52,24 +52,29 @@ abstract class Sprite extends Entity {
         image.draw(location.x,location.y);
 	}
 
-	//Method to get bounding box that allows for rotation
+	//Method to get bounding box that accounts for rotation
 	public Polygon getBoundingBox()
     {
         Polygon polygon = new Polygon();
 
+        //Find the two half-lengths of the rectangle of our image
         float halfWidth = image.getWidth() / 2;
         float halfHeight = image.getHeight() / 2;
 
+        //Find the centre location, this is the same as our centre of rotation
         Vector2f centre = getCentre();
 
+        //Generate two vectors that are parallel/perpendicular to our /rotated/ image, of half lengths each
         Vector2f left = new Vector2f(rotation).scale(halfWidth);
         Vector2f down = new Vector2f(rotation + 90).scale(halfHeight);
 
+        //Calculate the four vectors by adding our new perpendicular vectors to our centre
         Vector2f a = new Vector2f(centre).sub(left).sub(down);
         Vector2f b = new Vector2f(centre).add(left).sub(down);
         Vector2f c = new Vector2f(centre).add(left).add(down);
         Vector2f d = new Vector2f(centre).sub(left).add(down);
 
+        //Create a polygon from this
         polygon.addPoint(a.x,a.y);
         polygon.addPoint(b.x,b.y);
         polygon.addPoint(c.x,c.y);
