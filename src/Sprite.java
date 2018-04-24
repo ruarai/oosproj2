@@ -6,6 +6,10 @@ import org.newdawn.slick.geom.Vector2f;
 
 //Sprites are basic entities with some kind of image and location
 abstract class Sprite extends Entity {
+
+    private static float DIR_BEHIND = 90f;
+
+
     //Holds the image resource to be rendered
     protected Image image;
 
@@ -17,10 +21,6 @@ abstract class Sprite extends Entity {
 
     //rotation of the sprite, affect rendering of the sprite
     protected float rotation = 0f;
-
-    //We can record, if we'd like, the last movement of the sprite (purely optional)
-    //This is then used in the bounding box code
-    protected Vector2f lastMovement = new Vector2f(0,0);
 
     //Returns the centre point of the image according to the size of the sprite
     protected Vector2f getCentre()
@@ -68,15 +68,20 @@ abstract class Sprite extends Entity {
 
         //Generate two vectors that are parallel/perpendicular to our /rotated/ image, of half lengths each
         Vector2f left = new Vector2f(rotation).scale(halfWidth);
-        Vector2f down = new Vector2f(rotation + 90).scale(halfHeight);
+        Vector2f down = new Vector2f(rotation + DIR_BEHIND).scale(halfHeight);
 
-        down.add(lastMovement);
+        //Calculate a simple vector that will adjust for the movement made between frames
+        //Points in opposite direction of motion and is of length proportional to velocity
+        //This really isn't a perfect solution, but helps a lot!
+        float currSpeed = velocity.length();
+        Vector2f extraBehind = new Vector2f(rotation + DIR_BEHIND).scale(currSpeed);
+
 
         //Calculate the four vectors by adding our new perpendicular vectors to our centre
         Vector2f a = new Vector2f(centre).sub(left).sub(down);
         Vector2f b = new Vector2f(centre).add(left).sub(down);
-        Vector2f c = new Vector2f(centre).add(left).add(down);
-        Vector2f d = new Vector2f(centre).sub(left).add(down);
+        Vector2f c = new Vector2f(centre).add(left).add(down).add(extraBehind);
+        Vector2f d = new Vector2f(centre).sub(left).add(down).add(extraBehind);
 
         //Create a polygon from this
         polygon.addPoint(a.x,a.y);

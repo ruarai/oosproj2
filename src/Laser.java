@@ -29,7 +29,6 @@ public class Laser extends Sprite implements Collidable {
         velocity.scale(VELOCITY_MAGNITUDE * delta);
 
         location.add(velocity);
-        lastMovement = velocity;
 
         //If the laser goes off the screen, add it do the dead entities list
         //This will remove it from memory once the update is complete
@@ -55,10 +54,12 @@ public class Laser extends Sprite implements Collidable {
         if(collidingSprite instanceof Enemy) {
             Enemy enemy = (Enemy)collidingSprite;
 
+            //If we can't destroy the enemy, why bother?
+            if(!enemy.getDestroyable())
+                return;
+
             parentWorld.createExplosion(enemy.image,location,ENEMY_EXPLOSION_SIZE,ENEMY_EXPLOSION_SCALE, velocity);
             parentWorld.createExplosion(Resources.shot,location,LASER_EXPLOSION_SIZE,LASER_EXPLOSION_SCALE, new Vector2f(velocity).scale(2));
-
-            parentWorld.getEntity(GameplayController.class).shakeScreen(ENEMY_DEATH_SCREEN_SHAKE);
         }
     }
 }
