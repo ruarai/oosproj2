@@ -52,7 +52,8 @@ public class App extends BasicGame {
      */
     public void render(GameContainer gc, Graphics g)
     		throws SlickException {
-    	world.render(g, SCREEN_SCALE);
+        g.scale(SCREEN_SCALE, SCREEN_SCALE);
+    	world.render(g);
     }
 
     /** Start-up method. Creates the game and runs it.

@@ -42,8 +42,6 @@ public class Laser extends Sprite implements Collidable {
         Vector2f behind = new Vector2f(velocity);
         behind.scale(-1f / (float)BLUR_STEPS);
 
-
-
         for (int i = 0; i < BLUR_STEPS; i++)
         {
             Color filter = new Color(1,1,1,(BLUR_STEPS-i)/ (float)BLUR_STEPS);

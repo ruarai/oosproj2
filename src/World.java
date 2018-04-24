@@ -96,9 +96,7 @@ public class World {
         entities.removeAll(deadEntities);
 	}
 	
-	public void render(Graphics graphics, int scale) {
-	    graphics.scale(scale,scale);
-
+	public void render(Graphics graphics) {
 	    //render each entity
         for(Entity e : entities) {
             e.render(graphics);
