@@ -17,6 +17,7 @@ abstract class Sprite extends Entity {
     protected Vector2f location = new Vector2f();
 
     //velocity of the sprite
+    //not too much physical accuracy is present here, so it shouldn't be trusted beyond /cool/ effects
     protected Vector2f velocity = new Vector2f();
 
     //rotation of the sprite, affect rendering of the sprite

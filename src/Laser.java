@@ -53,6 +53,7 @@ public class Laser extends Sprite implements Collidable {
     }
 
     public void onCollision(Sprite collidingSprite) {
+        //Handle collision with an enemy, so that we can make some effects
         if(collidingSprite instanceof Enemy) {
             Enemy enemy = (Enemy)collidingSprite;
 

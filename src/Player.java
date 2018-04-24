@@ -93,13 +93,14 @@ class Player extends Sprite implements Collidable
         if(input.isKeyDown(Input.KEY_RIGHT))
             rotation += ROTATION_SPEED * delta * rotationScale;
 
-        //We now calculate a vector we'll call 'drift'
-        /*This is kind of complicated, but here's a basic explanation:
-        / Moving in a straight line, the ship's direction (rotation) and the ship's velocity are parallel
+        //
+        /*We now calculate a vector we'll call 'drift':
+          This is kind of complicated, but here's a basic explanation,
+          Moving in a straight line, the ship's direction (rotation) and the ship's velocity are parallel
           Say the ship moves to a new rotation. The ships velocity wouldn't normally adjust for this at all,
           and just keep moving in the direction of the velocity.
           We can change this for more fun/intuitive movement by creating a 'drift' vector,
-          whilst is the projection of the velocity onto the unit vector of the rotation. If we then subtract the
+          which is the projection of the velocity onto the unit vector of the rotation. If we then subtract the
           original velocity, we get just the component of the velocity that is perpendicular to the ship's rotation.
           Scaling this down a little such that it's not excessive, we can then add it to the velocity, making the ship
           turn 'naturally' around corners. You'll just need to ignore that this doesn't make any sense in space.*/

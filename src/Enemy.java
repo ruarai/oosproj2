@@ -27,6 +27,10 @@ abstract class Enemy extends Sprite implements Collidable {
         //Run down the explosion delay for collisions
         if(explosionDelay > 0)
             explosionDelay -= delta;
+
+        //Whilst we expect enemies to be off screen upwards, if they're off the screen downwards they should be killed
+        if(location.y > App.SCREEN_HEIGHT)
+            parentWorld.killEntity(this);
     }
 
 
