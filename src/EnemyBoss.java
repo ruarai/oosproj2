@@ -21,13 +21,9 @@ public class EnemyBoss extends Enemy {
 
     private static final int SHOT_DELAY = 200;
 
-    private static final int DEATH_EXPLOSION_SIZE = 500;
+    private static final int DEATH_EXPLOSION_SIZE = 5000;
     private static final float DEATH_EXPLOSION_SCALE = 0.30f;
 
-    private static final int EXTRA_EXPLOSION_SIZE = 500;
-    private static final float EXTRA_EXPLOSION_SCALE = 0.30f;
-
-    private static final float DEATH_SCREEN_SHAKE = 10f;
     private static final float LASER_HIT_SCREEN_SHAKE = 0.2f;
 
 
@@ -175,16 +171,14 @@ public class EnemyBoss extends Enemy {
                 parentWorld.killEntity(this);
                 parentWorld.getEntity(GameplayController.class).enemyDeath(this);
 
-
-                parentWorld.createExplosion(image,location,DEATH_EXPLOSION_SIZE,DEATH_EXPLOSION_SCALE, new Vector2f(0,0));
-
-                //This death is so dramatic, it requires like four explosions for sure
-                parentWorld.createExplosion(Resources.shield,location,EXTRA_EXPLOSION_SIZE,EXTRA_EXPLOSION_SCALE, new Vector2f(0,0));
-                parentWorld.createExplosion(Resources.shot,location,EXTRA_EXPLOSION_SIZE,EXTRA_EXPLOSION_SCALE, new Vector2f(0,0));
-                parentWorld.createExplosion(Resources.enemyShot,location,EXTRA_EXPLOSION_SIZE,EXTRA_EXPLOSION_SCALE, new Vector2f(0,0));
+                //This event requires an explosion
+                parentWorld.createExplosion(Resources.shot,location,DEATH_EXPLOSION_SIZE,DEATH_EXPLOSION_SCALE, new Vector2f(0,0));
 
                 //Yes, this is excessive, but totally worth it
-                parentWorld.getEntity(GameplayController.class).shakeScreen(DEATH_SCREEN_SHAKE);
+                //parentWorld.getEntity(GameplayController.class).shakeScreen(DEATH_SCREEN_SHAKE);
+
+                //MOST IMPORTANT FEATURE
+                parentWorld.activateSolitaireMode();
 
             } else {
                 //Otherwise, take away some life

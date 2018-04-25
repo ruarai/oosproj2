@@ -1,6 +1,4 @@
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
-import org.newdawn.slick.Input;
+import org.newdawn.slick.*;
 import org.newdawn.slick.geom.Vector2f;
 
 import java.io.*;
@@ -17,6 +15,11 @@ public class World {
     //Allow for debug rendering of the bounding boxes of any sprites
     private static final boolean RENDER_BOUNDING_BOX = false;
 
+    private static final Color RENDER_BLUR_FILTER = new Color(1,1,1,0.8f);
+
+    //most important feature do not delete (press A to activate)
+    private static final Color SOLITAIRE_BLUR_FILTER = new Color(1,1,1,1f);
+
 	public World() {
 	    //Load in all the imagery
 	    Resources.loadResources();
@@ -31,9 +34,16 @@ public class World {
         //Load in the world from the waves.txt file
         //createWorld();
 
-        entities.add(new EnemyJava(new Vector2f(240,240),this));
-        entities.add(new EnemyJava(new Vector2f(480+240,240),this));
+        entities.add(new EnemyBoss(new Vector2f(480,0),this));
+        //entities.add(new EnemyJava(new Vector2f(240,240),this));
+        //entities.add(new EnemyJava(new Vector2f(480+240,240),this));
 	}
+
+	private static Image generateBlankImage(){
+	    try {
+	        return new Image(App.SCREEN_WIDTH,App.SCREEN_HEIGHT);
+        } catch (SlickException e) { return null;}
+    }
 
 	private void createWorld(){
 	    //Load the waves file and split it into a stream of lines
@@ -82,6 +92,8 @@ public class World {
 	        delta *= 5f;
         if(input.isKeyDown(Input.KEY_D))
             delta /= 5f;
+        if(input.isKeyDown(Input.KEY_A))
+            solitaireMode = !solitaireMode;
 
 
 	    //clear the list of entities to add/remove
@@ -98,8 +110,31 @@ public class World {
         entities.addAll(newEntities);
         entities.removeAll(deadEntities);
 	}
-	
-	public void render(Graphics graphics) {
+
+    private Image blurImage = generateBlankImage();
+    private Image blurImageBuffer = generateBlankImage();
+
+    private boolean solitaireMode = false;
+
+    public void render(Graphics graphics) {
+	    //This is a two step process, first we render just the things that can blur on top of the previous frame
+        //This is then used for the next frame
+
+	    ArrayList<Sprite> particles = getEntitiesOfType(Sprite.class);
+
+	    //Pick our blur of choice
+	    Color blurFilter = solitaireMode ? SOLITAIRE_BLUR_FILTER : RENDER_BLUR_FILTER;
+
+        blurImage.draw(0,0,blurFilter);
+        for(Entity e : particles) {
+            e.render(graphics);
+        }
+        graphics.copyArea(blurImageBuffer,0,0);
+
+        //Then we clear our frame, render everything normally
+        graphics.clear();
+        graphics.resetTransform();
+
 	    //render each entity
         for(Entity e : entities) {
             e.render(graphics);
@@ -109,7 +144,16 @@ public class World {
 
         }
 
+        //We then draw on top of our current frame, the blur
+        blurImage.draw(0,0,blurFilter);
+        //And then swap out or blur with the blur image buffer generated earlier, allowing it to be used next frame
+        blurImage = blurImageBuffer.copy();
 	}
+
+	public void activateSolitaireMode() {
+        //Most important thing, toggle solitaire rendering
+        solitaireMode = true;
+    }
 
 	private void handleCollisions() {
 	    //Create a list of all collidable objects, then take the list as an array
