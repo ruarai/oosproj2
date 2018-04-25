@@ -17,6 +17,14 @@ class Resources {
     public static Image space;
     public static Image spaceship;
 
+    public static Image java;
+    public static Image javaError1;
+    public static Image javaError2;
+    public static Image javaError3;
+    public static Image javaError4;
+    public static Image javaError5;
+    public static Image javaError6;
+
     //Tries to load in all the resources from disk
     public static void loadResources(){
         try {
@@ -32,6 +40,14 @@ class Resources {
             sineEnemy = new Image("res/sine-enemy.png");
             space = new Image("res/space.png");
             spaceship = new Image("res/spaceship.png");
+
+            java = new Image("res/java.png");
+            javaError1 = new Image("res/java-err-1.png");
+            javaError2 = new Image("res/java-err-2.png");
+            javaError3 = new Image("res/java-err-3.png");
+            javaError4 = new Image("res/java-err-4.png");
+            javaError5 = new Image("res/java-err-5.png");
+            javaError6 = new Image("res/java-err-6.png");
         } catch(SlickException e){
             //This shouldn't happen, but ok, print an exception message
             System.out.println("An error occurred whilst loading resources:");

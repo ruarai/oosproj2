@@ -31,7 +31,7 @@ public class World {
         //Load in the world from the waves.txt file
         //createWorld();
 
-        entities.add(new EnemyBoss(new Vector2f(480,0),this));
+        entities.add(new EnemyJava(new Vector2f(480,240),this));
 	}
 
 	private void createWorld(){
