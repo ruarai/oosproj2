@@ -39,8 +39,14 @@ public class GameplayController extends Entity {
     }
 
     //Method to allow shaking of the screen on some important event
-    public void shakeScreen(float shakeMagnitude){
+    public void shakeScreen(float shakeMagnitude)
+    {
         shakeLife = shakeMagnitude;
+    }
+
+
+    public float getCurrentScreenShake(){
+        return shakeLife;
     }
 
     private float timeElapsed = 0;
@@ -65,6 +71,13 @@ public class GameplayController extends Entity {
         {
             Resources.spaceship.draw(LIVES_OFFSET.x + LIVES_GAP * i,LIVES_OFFSET.y,0.5f);
         }
+    }
+
+
+
+
+    public float getCurrentTimeScale(){
+
     }
 
     //Method called when an enemy is killed, adds score to the player

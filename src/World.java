@@ -20,6 +20,8 @@ public class World {
     //most important feature do not delete (press A to activate)
     private static final Color SOLITAIRE_BLUR_FILTER = new Color(1,1,1,1f);
 
+    private static final float CHROMATIC_ABERRATION_SCALE = 8f;
+
 	public World() {
 	    //Load in all the imagery
 	    Resources.loadResources();
@@ -32,9 +34,9 @@ public class World {
         entities.add(new Player(playerDefault,this));
 
         //Load in the world from the waves.txt file
-        //createWorld();
+        createWorld();
 
-        entities.add(new EnemyBoss(new Vector2f(480,0),this));
+        //entities.add(new EnemyBoss(new Vector2f(480,0),this));
         //entities.add(new EnemyJava(new Vector2f(240,240),this));
         //entities.add(new EnemyJava(new Vector2f(480+240,240),this));
 	}
@@ -86,15 +88,25 @@ public class World {
     {
         deadEntities.add(e);
     }
-	
+
+    //Simple pause that lets you look at the current blur frame
+    private boolean pause = false;
+
 	public void update(Input input, int delta) {
+	    delta *= timeScale;
+
 	    if(input.isKeyDown(Input.KEY_S))
 	        delta *= 5f;
         if(input.isKeyDown(Input.KEY_D))
             delta /= 5f;
-        if(input.isKeyDown(Input.KEY_A))
+        if(input.isKeyPressed(Input.KEY_A))
             solitaireMode = !solitaireMode;
+        if(input.isKeyPressed(Input.KEY_P))
+            pause = !pause;
 
+        //If we're paused, don't update anything
+        if(pause)
+            return;
 
 	    //clear the list of entities to add/remove
         newEntities.clear();
@@ -114,13 +126,24 @@ public class World {
     private Image blurImage = generateBlankImage();
     private Image blurImageBuffer = generateBlankImage();
 
+    private Image frameImage = generateBlankImage();
+
     private boolean solitaireMode = false;
 
     public void render(Graphics graphics) {
+        //Make sure we're not drawing in some kind of weird way at the moment
+        graphics.setDrawMode(Graphics.MODE_NORMAL);
+
+        //If we're paused, just draw the blur image and return
+        if(pause){
+            blurImage.draw(0,0);
+            return;
+        }
+
 	    //This is a two step process, first we render just the things that can blur on top of the previous frame
         //This is then used for the next frame
 
-	    ArrayList<Sprite> particles = getEntitiesOfType(Sprite.class);
+	    ArrayList<Particle> particles = getEntitiesOfType(Particle.class);
 
 	    //Pick our blur of choice
 	    Color blurFilter = solitaireMode ? SOLITAIRE_BLUR_FILTER : RENDER_BLUR_FILTER;
@@ -148,6 +171,28 @@ public class World {
         blurImage.draw(0,0,blurFilter);
         //And then swap out or blur with the blur image buffer generated earlier, allowing it to be used next frame
         blurImage = blurImageBuffer.copy();
+
+
+
+        //Find out our chromatic aberration intensity by taking the screen shake value from the gameplay controller
+        float intensity = getEntity(GameplayController.class).getCurrentScreenShake() * CHROMATIC_ABERRATION_SCALE;
+        //Check if we should bother with the next steps
+
+        if(intensity <= 0)
+            return;
+
+        //We now copy and clear the frame once more so that we can create a chromatic aberration effect
+        graphics.copyArea(frameImage,0,0);
+
+        graphics.clear();
+
+        //Set the draw mode to add so that our frames add nicely
+        graphics.setDrawMode(Graphics.MODE_ADD);
+
+
+        frameImage.draw(intensity,0,new Color(1,0,0,0.33f));
+        frameImage.draw(0,0,new Color(0,1,0,0.33f));
+        frameImage.draw(-intensity,0,new Color(0,0,1,0.33f));
 	}
 
 	public void activateSolitaireMode() {
