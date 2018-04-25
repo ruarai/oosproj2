@@ -21,19 +21,9 @@ abstract class Enemy extends Sprite implements Collidable {
     private int explosionDelay = 0;
 
     public void update(Input input, int delta) {
-        Player player = parentWorld.getEntity(Player.class);
-
-        //If the player doesn't exist, we certainly don't intersect with it
-        if(player == null)
-            return;
-
         //Run down the explosion delay for collisions
         if(explosionDelay > 0)
             explosionDelay -= delta;
-
-        //Whilst we expect enemies to be off screen upwards, if they're off the screen downwards they should be killed
-        if(location.y > App.SCREEN_HEIGHT)
-            parentWorld.killEntity(this);
     }
 
 

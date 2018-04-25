@@ -18,6 +18,10 @@ public class EnemyShot extends Enemy {
         velocity.scale(VELOCITY * delta);
 
         location.add(velocity);
+
+        //Once the laser leaves the screen, kill it
+        if(location.y > App.SCREEN_HEIGHT)
+            parentWorld.killEntity(this);
     }
 
     public int getScoreValue() {

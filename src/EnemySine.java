@@ -30,6 +30,11 @@ public class EnemySine extends Enemy {
         location.add(velocity);
 
         location.x = initialX + AMPLITUDE * (float)Math.sin(((2*Math.PI)/(PERIOD))*timeElapsed);
+
+
+        //Kill the enemy once it leaves the screen
+        if(location.y > App.SCREEN_HEIGHT)
+            parentWorld.killEntity(this);
     }
 
     public int getScoreValue() {

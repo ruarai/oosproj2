@@ -25,6 +25,8 @@ class Resources {
     public static Image javaError5;
     public static Image javaError6;
 
+    private static final int NUM_JAVA_ERRORS = 6;
+
     //Tries to load in all the resources from disk
     public static void loadResources(){
         try {
@@ -53,6 +55,22 @@ class Resources {
             System.out.println("An error occurred whilst loading resources:");
             System.out.println(e);
         }
+    }
 
+    public static Image getRandomJavaError(){
+        int randInt = Utility.random.nextInt(NUM_JAVA_ERRORS) + 1;
+
+        switch (randInt){
+            case 1: return javaError1;
+            case 2: return javaError2;
+            case 3: return javaError3;
+            case 4: return javaError4;
+            case 5: return javaError5;
+            case 6: return javaError6;
+        }
+
+        //Of course Java expects a random number between 1 and 6 to be possibly not be between 1 and 6,
+        //So we add this for good measure
+        return javaError1;
     }
 }
