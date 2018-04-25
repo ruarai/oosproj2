@@ -3,8 +3,13 @@ import org.newdawn.slick.geom.Vector2f;
 
 public class EnemyBoss extends Enemy {
 
+    private static final int FIRST_WAIT_TIME = 5000;
+    private static final int SECOND_WAIT_TIME = 5000;
+    private static final int SHOOTING_WAIT_TIME = 5000;
+
     private static final float INIT_WALK_VELOCITY = 0.05f;
     private static final float INIT_WALK_DIRECTION = 90;
+    private static final float INIT_WALK_GOAL = 72;
 
     private static final float X_WALK_VELOCITY = 0.05f;
     private static final float LEFT_DIRECTION = 180f;
@@ -47,7 +52,7 @@ public class EnemyBoss extends Enemy {
                 break;
             case FirstWait:
                 //In this state, we wait 5000 milliseconds
-                if(waited(5000, delta))
+                if(waited(FIRST_WAIT_TIME, delta))
                 {
                     //Move to the next state, calculating a new random xGoal and thus xGoalHigher
                     currentState = State.RandomXWalk;
@@ -60,7 +65,7 @@ public class EnemyBoss extends Enemy {
                 randomWalk(delta, State.SecondWait);
                 break;
             case SecondWait:
-                if(waited(2000, delta))
+                if(waited(SECOND_WAIT_TIME, delta))
                 {
                     //Move to the next state, calculating again the random xGoal and xGoalHigher
                     currentState = State.RandomXWalkShooting;
@@ -77,7 +82,7 @@ public class EnemyBoss extends Enemy {
                 //Wait for 3000 milliseconds, shooting whilst doing so
                 shoot(delta);
 
-                if(waited(3000, delta))
+                if(waited(SHOOTING_WAIT_TIME, delta))
                     currentState = State.FirstWait;
                 break;
         }
@@ -90,9 +95,9 @@ public class EnemyBoss extends Enemy {
         location.add(velocity);
 
         //We reached our goal, ensure we're exactly at goal then move to next state
-        if(location.y >= 72)
+        if(location.y >= INIT_WALK_GOAL)
         {
-            location.y = 72;
+            location.y = INIT_WALK_GOAL;
             currentState = State.FirstWait;
         }
     }
