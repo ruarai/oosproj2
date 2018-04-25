@@ -8,6 +8,9 @@ abstract class Enemy extends Sprite implements Collidable {
     private static final int HIT_EXPLOSION_DELAY = 150;
     private static final float HIT_EXPLOSION_SCALE = 0.1f;
 
+    private static final int DEATH_EXPLOSION_SIZE = 100;
+    private static final float DEATH_EXPLOSION_SCALE = 0.15f;
+
     private static final float PLAYER_HIT_SCREEN_SHAKE = 1.5f;
 
 
@@ -50,12 +53,16 @@ abstract class Enemy extends Sprite implements Collidable {
                 parentWorld.createExplosion(Resources.enemyShot,getCentre(), HIT_EXPLOSION_SIZE,HIT_EXPLOSION_SCALE, velocity);
                 parentWorld.getEntity(GameplayController.class).shakeScreen(PLAYER_HIT_SCREEN_SHAKE);
 
+
                 explosionDelay = HIT_EXPLOSION_DELAY;
             }
         } else if (collidingSprite instanceof Laser) {
             if(getDestroyable()){
                 parentWorld.killEntity(this);
                 parentWorld.getEntity(GameplayController.class).enemyDeath(this);
+
+                //create an explosion based on our image
+                parentWorld.createExplosion(image,collidingSprite.getCentre(),DEATH_EXPLOSION_SIZE,DEATH_EXPLOSION_SCALE, collidingSprite.velocity);
             }
         }
     }

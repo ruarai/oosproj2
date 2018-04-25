@@ -6,9 +6,7 @@ public class Laser extends Sprite implements Collidable {
 
     //The speed that the laser moves upwards on the screen
     private static final float VELOCITY_MAGNITUDE = 3f;
-
-    private static final int ENEMY_EXPLOSION_SIZE = 100;
-    private static final float ENEMY_EXPLOSION_SCALE = 0.15f;
+;
     private static final int LASER_EXPLOSION_SIZE = 200;
     private static final float LASER_EXPLOSION_SCALE = 0.4f;
     private static final float LASER_EXPLOSION_FORCE_SCALE = 2f;
@@ -55,14 +53,6 @@ public class Laser extends Sprite implements Collidable {
     public void onCollision(Sprite collidingSprite) {
         //Handle collision with an enemy, so that we can make some effects
         if(collidingSprite instanceof Enemy) {
-            Enemy enemy = (Enemy)collidingSprite;
-
-            //If we can't destroy the enemy, why bother?
-            if(!enemy.getDestroyable())
-                return;
-
-            parentWorld.createExplosion(enemy.image,location,ENEMY_EXPLOSION_SIZE,ENEMY_EXPLOSION_SCALE, velocity);
-
             parentWorld.createExplosion(Resources.shot,location,LASER_EXPLOSION_SIZE,LASER_EXPLOSION_SCALE,
                     new Vector2f(velocity).scale(LASER_EXPLOSION_FORCE_SCALE));
         }
