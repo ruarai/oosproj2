@@ -29,7 +29,9 @@ public class World {
         entities.add(new Player(playerDefault,this));
 
         //Load in the world from the waves.txt file
-        createWorld();
+        //createWorld();
+
+        entities.add(new EnemyBoss(new Vector2f(480,0),this));
 	}
 
 	private void createWorld(){
