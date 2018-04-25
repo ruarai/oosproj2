@@ -50,7 +50,7 @@ abstract class Enemy extends Sprite implements Collidable {
             //Create a cool explosion and screen shake, if we haven't recently
             if(explosionDelay <= 0)
             {
-                parentWorld.createExplosion(Resources.enemyShot,getCentre(), HIT_EXPLOSION_SIZE,HIT_EXPLOSION_SCALE, velocity);
+                parentWorld.createExplosion(Resources.enemyShot,collidingSprite.getCentre(), HIT_EXPLOSION_SIZE,HIT_EXPLOSION_SCALE, velocity);
                 parentWorld.getEntity(GameplayController.class).shakeScreen(PLAYER_HIT_SCREEN_SHAKE);
 
 
