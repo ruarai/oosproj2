@@ -28,7 +28,10 @@ public class EnemyJavaError extends Enemy {
         Vector2f towardsPlayer = new Vector2f(player.location).sub(location);
 
         Vector2f thrust = new Vector2f(towardsPlayer.getTheta() + (Utility.random.nextFloat()-0.5f) * 20);
-        rotation = (float)towardsPlayer.getTheta() - 90;
+
+        float rotationDiff = ((float)towardsPlayer.getTheta() - 90) - rotation;
+
+        rotation += rotationDiff * 0.01;
 
         thrust.scale(0.01f * delta);
 

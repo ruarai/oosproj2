@@ -34,6 +34,8 @@ public class EnemyJava extends Enemy {
     }
 
     public boolean getDestroyable() {
+        //The java is not destroyable, and never will be destroyable.
+        //Such is life
         return false;
     }
 
