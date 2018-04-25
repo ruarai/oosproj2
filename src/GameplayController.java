@@ -17,6 +17,9 @@ public class GameplayController extends Entity {
     private static final float SCREEN_SHAKE_DECAY = 0.001f;
     private static final float SCREEN_SHAKE_MAGNITUDE = 3f;
 
+    private static final float TIME_EFFECT_DECAY = 0.0001f;
+    private static final float TIME_EFFECT_START = 0.8f;
+
     private int playerScore = 0;
     private int playerLives = PLAYER_INIT_LIVES;
 
@@ -31,12 +34,21 @@ public class GameplayController extends Entity {
 
         timeElapsed += delta;
 
-        //Try to run down the shakeLife, and if it's less than zero make sure it's exactly zer
+        //Try to run down the shakeLife, and if it's less than zero make sure it's exactly zero
         if(shakeLife > 0)
             shakeLife -= delta * SCREEN_SHAKE_DECAY;
         else
             shakeLife = 0;
+
+        //Same for slowLife
+        if(slowLife > 0)
+            slowLife -= delta * TIME_EFFECT_DECAY;
+        else
+            slowLife = 0;
     }
+
+    private float timeElapsed = 0;
+    private float shakeLife = 0;
 
     //Method to allow shaking of the screen on some important event
     public void shakeScreen(float shakeMagnitude)
@@ -44,13 +56,20 @@ public class GameplayController extends Entity {
         shakeLife = shakeMagnitude;
     }
 
-
     public float getCurrentScreenShake(){
         return shakeLife;
     }
 
-    private float timeElapsed = 0;
-    private float shakeLife = 0;
+    private float slowLife = 0;
+
+    public void slowTime(){
+        //Starts the time dilation effect
+        slowLife = TIME_EFFECT_START;
+    }
+
+    public float getCurrentTimeScale(){
+        return 1 - slowLife;
+    }
 
     public void render(Graphics graphics) {
         //Calculate how much the screen will shake
@@ -73,12 +92,6 @@ public class GameplayController extends Entity {
         }
     }
 
-
-
-
-    public float getCurrentTimeScale(){
-
-    }
 
     //Method called when an enemy is killed, adds score to the player
     public void enemyDeath(Enemy e) {
@@ -106,6 +119,8 @@ public class GameplayController extends Entity {
                 //The player is out of lives, remove the entity and create a very big explosion
                 parentWorld.killEntity(player);
                 parentWorld.createExplosion(player.image,player.getCentre(), PLAYER_DEATH_EXPLOSION_SIZE, 2f, player.velocity);
+
+                slowTime();
             }
         }
 

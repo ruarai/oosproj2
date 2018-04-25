@@ -93,7 +93,7 @@ public class World {
     private boolean pause = false;
 
 	public void update(Input input, int delta) {
-	    delta *= timeScale;
+	    delta *= getEntity(GameplayController.class).getCurrentTimeScale();
 
 	    if(input.isKeyDown(Input.KEY_S))
 	        delta *= 5f;

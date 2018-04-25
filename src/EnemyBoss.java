@@ -174,8 +174,8 @@ public class EnemyBoss extends Enemy {
                 //This event requires an explosion
                 parentWorld.createExplosion(Resources.shot,location,DEATH_EXPLOSION_SIZE,DEATH_EXPLOSION_SCALE, new Vector2f(0,0));
 
-                //Yes, this is excessive, but totally worth it
-                //parentWorld.getEntity(GameplayController.class).shakeScreen(DEATH_SCREEN_SHAKE);
+                //Make the event even more dramatic
+                parentWorld.getEntity(GameplayController.class).slowTime();
 
                 //MOST IMPORTANT FEATURE
                 parentWorld.activateSolitaireMode();
