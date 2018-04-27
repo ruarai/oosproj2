@@ -130,6 +130,8 @@ public class GameplayController extends Entity {
 
                 //Slow motion on death
                 slowTime();
+
+                parentWorld.activateSolitaireMode();
             }
         }
 

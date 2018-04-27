@@ -22,7 +22,7 @@ public class World {
     //most important feature do not delete (press A to activate)
     private static final Color SOLITAIRE_BLUR_FILTER = new Color(1,1,1,1f);
 
-    private static final float CHROMATIC_ABERRATION_SCALE = 8f;
+    private static final float CHROMATIC_ABERRATION_SCALE = 15f;
     private static final Color FILTER_RED = new Color(1,0,0,0.333f);
     private static final Color FILTER_GREEN = new Color(0,1,0,0.333f);
     private static final Color FILTER_BLUE = new Color(0,0,1,0.333f);
@@ -144,14 +144,20 @@ public class World {
 
 	//Creates the blur filter to be drawn later
 	private void preBlur(Graphics graphics) {
-        /* Here, we draw in just the particles (we don't want to blur anything else, it hurts
+        ArrayList<Entity> drawnEntities = new ArrayList<>();
+
+        /* Here, we (normally) draw in just the particles (we don't want to blur anything else, it hurts
            the eyes). These are drawn over the last blur frame which has had some amount of
            opacity reduced. This means that earlier frames are still partially visible, producing
            the blur effect. */
-        ArrayList<Particle> particles = getEntitiesOfType(Particle.class);
+        //But we can also choose to render all Sprites, to improve SOLITAIRE MODE
+        if(solitaireMode)
+            drawnEntities.addAll(getEntitiesOfType(Sprite.class));
+        else
+            drawnEntities.addAll(getEntitiesOfType(Particle.class));
 
         blurImage.draw(0,0, getBlurFilter());
-        for(Entity e : particles) {
+        for(Entity e : drawnEntities) {
             e.render(graphics);
         }
 
