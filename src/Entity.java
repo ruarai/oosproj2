@@ -8,7 +8,7 @@ public abstract class Entity {
     }
 
     //Pointer to allow entities to interact with world
-    protected World parentWorld;
+    World parentWorld;
 
     //called every logic update
     public abstract void update(Input input, int delta);

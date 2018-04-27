@@ -11,7 +11,7 @@ abstract class Sprite extends Entity {
 
 
     //Holds the image resource to be rendered
-    protected Image image;
+    Image image;
 
     //location of the sprite
     Vector2f location = new Vector2f();
@@ -24,7 +24,7 @@ abstract class Sprite extends Entity {
     float rotation = 0f;
 
     //Returns the centre point of the image according to the size of the sprite
-    protected Vector2f getCentre()
+    Vector2f getCentre()
     {
         float x = location.x + image.getWidth() / 2;
         float y = location.y + image.getHeight() / 2;

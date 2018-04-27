@@ -18,7 +18,7 @@ public class Particle extends Sprite {
     private float rotationSpeed;
     private float life;
 
-    protected float lifeDecayRate = DEFAULT_LIFE_DECAY;
+    float lifeDecayRate = DEFAULT_LIFE_DECAY;
 
     public Particle(Image img, Vector2f location, World parent, float randomScale, Vector2f force) {
         super(img, location, parent);
