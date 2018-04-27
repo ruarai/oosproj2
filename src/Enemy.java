@@ -13,6 +13,8 @@ abstract class Enemy extends Sprite implements Collidable {
 
     private static final float PLAYER_HIT_SCREEN_SHAKE = 1.5f;
 
+    private static final float POWERUP_CHANCE = 0.05f;
+
 
     public Enemy(Image img, Vector2f v, World parent) {
         super(img, v, parent);
@@ -53,6 +55,13 @@ abstract class Enemy extends Sprite implements Collidable {
 
                 //create an explosion based on our image
                 parentWorld.createExplosion(image,collidingSprite.getCentre(),DEATH_EXPLOSION_SIZE,DEATH_EXPLOSION_SCALE, collidingSprite.velocity);
+
+                if(Utility.random.nextFloat() < POWERUP_CHANCE) {
+                    if(Utility.random.nextFloat() > 0.5f)
+                        parentWorld.addEntity(new ShieldPowerup(getCentre(),parentWorld));
+                    else
+                        parentWorld.addEntity(new ShotSpeedPowerup(getCentre(),parentWorld));
+                }
             }
         }
     }

@@ -26,12 +26,18 @@ public class GameplayController extends Entity {
 
     private int shieldTime = PLAYER_INITIAL_SHIELD_TIME;
 
+    private int shotSpeedTime = 0;
+    private static final int DEFAULT_SHOT_DELAY = 250;
+    private static final int POWERUP_SHOT_DELAY = 150;
+
     public GameplayController(World parentWorld) { super(parentWorld); }
 
     public void update(Input input, int delta) {
-        if(shieldTime > 0){
+        if(shotSpeedTime > 0)
+            shotSpeedTime -= delta;
+
+        if(shieldTime > 0)
             shieldTime -= delta;
-        }
 
         timeElapsed += delta;
 
@@ -132,5 +138,18 @@ public class GameplayController extends Entity {
     //Returns if the player's shield is active, allows for it to be rendered elsewhere
     public boolean getIsShieldActive(){
         return shieldTime > 0;
+    }
+
+    public void setShieldTime(int shieldTime)
+    {
+        this.shieldTime = shieldTime;
+    }
+
+    public int getCurrentShotDelay() {
+        return shotSpeedTime > 0 ? POWERUP_SHOT_DELAY : DEFAULT_SHOT_DELAY;
+    }
+
+    public void setShotSpeedTime(int shotSpeedTime) {
+        this.shotSpeedTime = shotSpeedTime;
     }
 }

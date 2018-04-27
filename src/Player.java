@@ -1,3 +1,4 @@
+import org.newdawn.slick.Game;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.geom.Vector2f;
@@ -38,7 +39,9 @@ class Player extends Sprite implements Collidable
     private void tryShoot(Input input, int delta){
         //See if we need to shoot a laser
         //Use isKeyPressed to ensure 1 laser per key press
-        if(input.isKeyDown(Input.KEY_SPACE) && shotDelay <= 0)
+        boolean tryShooting = input.isKeyDown(Input.KEY_SPACE) || input.isMouseButtonDown(Input.MOUSE_LEFT_BUTTON);
+
+        if(tryShooting && shotDelay <= 0)
         {
             //So shoot a laser!
             Laser laser = new Laser(Resources.shot,this.getCentre(),parentWorld, rotation);
@@ -49,7 +52,7 @@ class Player extends Sprite implements Collidable
             velocity.add(recoil);
 
             //Reset the delay to SHOT_DELAY
-            shotDelay = SHOT_DELAY;
+            shotDelay = parentWorld.getEntity(GameplayController.class).getCurrentShotDelay();
         }
 
         //Run down the delay
@@ -79,21 +82,9 @@ class Player extends Sprite implements Collidable
         friction.scale(FRICTION_SCALE);
         velocity.sub(friction);
 
-        Vector2f thrust = new Vector2f();
+        Vector2f thrust = keyboardInput(input, delta);
+        thrust.add(mouseInput(input, delta));
 
-        float rotationScale = Math.max(3-velocity.lengthSquared()/5f,1f);
-
-        //respond to key inputs, changing the thrust vector
-        if(input.isKeyDown(Input.KEY_UP))
-            thrust = new Vector2f(rotation  + DIR_FORWARDS).scale(MOVE_ACCEL * delta);
-        if(input.isKeyDown(Input.KEY_DOWN))
-            thrust = new Vector2f(rotation  + DIR_FORWARDS).scale(-MOVE_ACCEL * delta);
-        if(input.isKeyDown(Input.KEY_LEFT))
-            rotation += -ROTATION_SPEED * delta * rotationScale;
-        if(input.isKeyDown(Input.KEY_RIGHT))
-            rotation += ROTATION_SPEED * delta * rotationScale;
-
-        //
         /*We now calculate a vector we'll call 'drift':
           This is kind of complicated, but here's a basic explanation,
           Moving in a straight line, the ship's direction (rotation) and the ship's velocity are parallel
@@ -118,7 +109,40 @@ class Player extends Sprite implements Collidable
 
         //Are we moving fast enough? Create some exhaust particles for fun.
         if(velocity.length() > EXHAUST_SPEED_REQUIRED)
-            parentWorld.addEntity(new ExhaustParticle(getCentre().add(new Vector2f(rotation + 90).scale(EXHAUST_OFFSET_Y)),parentWorld,velocity));
+            parentWorld.addEntity(new ExhaustParticle(getCentre().add(new Vector2f(rotation - DIR_FORWARDS).scale(EXHAUST_OFFSET_Y)),parentWorld,velocity));
+    }
+
+    private Vector2f keyboardInput(Input input, int delta){
+        Vector2f thrust = new Vector2f();
+
+        float rotationScale = Math.max(3-velocity.lengthSquared()/5f,1f);
+
+        //respond to key inputs, changing the thrust vector
+        if(input.isKeyDown(Input.KEY_UP))
+            thrust = new Vector2f(rotation  + DIR_FORWARDS).scale(MOVE_ACCEL * delta);
+        if(input.isKeyDown(Input.KEY_DOWN))
+            thrust = new Vector2f(rotation  + DIR_FORWARDS).scale(-MOVE_ACCEL * delta);
+
+        if(input.isKeyDown(Input.KEY_LEFT))
+            rotation += -ROTATION_SPEED * delta * rotationScale;
+        if(input.isKeyDown(Input.KEY_RIGHT))
+            rotation += ROTATION_SPEED * delta * rotationScale;
+
+        return thrust;
+    }
+
+    private Vector2f mouseInput(Input input, int delta) {
+        Vector2f toMouse = new Vector2f(input.getMouseX(),input.getMouseY()).sub(getCentre());
+
+        if(input.isMouseButtonDown(Input.MOUSE_LEFT_BUTTON) || input.isMouseButtonDown(Input.MOUSE_RIGHT_BUTTON)){
+
+            rotation = (float)toMouse.getTheta() - DIR_FORWARDS;
+        }
+
+        if(toMouse.length() > 10f && input.isMouseButtonDown(Input.MOUSE_RIGHT_BUTTON))
+            return new Vector2f(rotation  + DIR_FORWARDS).scale(MOVE_ACCEL * delta);
+
+        return new Vector2f(0,0);
     }
 
     //Method to keep the object on the screen
