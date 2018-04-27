@@ -65,6 +65,7 @@ public class GameplayController extends Entity {
 
     public void slowTime(){
         //Starts the time dilation effect
+        //We can't set this to be too close to 1, since that will stop the game from updating and hence allowing it decay
         slowLife = TIME_EFFECT_START;
     }
 
