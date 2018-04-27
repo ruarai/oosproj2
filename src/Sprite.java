@@ -14,14 +14,14 @@ abstract class Sprite extends Entity {
     protected Image image;
 
     //location of the sprite
-    protected Vector2f location = new Vector2f();
+    Vector2f location = new Vector2f();
 
     //velocity of the sprite
     //not too much physical accuracy is present here, so it shouldn't be trusted beyond /cool/ effects
-    protected Vector2f velocity = new Vector2f();
+    Vector2f velocity = new Vector2f();
 
     //rotation of the sprite, affect rendering of the sprite
-    protected float rotation = 0f;
+    float rotation = 0f;
 
     //Returns the centre point of the image according to the size of the sprite
     protected Vector2f getCentre()

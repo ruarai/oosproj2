@@ -12,14 +12,13 @@ public class World {
 
     private ArrayList<Entity> entities = new ArrayList<>();
 
+    private static final Vector2f PLAYER_LOCATION = new Vector2f(480,488);
+
     //Allow for debug rendering of the bounding boxes of any sprites
     private static final boolean RENDER_BOUNDING_BOX = false;
-
     private static final Color RENDER_BLUR_FILTER = new Color(1,1,1,0.8f);
-
     //most important feature do not delete (press A to activate)
     private static final Color SOLITAIRE_BLUR_FILTER = new Color(1,1,1,1f);
-
     private static final float CHROMATIC_ABERRATION_SCALE = 8f;
 
 	public World() {
@@ -29,9 +28,8 @@ public class World {
 	    entities.add(new Background(this));
 	    entities.add(new GameplayController(this));
 
-	    //Create a Player sprite centred on (480,688)
-        Vector2f playerDefault = new Vector2f(480,688);
-        entities.add(new Player(playerDefault,this));
+	    //Create a Player sprite centred on its default location
+        entities.add(new Player(PLAYER_LOCATION,this));
 
         //Load in the world from the waves.txt file
         createWorld();
@@ -156,7 +154,6 @@ public class World {
 
         //Then we clear our frame, render everything normally
         graphics.clear();
-        graphics.resetTransform();
 
 	    //render each entity
         for(Entity e : entities) {
