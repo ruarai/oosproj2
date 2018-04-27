@@ -1,6 +1,12 @@
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.stream.Stream;
+
 //A class to simply hold all image files for the game
 //Meaning only one of each file is held in memory
 class Resources {
@@ -72,5 +78,33 @@ class Resources {
         //Of course Java expects a random number between 1 and 6 to be possibly not be between 1 and 6,
         //So we add this for good measure
         return javaError1;
+    }
+
+
+    public static ArrayList<Entity> loadWaveData(World world){
+        ArrayList<Entity> newEntities = new ArrayList<>();
+
+        //Load the waves file and split it into a stream of lines
+        try(Stream<String> lines = Files.lines(Paths.get("res","waves.txt"))){
+            //Iterate through the Stream by accessing its iterator
+            for (String line : (Iterable<String>)lines::iterator){
+                //Ignore comments:
+                if(line.startsWith("#"))
+                    continue;
+
+                //Parse the line for name, pos and delay
+                String[] parts = line.split(",");
+                String name = parts[0];
+                int xPosition = Integer.parseInt(parts[1]);
+                int delay = Integer.parseInt(parts[2]);
+
+                //Add a new spawner that will spawn the enemy
+                newEntities.add(new EnemySpawner(name,xPosition,delay,world));
+            }
+        } catch (IOException e){
+            System.out.println("Failed to read the waves file.");
+            System.out.println(e);
+        }
+        return newEntities;
     }
 }

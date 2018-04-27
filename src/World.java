@@ -38,7 +38,7 @@ public class World {
         entities.add(new Player(PLAYER_LOCATION,this));
 
         //Load in the world from the waves.txt file
-        createWorld();
+        entities.addAll(Resources.loadWaveData(this));
 
         //entities.add(new EnemyBoss(new Vector2f(480,0),this));
         //entities.add(new EnemyJava(new Vector2f(240,240),this));
@@ -51,29 +51,6 @@ public class World {
         } catch (SlickException e) { return null;}
     }
 
-	private void createWorld(){
-	    //Load the waves file and split it into a stream of lines
-	    try(Stream<String> lines = Files.lines(Paths.get("res","waves.txt"))){
-	        //Iterate through the Stream by accessing its iterator
-	        for (String line : (Iterable<String>)lines::iterator){
-	            //Ignore comments:
-	            if(line.startsWith("#"))
-	                continue;
-
-	            //Parse the line for name, pos and delay
-                String[] parts = line.split(",");
-                String name = parts[0];
-                int xPosition = Integer.parseInt(parts[1]);
-                int delay = Integer.parseInt(parts[2]);
-
-                //Add a new spawner that will spawn the enemy
-                entities.add(new EnemySpawner(name,xPosition,delay,this));
-            }
-        } catch (IOException e){
-	        System.out.println("Failed to read the waves file.");
-	        System.out.println(e);
-        }
-    }
 
 	//temporary list that we can add entities to during enumeration of actual entities list
     //prevents a concurrentModificationException
