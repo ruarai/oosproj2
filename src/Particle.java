@@ -8,16 +8,12 @@ import org.newdawn.slick.geom.Vector2f;
 public class Particle extends Sprite {
 
     private static final float ROTATION_SCALE = 0.5f;
-    private static final float SCALING_SCALE = 0.0005f;
 
     private static final float FULL_CIRCLE = 360f;
 
     private static final float DEFAULT_LIFE_DECAY = 0.0001f;
     private static final float LIFE_POWER = 4f;
     private static final float LIFE_START_RANDOM_SCALE = 0.3f;
-
-    private float scale = 1;
-    private float scaleSpeed = 0;
 
     private float rotationSpeed;
     private float life;
@@ -33,8 +29,6 @@ public class Particle extends Sprite {
         velocity.add(new Vector2f(force).scale(0.01f));
         rotationSpeed = (Utility.random.nextFloat()-0.5f) * ROTATION_SCALE;
 
-        scaleSpeed = (Utility.random.nextFloat()-0.5f) * SCALING_SCALE;
-
         rotation = (float)velocity.getTheta() - 90f;
 
         life = 1f + (Utility.random.nextFloat()-0.5f) * LIFE_START_RANDOM_SCALE;
@@ -46,7 +40,6 @@ public class Particle extends Sprite {
         location.add(scaledVel);
 
         rotation += rotationSpeed * delta;
-        scale += scaleSpeed * delta;
 
         life -= delta * lifeDecayRate;
 
@@ -64,6 +57,6 @@ public class Particle extends Sprite {
 
         image.setRotation(rotation);
 
-        image.draw(location.x,location.y,scale,filter);
+        image.draw(location.x,location.y,filter);
     }
 }
