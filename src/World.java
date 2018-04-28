@@ -14,7 +14,7 @@ public class World {
 
     //Allow for debug rendering of the bounding boxes of any sprites
     private static final boolean RENDER_BOUNDING_BOX = false;
-    private static final Color RENDER_BLUR_FILTER = new Color(1,1,1,0.9f);
+    private static final Color RENDER_BLUR_FILTER = new Color(1,1,1,0.8f);
     //most important feature do not delete (press A to activate)
     private static final Color SOLITAIRE_BLUR_FILTER = new Color(1,1,1,1f);
 
