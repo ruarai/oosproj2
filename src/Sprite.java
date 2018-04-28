@@ -23,15 +23,6 @@ abstract class Sprite extends Entity {
     //rotation of the sprite, affect rendering of the sprite
     float rotation = 0f;
 
-    //Returns the centre point of the image according to the size of the sprite
-    Vector2f getCentre()
-    {
-        float x = location.x + image.getWidth() / 2;
-        float y = location.y + image.getHeight() / 2;
-
-        return new Vector2f(x,y);
-    }
-
 
     //Create a new sprite from specified file with a default location vector v
     public Sprite(Image img, Vector2f v, World parent) {
@@ -44,6 +35,16 @@ abstract class Sprite extends Entity {
 
         parentWorld = parent;
     }
+
+    //Returns the centre point of the image according to the size of the sprite
+    Vector2f getCentre()
+    {
+        float x = location.x + image.getWidth() / 2;
+        float y = location.y + image.getHeight() / 2;
+
+        return new Vector2f(x,y);
+    }
+
 
     //We don't want to try and implement any base update code for sprites, make it abstract
 	abstract public void update(Input input, int delta);

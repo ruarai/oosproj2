@@ -16,8 +16,6 @@ class Player extends Sprite implements Collidable
 
     private static final int SHIELD_OFFSET = 16;
 
-    private static final int SHOT_DELAY = 250;
-
     private static final float PLAYER_HIT_BOUNCE_SCALE = 0.1f;
 
     private static final float EXHAUST_SPEED_REQUIRED = 2f;
@@ -71,10 +69,15 @@ class Player extends Sprite implements Collidable
         }
     }
 
+    private float lastRotation;
+
 
     //Method to calculate movement
     private void move(Input input, int delta)
     {
+        lastRotation = rotation;
+
+
         Vector2f friction = new Vector2f(velocity);
 
         //Calculate a friction vector to remove from the velocity
@@ -171,5 +174,9 @@ class Player extends Sprite implements Collidable
 
             parentWorld.getEntity(GameplayController.class).playerDeath();
         }
+    }
+
+    public float getRotationChange(){
+        return rotation - lastRotation;
     }
 }

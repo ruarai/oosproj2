@@ -1,11 +1,7 @@
 import org.newdawn.slick.*;
 import org.newdawn.slick.geom.Vector2f;
 
-import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.stream.Stream;
 
 
 public class World {
@@ -139,6 +135,7 @@ public class World {
         }
 
         postBlur();
+
         chromaticAberration(graphics);
 	}
 
@@ -146,15 +143,16 @@ public class World {
 	private void preBlur(Graphics graphics) {
         ArrayList<Entity> drawnEntities = new ArrayList<>();
 
+
         /* Here, we (normally) draw in just the particles (we don't want to blur anything else, it hurts
            the eyes). These are drawn over the last blur frame which has had some amount of
            opacity reduced. This means that earlier frames are still partially visible, producing
            the blur effect. */
         //But we can also choose to render all Sprites, to improve SOLITAIRE MODE
         if(solitaireMode)
-            drawnEntities.addAll(getEntitiesOfType(Sprite.class));
+            drawnEntities.addAll(getEntities(Sprite.class));
         else
-            drawnEntities.addAll(getEntitiesOfType(Particle.class));
+            drawnEntities.addAll(getEntities(Particle.class));
 
         blurImage.draw(0,0, getBlurFilter());
         for(Entity e : drawnEntities) {
@@ -203,7 +201,7 @@ public class World {
 
 	private void handleCollisions() {
 	    //Create a list of all collidable objects, then take the list as an array
-	    ArrayList<Collidable> collidables = getEntitiesOfType(Collidable.class);
+	    ArrayList<Collidable> collidables = getEntities(Collidable.class);
 
 	    //PS: Java sucks at this
         Collidable[] collidableArray = new Collidable[collidables.size()];
@@ -248,7 +246,7 @@ public class World {
 
     //Generic method that allows us to query the entity list for entities of a certain type 'type'
     //Really simplifies code elsewhere
-    public <T> ArrayList<T> getEntitiesOfType(Class<T> type)
+    public <T> ArrayList<T> getEntities(Class<T> type)
     {
         ArrayList<T> addedEntities = new ArrayList<>();
 
