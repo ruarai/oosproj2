@@ -23,11 +23,17 @@ public class World {
     private static final Color FILTER_GREEN = new Color(0,1,0,0.333f);
     private static final Color FILTER_BLUE = new Color(0,0,1,0.333f);
 
+    private static final float BACKGROUND_SCROLL_NEAR = 0.17f;
+    private static final float BACKGROUND_SCROLL_FAR = 0.13f;
+
 	public World() {
 	    //Load in all the imagery
 	    Resources.loadResources();
 
-	    entities.add(new Background(this));
+	    //We've made the background transparent so we can render multiple layers for some parallax effect
+        entities.add(new Background(Resources.spaceFar,BACKGROUND_SCROLL_FAR,this));
+	    entities.add(new Background(Resources.space,BACKGROUND_SCROLL_NEAR,this));
+
 	    entities.add(new GameplayController(this));
 
 	    //Create a Player sprite centred on its default location

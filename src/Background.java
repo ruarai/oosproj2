@@ -13,12 +13,13 @@ class Background extends Entity {
     private int xRepeats;
     private int yRepeats;
 
-    private static final float SCROLL_SPEED = 0.2f;
-
-    public Background(World parentWorld)
+    private float scrollSpeed;
+    public Background(Image img, float scrollSpeed,World parentWorld)
     {
         super(parentWorld);
-        backgroundImage = Resources.space;
+
+        backgroundImage = img;
+        this.scrollSpeed = scrollSpeed;
 
         //Calculate the number of times we can tile the background
         xRepeats = (int)Math.ceil((float)App.SCREEN_WIDTH / backgroundImage.getWidth());
@@ -29,7 +30,7 @@ class Background extends Entity {
     public void update(Input input, int delta) {
         //Increment the scroll value according to delta
         //We loop around the vertical dimension according to our calculated yRepeats
-        scroll = (scroll + delta * SCROLL_SPEED) % (yRepeats * backgroundImage.getHeight());
+        scroll = (scroll + delta * scrollSpeed) % (yRepeats * backgroundImage.getHeight());
     }
 
     public void render(Graphics graphics) {
@@ -48,7 +49,5 @@ class Background extends Entity {
                 backgroundImage.draw(xLoc,yLoc);
             }
         }
-
-
     }
 }

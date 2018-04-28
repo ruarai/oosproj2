@@ -23,6 +23,9 @@ class Resources {
     public static Image space;
     public static Image spaceship;
 
+
+    public static Image spaceFar;
+
     public static Image java;
     public static Image javaError1;
     public static Image javaError2;
@@ -48,6 +51,8 @@ class Resources {
             sineEnemy = new Image("res/sine-enemy.png");
             space = new Image("res/space.png");
             spaceship = new Image("res/spaceship.png");
+
+            spaceFar = new Image("res/space-far.png");
 
             java = new Image("res/java.png");
             javaError1 = new Image("res/java-err-1.png");
