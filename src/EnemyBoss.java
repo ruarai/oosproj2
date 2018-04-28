@@ -128,7 +128,7 @@ public class EnemyBoss extends Enemy {
 
         location.add(velocity);
 
-        if((xGoalHigher && location.x > xGoal)||(!xGoalHigher && location.x < xGoal))
+        if((xGoalHigher && getCentre().x > xGoal)||(!xGoalHigher && getCentre().x < xGoal))
         {
             //location.x = xGoal;
             currentState = nextState;
