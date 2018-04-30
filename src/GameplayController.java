@@ -118,7 +118,7 @@ public class GameplayController extends Entity {
             //Otherwise, we kill the player and create a cool explosion.
             Player player = parentWorld.getEntity(Player.class);
 
-            if(playerLives > 0){
+            if(playerLives > 1){
                 //If the player has lives left, take one and active shield
                 playerLives--;
                 shieldTime = PLAYER_DEATH_SHIELD_TIME;
