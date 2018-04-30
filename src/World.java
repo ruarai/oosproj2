@@ -83,7 +83,7 @@ public class World {
         if(input.isKeyDown(Input.KEY_D))
             delta /= TIME_DILATION_FACTOR;
         if(input.isKeyPressed(Input.KEY_A))
-            solitaireMode = !solitaireMode;
+            activateSolitaireMode();
         if(input.isKeyPressed(Input.KEY_P))
             pause = !pause;
 
@@ -114,10 +114,10 @@ public class World {
     private Image frameImage = generateBlankImage();
 
     //Whether or not we should allow particles to be drawn in solitaire mode
-    private boolean solitaireMode = false;
+    private boolean solitaireRendering = false;
 
     private Color getBlurFilter(){
-        return solitaireMode ? SOLITAIRE_BLUR_FILTER : RENDER_BLUR_FILTER;
+        return solitaireRendering ? SOLITAIRE_BLUR_FILTER : RENDER_BLUR_FILTER;
     }
 
     public void render(Graphics graphics) {
@@ -155,7 +155,7 @@ public class World {
            opacity reduced. This means that earlier frames are still partially visible, producing
            the blur effect. */
         //But we can also choose to render all Sprites, to improve SOLITAIRE MODE
-        if(solitaireMode)
+        if(solitaireRendering)
             drawnEntities.addAll(getEntities(Sprite.class));
         else
             drawnEntities.addAll(getEntities(Particle.class));
@@ -202,7 +202,9 @@ public class World {
 
 	public void activateSolitaireMode() {
         //Most important thing, enables solitaire rendering
-        solitaireMode = true;
+        solitaireRendering = true;
+
+        getEntity(GameplayController.class).enableSolitaireSpawning();
     }
 
 	private void handleCollisions() {

@@ -44,7 +44,7 @@ public class Particle extends Sprite {
         life -= delta * lifeDecayRate;
 
         //Have we moved off the screen/ran out of life? We should remove ourselves
-        if(Utility.offScreen(location) || life < 0)
+        if(Utility.offScreen(location, image) || life < 0)
         {
             parentWorld.killEntity(this);
         }

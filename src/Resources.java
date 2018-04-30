@@ -34,6 +34,8 @@ class Resources {
     public static Image javaError5;
     public static Image javaError6;
 
+    public static Image solitaire;
+
     private static final int NUM_JAVA_ERRORS = 6;
 
     //Tries to load in all the resources from disk
@@ -61,6 +63,8 @@ class Resources {
             javaError4 = new Image("res/java-err-4.png");
             javaError5 = new Image("res/java-err-5.png");
             javaError6 = new Image("res/java-err-6.png");
+
+            solitaire = new Image("res/solitaire.png");
         } catch(SlickException e){
             //This shouldn't happen, but ok, print an exception message
             System.out.println("An error occurred whilst loading resources:");

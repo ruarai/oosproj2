@@ -21,6 +21,9 @@ public class GameplayController extends Entity {
     private static final float TIME_EFFECT_DECAY = 0.0001f;
     private static final float TIME_EFFECT_START = 0.8f;
 
+    private static final int SOLITAIRE_INITIAL_DELAY = 3500;
+    private static final int SOLITAIRE_DELAY = 500;
+
     private int playerScore = 0;
     private int playerLives = PLAYER_INIT_LIVES;
 
@@ -52,6 +55,15 @@ public class GameplayController extends Entity {
             slowLife -= delta * TIME_EFFECT_DECAY;
         else
             slowLife = 0;
+
+        if(spawnSolitaires){
+            if(solitaireDelay > 0){
+                solitaireDelay -= delta;
+            }else {
+                parentWorld.addEntity(new Solitaire(parentWorld));
+                solitaireDelay = SOLITAIRE_DELAY;
+            }
+        }
     }
 
     private float timeElapsed = 0;
@@ -153,5 +165,12 @@ public class GameplayController extends Entity {
 
     public void setShotSpeedTime(int shotSpeedTime) {
         this.shotSpeedTime = shotSpeedTime;
+    }
+
+    private boolean spawnSolitaires = false;
+    private int solitaireDelay = SOLITAIRE_INITIAL_DELAY;
+
+    public void enableSolitaireSpawning() {
+        spawnSolitaires = true;
     }
 }
