@@ -138,7 +138,7 @@ public class GameplayController extends Entity {
             else {
                 //The player is out of lives, remove the entity and create a very big explosion
                 parentWorld.killEntity(player);
-                parentWorld.createExplosion(player.image,player.getCentre(), PLAYER_DEATH_EXPLOSION_SIZE, PLAYER_DEATH_EXPLOSION_SCALE, player.velocity);
+                parentWorld.createExplosion(player.getImage(),player.getCentre(), PLAYER_DEATH_EXPLOSION_SIZE, PLAYER_DEATH_EXPLOSION_SCALE, player.getVelocity());
 
                 //Slow motion on death
                 slowTime();

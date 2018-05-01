@@ -18,10 +18,10 @@ public class EnemyBasic extends Enemy {
         Vector2f velocity = new Vector2f(DIRECTION);
         velocity.scale(SPEED * delta);
 
-        location.add(velocity);
+        getLocation().add(velocity);
 
         //Whilst we expect enemies to be off screen upwards, if they're off the screen downwards they should be killed
-        if(location.y > App.SCREEN_HEIGHT)
+        if(getLocation().y > App.SCREEN_HEIGHT)
             parentWorld.killEntity(this);
     }
 

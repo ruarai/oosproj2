@@ -27,13 +27,13 @@ public class EnemySine extends Enemy {
         Vector2f velocity = new Vector2f(DIRECTION_STRAIGHT);
         velocity.scale(SPEED * delta);
 
-        location.add(velocity);
+        getLocation().add(velocity);
 
-        location.x = initialX + AMPLITUDE * (float)Math.sin(((2*Math.PI)/(PERIOD))*timeElapsed);
+        getLocation().x = initialX + AMPLITUDE * (float)Math.sin(((2*Math.PI)/(PERIOD))*timeElapsed);
 
 
         //Kill the enemy once it leaves the screen
-        if(location.y > App.SCREEN_HEIGHT)
+        if(getLocation().y > App.SCREEN_HEIGHT)
             parentWorld.killEntity(this);
     }
 

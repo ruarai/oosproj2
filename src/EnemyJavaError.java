@@ -18,26 +18,26 @@ public class EnemyJavaError extends Enemy {
             return;
 
 
-        Vector2f friction = new Vector2f(velocity);
+        Vector2f friction = new Vector2f(getVelocity());
 
         //Calculate a friction vector to remove from the velocity
         //This sadly isn't frame-independent, but implementing this correctly seems difficult
         friction.scale(0.006f);
-        velocity.sub(friction);
+        getVelocity().sub(friction);
 
-        Vector2f towardsPlayer = new Vector2f(player.location).sub(location);
+        Vector2f towardsPlayer = new Vector2f(player.getLocation()).sub(getLocation());
 
         Vector2f thrust = new Vector2f(towardsPlayer.getTheta() + (Utility.random.nextFloat()-0.5f) * 20);
 
-        float rotationDiff = ((float)towardsPlayer.getTheta() - 90) - rotation;
+        float rotationDiff = ((float)towardsPlayer.getTheta() - 90) - getRotation();
 
-        rotation += rotationDiff * 0.01;
+        setRotation(getRotation() + rotationDiff * 0.01f);
 
         thrust.scale(0.01f * delta);
 
-        velocity.add(thrust);
+        getVelocity().add(thrust);
 
-        location.add(velocity);
+        getLocation().add(getVelocity());
 
     }
 

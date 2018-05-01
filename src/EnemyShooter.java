@@ -28,7 +28,7 @@ public class EnemyShooter extends Enemy {
         super.update(input, delta);
 
         //Are we at our target location yet?
-        if(location.y < targetY)
+        if(getLocation().y < targetY)
         {
             //No, keep moving down:
 
@@ -36,7 +36,7 @@ public class EnemyShooter extends Enemy {
             Vector2f velocity = new Vector2f(DIRECTION);
             velocity.scale(SPEED * delta);
 
-            location.add(velocity);
+            getLocation().add(velocity);
         }
         else {
             //Yes, let's try and shoot:

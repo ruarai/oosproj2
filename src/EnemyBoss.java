@@ -60,7 +60,7 @@ public class EnemyBoss extends Enemy {
                     //Move to the next state, calculating a new random xGoal and thus xGoalHigher
                     currentState = State.RandomXWalk;
                     xGoal = Utility.random.nextFloat() * (X_RAND_MAX-X_RAND_MIN) + X_RAND_MIN;
-                    xGoalHigher =  location.x < xGoal;
+                    xGoalHigher =  getLocation().x < xGoal;
                 }
                 break;
             case RandomXWalk:
@@ -73,7 +73,7 @@ public class EnemyBoss extends Enemy {
                     //Move to the next state, calculating again the random xGoal and xGoalHigher
                     currentState = State.RandomXWalkShooting;
                     xGoal = Utility.random.nextFloat() * (X_RAND_MAX-X_RAND_MIN) + X_RAND_MIN;
-                    xGoalHigher =  location.x < xGoal;
+                    xGoalHigher =  getLocation().x < xGoal;
                 }
                 break;
             case RandomXWalkShooting:
@@ -95,12 +95,12 @@ public class EnemyBoss extends Enemy {
     private void initialWalk(int delta) {
         Vector2f velocity = new Vector2f(INIT_WALK_DIRECTION);
         velocity.scale(INIT_WALK_SPEED * delta);
-        location.add(velocity);
+        getLocation().add(velocity);
 
         //We reached our goal, ensure we're exactly at goal then move to next state
-        if(location.y >= INIT_WALK_GOAL)
+        if(getLocation().y >= INIT_WALK_GOAL)
         {
-            location.y = INIT_WALK_GOAL;
+            getLocation().y = INIT_WALK_GOAL;
             currentState = State.FirstWait;
         }
     }
@@ -125,7 +125,7 @@ public class EnemyBoss extends Enemy {
         if(xGoalHigher)
             velocity.scale(-1);
 
-        location.add(velocity);
+        getLocation().add(velocity);
 
         if((xGoalHigher && getCentre().x > xGoal)||(!xGoalHigher && getCentre().x < xGoal))
         {
@@ -178,7 +178,7 @@ public class EnemyBoss extends Enemy {
                 parentWorld.getEntity(GameplayController.class).enemyDeath(this);
 
                 //This event requires an explosion
-                parentWorld.createExplosion(Resources.shot,location,DEATH_EXPLOSION_SIZE,DEATH_EXPLOSION_SCALE, new Vector2f(0,0));
+                parentWorld.createExplosion(Resources.shot, getLocation(),DEATH_EXPLOSION_SIZE,DEATH_EXPLOSION_SCALE, new Vector2f(0,0));
 
                 //Make the event even more dramatic
                 parentWorld.getEntity(GameplayController.class).slowTime();

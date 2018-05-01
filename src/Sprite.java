@@ -11,17 +11,17 @@ abstract class Sprite extends Entity {
 
 
     //Holds the image resource to be rendered
-    Image image;
+    private Image image;
 
     //location of the sprite
-    Vector2f location = new Vector2f();
+    private Vector2f location = new Vector2f();
 
     //velocity of the sprite
     //not too much physical accuracy is present here, so it shouldn't be trusted beyond /cool/ effects
-    Vector2f velocity = new Vector2f();
+    private Vector2f velocity = new Vector2f();
 
     //rotation of the sprite, affect rendering of the sprite
-    float rotation = 0f;
+    private float rotation = 0f;
 
 
     //Create a new sprite from specified file with a default location vector v
@@ -30,8 +30,8 @@ abstract class Sprite extends Entity {
         this.image = img;
 
         //We will move the sprite such that its centre lay upon the vector coordinate
-        location.x = v.x - img.getWidth() / 2;
-        location.y = v.y - img.getHeight() / 2;
+        getLocation().x = v.x - img.getWidth() / 2;
+        getLocation().y = v.y - img.getHeight() / 2;
 
         parentWorld = parent;
     }
@@ -39,8 +39,8 @@ abstract class Sprite extends Entity {
     //Returns the centre point of the image according to the size of the sprite
     Vector2f getCentre()
     {
-        float x = location.x + image.getWidth() / 2;
-        float y = location.y + image.getHeight() / 2;
+        float x = getLocation().x + getImage().getWidth() / 2;
+        float y = getLocation().y + getImage().getHeight() / 2;
 
         return new Vector2f(x,y);
     }
@@ -52,8 +52,8 @@ abstract class Sprite extends Entity {
 	//but rendering is the same across all sprites
 	public void render(Graphics graphics)
     {
-        image.setRotation(rotation);
-        image.draw(location.x,location.y);
+        getImage().setRotation(getRotation());
+        getImage().draw(getLocation().x, getLocation().y);
 	}
 
 	//Method to get bounding box that accounts for rotation
@@ -62,21 +62,21 @@ abstract class Sprite extends Entity {
         Polygon polygon = new Polygon();
 
         //Find the two half-lengths of the rectangle of our image
-        float halfWidth = image.getWidth() / 2;
-        float halfHeight = image.getHeight() / 2;
+        float halfWidth = getImage().getWidth() / 2;
+        float halfHeight = getImage().getHeight() / 2;
 
         //Find the centre location, this is the same as our centre of rotation
         Vector2f centre = getCentre();
 
         //Generate two vectors that are parallel/perpendicular to our /rotated/ image, of half lengths each
-        Vector2f left = new Vector2f(rotation).scale(halfWidth);
-        Vector2f down = new Vector2f(rotation + DIR_BEHIND).scale(halfHeight);
+        Vector2f left = new Vector2f(getRotation()).scale(halfWidth);
+        Vector2f down = new Vector2f(getRotation() + DIR_BEHIND).scale(halfHeight);
 
         //Calculate a simple vector that will adjust for the movement made between frames
         //Points in opposite direction of motion and is of length proportional to velocity
         //This really isn't a perfect solution, but helps a lot!
-        float currSpeed = velocity.length();
-        Vector2f extraBehind = new Vector2f(rotation + DIR_BEHIND).scale(currSpeed);
+        float currSpeed = getVelocity().length();
+        Vector2f extraBehind = new Vector2f(getRotation() + DIR_BEHIND).scale(currSpeed);
 
 
         //Calculate the four vectors by adding our new perpendicular vectors to our centre
@@ -92,5 +92,33 @@ abstract class Sprite extends Entity {
         polygon.addPoint(d.x,d.y);
 
         return polygon;
+    }
+
+    public Image getImage() {
+        return image;
+    }
+
+    public Vector2f getLocation() {
+        return location;
+    }
+
+    public void setLocation(Vector2f location) {
+        this.location = location;
+    }
+
+    public Vector2f getVelocity() {
+        return velocity;
+    }
+
+    public void setVelocity(Vector2f velocity) {
+        this.velocity = velocity;
+    }
+
+    public float getRotation() {
+        return rotation;
+    }
+
+    public void setRotation(float rotation) {
+        this.rotation = rotation;
     }
 }

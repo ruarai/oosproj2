@@ -1,4 +1,3 @@
-import org.newdawn.slick.Game;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.geom.Vector2f;
@@ -42,12 +41,12 @@ class Player extends Sprite implements Collidable
         if(tryShooting && shotDelay <= 0)
         {
             //So shoot a laser!
-            Laser laser = new Laser(Resources.shot,this.getCentre(),parentWorld, rotation);
+            Laser laser = new Laser(Resources.shot,this.getCentre(),parentWorld, getRotation());
             parentWorld.addEntity(laser);
 
             //Calculate some amount of recoil
-            Vector2f recoil = new Vector2f(rotation + DIR_FORWARDS).scale(-RECOIL_ACCEL * delta);
-            velocity.add(recoil);
+            Vector2f recoil = new Vector2f(getRotation() + DIR_FORWARDS).scale(-RECOIL_ACCEL * delta);
+            getVelocity().add(recoil);
 
             //Reset the delay to SHOT_DELAY
             shotDelay = parentWorld.getEntity(GameplayController.class).getCurrentShotDelay();
@@ -64,8 +63,8 @@ class Player extends Sprite implements Collidable
         //Check if we have a shield active, and if so, draw it
         if(parentWorld.getEntity(GameplayController.class).getIsShieldActive())
         {
-            Resources.shield.setRotation(rotation);
-            Resources.shield.draw(location.x - SHIELD_OFFSET,location.y - SHIELD_OFFSET);
+            Resources.shield.setRotation(getRotation());
+            Resources.shield.draw(getLocation().x - SHIELD_OFFSET, getLocation().y - SHIELD_OFFSET);
         }
     }
 
@@ -75,15 +74,15 @@ class Player extends Sprite implements Collidable
     //Method to calculate movement
     private void move(Input input, int delta)
     {
-        lastRotation = rotation;
+        lastRotation = getRotation();
 
 
-        Vector2f friction = new Vector2f(velocity);
+        Vector2f friction = new Vector2f(getVelocity());
 
         //Calculate a friction vector to remove from the velocity
         //This sadly isn't frame-independent, but implementing this correctly seems difficult
         friction.scale(FRICTION_SCALE);
-        velocity.sub(friction);
+        getVelocity().sub(friction);
 
         Vector2f thrust = keyboardInput(input, delta);
         thrust.add(mouseInput(input, delta));
@@ -99,37 +98,37 @@ class Player extends Sprite implements Collidable
           Scaling this down a little such that it's not excessive, we can then add it to the velocity, making the ship
           turn 'naturally' around corners. You'll just need to ignore that this doesn't make any sense in space.*/
         Vector2f drift = new Vector2f();
-        velocity.projectOntoUnit(new Vector2f(rotation + DIR_FORWARDS),drift);
-        drift.sub(velocity);
+        getVelocity().projectOntoUnit(new Vector2f(getRotation() + DIR_FORWARDS),drift);
+        drift.sub(getVelocity());
         drift.scale(DRIFT_SCALE);
 
         //Add our new vectors
-        velocity.add(thrust);
-        velocity.add(drift);
+        getVelocity().add(thrust);
+        getVelocity().add(drift);
 
         //Move our ship according to our now-updated velocity
-        location.add(velocity);
+        getLocation().add(getVelocity());
 
         //Are we moving fast enough? Create some exhaust particles for fun.
-        if(velocity.length() > EXHAUST_SPEED_REQUIRED)
-            parentWorld.addEntity(new ExhaustParticle(getCentre().add(new Vector2f(rotation - DIR_FORWARDS).scale(EXHAUST_OFFSET_Y)),parentWorld,velocity));
+        if(getVelocity().length() > EXHAUST_SPEED_REQUIRED)
+            parentWorld.addEntity(new ExhaustParticle(getCentre().add(new Vector2f(getRotation() - DIR_FORWARDS).scale(EXHAUST_OFFSET_Y)),parentWorld, getVelocity()));
     }
 
     private Vector2f keyboardInput(Input input, int delta){
         Vector2f thrust = new Vector2f();
 
-        float rotationScale = Math.max(3-velocity.lengthSquared()/5f,1f);
+        float rotationScale = Math.max(3- getVelocity().lengthSquared()/5f,1f);
 
         //respond to key inputs, changing the thrust vector
         if(input.isKeyDown(Input.KEY_UP))
-            thrust = new Vector2f(rotation  + DIR_FORWARDS).scale(MOVE_ACCEL * delta);
+            thrust = new Vector2f(getRotation() + DIR_FORWARDS).scale(MOVE_ACCEL * delta);
         if(input.isKeyDown(Input.KEY_DOWN))
-            thrust = new Vector2f(rotation  + DIR_FORWARDS).scale(-MOVE_ACCEL * delta);
+            thrust = new Vector2f(getRotation() + DIR_FORWARDS).scale(-MOVE_ACCEL * delta);
 
         if(input.isKeyDown(Input.KEY_LEFT))
-            rotation += -ROTATION_SPEED * delta * rotationScale;
+            setRotation(getRotation() + -ROTATION_SPEED * delta * rotationScale);
         if(input.isKeyDown(Input.KEY_RIGHT))
-            rotation += ROTATION_SPEED * delta * rotationScale;
+            setRotation(getRotation() + ROTATION_SPEED * delta * rotationScale);
 
         return thrust;
     }
@@ -139,11 +138,11 @@ class Player extends Sprite implements Collidable
 
         if(input.isMouseButtonDown(Input.MOUSE_LEFT_BUTTON) || input.isMouseButtonDown(Input.MOUSE_RIGHT_BUTTON)){
 
-            rotation = (float)toMouse.getTheta() - DIR_FORWARDS;
+            setRotation((float)toMouse.getTheta() - DIR_FORWARDS);
         }
 
         if(toMouse.length() > 10f && input.isMouseButtonDown(Input.MOUSE_RIGHT_BUTTON))
-            return new Vector2f(rotation  + DIR_FORWARDS).scale(MOVE_ACCEL * delta);
+            return new Vector2f(getRotation() + DIR_FORWARDS).scale(MOVE_ACCEL * delta);
 
         return new Vector2f(0,0);
     }
@@ -152,17 +151,17 @@ class Player extends Sprite implements Collidable
     private void keepOnScreen()
     {
         //handle the literal edgecases:
-        if(location.x > App.SCREEN_WIDTH - image.getWidth())
-            location.x = App.SCREEN_WIDTH - image.getWidth();
+        if(getLocation().x > App.SCREEN_WIDTH - getImage().getWidth())
+            getLocation().x = App.SCREEN_WIDTH - getImage().getWidth();
 
-        if(location.y > App.SCREEN_HEIGHT - image.getHeight())
-            location.y = App.SCREEN_HEIGHT - image.getHeight();
+        if(getLocation().y > App.SCREEN_HEIGHT - getImage().getHeight())
+            getLocation().y = App.SCREEN_HEIGHT - getImage().getHeight();
 
-        if(location.x < 0)
-            location.x = 0;
+        if(getLocation().x < 0)
+            getLocation().x = 0;
 
-        if(location.y < 0)
-            location.y = 0;
+        if(getLocation().y < 0)
+            getLocation().y = 0;
     }
 
     public void onCollision(Sprite collidingSprite) {
@@ -170,13 +169,13 @@ class Player extends Sprite implements Collidable
         if(collidingSprite instanceof Enemy) {
             Enemy enemy = (Enemy)collidingSprite;
 
-            velocity.add(new Vector2f(enemy.velocity).scale(PLAYER_HIT_BOUNCE_SCALE));
+            getVelocity().add(new Vector2f(enemy.getVelocity()).scale(PLAYER_HIT_BOUNCE_SCALE));
 
             parentWorld.getEntity(GameplayController.class).playerDeath();
         }
     }
 
     public float getRotationChange(){
-        return rotation - lastRotation;
+        return getRotation() - lastRotation;
     }
 }

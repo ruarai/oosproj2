@@ -14,13 +14,13 @@ public class EnemyShot extends Enemy {
         super.update(input, delta);
 
         //Vector moving downwards
-        velocity = new Vector2f(DIRECTION);
-        velocity.scale(SPEED * delta);
+        setVelocity(new Vector2f(DIRECTION));
+        getVelocity().scale(SPEED * delta);
 
-        location.add(velocity);
+        getLocation().add(getVelocity());
 
         //Once the laser leaves the screen, kill it
-        if(location.y > App.SCREEN_HEIGHT)
+        if(getLocation().y > App.SCREEN_HEIGHT)
             parentWorld.killEntity(this);
     }
 
