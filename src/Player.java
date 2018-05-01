@@ -68,15 +68,10 @@ class Player extends Sprite implements Collidable
         }
     }
 
-    private float lastRotation;
-
 
     //Method to calculate movement
     private void move(Input input, int delta)
     {
-        lastRotation = getRotation();
-
-
         Vector2f friction = new Vector2f(getVelocity());
 
         //Calculate a friction vector to remove from the velocity
@@ -173,9 +168,5 @@ class Player extends Sprite implements Collidable
 
             parentWorld.getEntity(GameplayController.class).playerDeath();
         }
-    }
-
-    public float getRotationChange(){
-        return getRotation() - lastRotation;
     }
 }

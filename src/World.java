@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class World {
 
-    private ArrayList<Entity> entities = new ArrayList<>();
+    private final ArrayList<Entity> entities = new ArrayList<>();
 
     private static final float TIME_DILATION_FACTOR = 5f;
 
@@ -56,10 +56,10 @@ public class World {
 
 	//temporary list that we can add entities to during enumeration of actual entities list
     //prevents a concurrentModificationException
-	private ArrayList<Entity> newEntities = new ArrayList<>();
+	private final ArrayList<Entity> newEntities = new ArrayList<>();
 
 	//similarly for removing entities, even allowing entities to remove themselves
-    private ArrayList<Entity> deadEntities = new ArrayList<>();
+    private final ArrayList<Entity> deadEntities = new ArrayList<>();
 
 	//Allows for the addition of entities from outside classes
 	public void addEntity(Entity e)

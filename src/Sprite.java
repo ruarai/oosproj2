@@ -7,7 +7,7 @@ import org.newdawn.slick.geom.Vector2f;
 //Sprites are basic entities with some kind of image and location
 abstract class Sprite extends Entity {
 
-    private static float DIR_BEHIND = 90f;
+    private static final float DIR_BEHIND = 90f;
 
 
     //Holds the image resource to be rendered
@@ -102,23 +102,19 @@ abstract class Sprite extends Entity {
         return location;
     }
 
-    public void setLocation(Vector2f location) {
-        this.location = location;
-    }
-
     public Vector2f getVelocity() {
         return velocity;
     }
 
-    public void setVelocity(Vector2f velocity) {
+    void setVelocity(Vector2f velocity) {
         this.velocity = velocity;
     }
 
-    public float getRotation() {
+    float getRotation() {
         return rotation;
     }
 
-    public void setRotation(float rotation) {
+    void setRotation(float rotation) {
         this.rotation = rotation;
     }
 }

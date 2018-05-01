@@ -3,7 +3,7 @@ import org.newdawn.slick.geom.Vector2f;
 
 public class EnemyJava extends Enemy {
 
-    private final int SHOT_DELAY = 1500;
+    private static final int SHOT_DELAY = 1500;
 
     public EnemyJava(Vector2f v, World parent) {
         super(Resources.java, v, parent);
@@ -35,9 +35,5 @@ public class EnemyJava extends Enemy {
     public boolean getDestroyable() {
         //The java is not destroyable, naturally
         return false;
-    }
-
-    public void onCollision(Sprite collidingSprite) {
-        super.onCollision(collidingSprite);
     }
 }

@@ -65,10 +65,10 @@ class Resources {
             javaError6 = new Image("res/java-err-6.png");
 
             solitaire = new Image("res/solitaire.png");
-        } catch(SlickException e){
+        } catch(Exception e){
             //This shouldn't happen, but ok, print an exception message
-            System.out.println("An error occurred whilst loading resources:");
-            System.out.println(e);
+            System.out.println("An exception occurred whilst loading resources:");
+            e.printStackTrace();
         }
     }
 
@@ -112,7 +112,7 @@ class Resources {
             }
         } catch (IOException e){
             System.out.println("Failed to read the waves file.");
-            System.out.println(e);
+            e.printStackTrace();
         }
         return newEntities;
     }

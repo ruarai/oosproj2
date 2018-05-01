@@ -122,12 +122,8 @@ public class GameplayController extends Entity {
     public void playerDeath(){
 
         //Is the shield active?
-        if(getIsShieldActive()) {
-            //If so, player doesn't die, try again later
-            return;
-        }
-        else {
-            //Otherwise, we kill the player and create a cool explosion.
+        if(!getIsShieldActive()) {
+            //If not, we kill the player and create a cool explosion.
             Player player = parentWorld.getEntity(Player.class);
 
             if(playerLives > 1){

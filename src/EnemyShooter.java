@@ -3,13 +3,13 @@ import org.newdawn.slick.geom.Vector2f;
 
 public class EnemyShooter extends Enemy {
 
-    private final float SPEED = 0.2f;
-    private final float DIRECTION = 90f;
+    private static final float SPEED = 0.2f;
+    private static final float DIRECTION = 90f;
 
-    private final float MIN_TARGET_Y = 48;
-    private final float MAX_TARGET_Y = 464;
+    private static final float MIN_TARGET_Y = 48;
+    private static final float MAX_TARGET_Y = 464;
 
-    private final int SHOT_DELAY = 3500;
+    private static final int SHOT_DELAY = 3500;
 
 
     public EnemyShooter(Vector2f location, World parent) {

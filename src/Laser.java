@@ -6,7 +6,7 @@ public class Laser extends Sprite implements Collidable {
 
     //The speed that the laser moves upwards on the screen
     private static final float SPEED = 3f;
-;
+
     private static final int LASER_EXPLOSION_SIZE = 200;
     private static final float LASER_EXPLOSION_SCALE = 0.4f;
     private static final float LASER_EXPLOSION_FORCE_SCALE = 2f;

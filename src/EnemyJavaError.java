@@ -48,8 +48,4 @@ public class EnemyJavaError extends Enemy {
     public boolean getDestroyable() {
         return true;
     }
-
-    public void onCollision(Sprite collidingSprite) {
-        super.onCollision(collidingSprite);
-    }
 }
