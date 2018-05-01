@@ -4,7 +4,7 @@ import org.newdawn.slick.geom.Vector2f;
 
 public abstract class Powerup extends Sprite implements Collidable {
 
-    private static final float VELOCITY = 0.1f;
+    private static final float SPEED = 0.1f;
     private static final float DIRECTION = 90f;
 
     public Powerup(Image img, Vector2f v, World parent) {
@@ -13,7 +13,7 @@ public abstract class Powerup extends Sprite implements Collidable {
 
     public void update(Input input, int delta) {
         velocity = new Vector2f(DIRECTION);
-        velocity.scale(VELOCITY * delta);
+        velocity.scale(SPEED * delta);
 
         location.add(velocity);
     }

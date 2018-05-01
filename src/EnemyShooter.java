@@ -3,7 +3,7 @@ import org.newdawn.slick.geom.Vector2f;
 
 public class EnemyShooter extends Enemy {
 
-    private final float VELOCITY = 0.2f;
+    private final float SPEED = 0.2f;
     private final float DIRECTION = 90f;
 
     private final float MIN_TARGET_Y = 48;
@@ -34,7 +34,7 @@ public class EnemyShooter extends Enemy {
 
             //Vector moving downwards
             Vector2f velocity = new Vector2f(DIRECTION);
-            velocity.scale(VELOCITY * delta);
+            velocity.scale(SPEED * delta);
 
             location.add(velocity);
         }

@@ -3,7 +3,7 @@ import org.newdawn.slick.geom.Vector2f;
 
 public class EnemyBasic extends Enemy {
 
-    private static final float VELOCITY = 0.2f;
+    private static final float SPEED = 0.2f;
     private static final float DIRECTION = 90f;
 
     public EnemyBasic(Vector2f location, World parent) {
@@ -16,7 +16,7 @@ public class EnemyBasic extends Enemy {
 
         //Vector moving downwards
         Vector2f velocity = new Vector2f(DIRECTION);
-        velocity.scale(VELOCITY * delta);
+        velocity.scale(SPEED * delta);
 
         location.add(velocity);
 

@@ -1,4 +1,3 @@
-import org.newdawn.slick.Game;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.geom.Vector2f;
 
@@ -8,11 +7,11 @@ public class EnemyBoss extends Enemy {
     private static final int SECOND_WAIT_TIME = 2000;
     private static final int SHOOTING_WAIT_TIME = 3000;
 
-    private static final float INIT_WALK_VELOCITY = 0.05f;
+    private static final float INIT_WALK_SPEED = 0.05f;
     private static final float INIT_WALK_DIRECTION = 90;
     private static final float INIT_WALK_GOAL = 72;
 
-    private static final float X_WALK_VELOCITY = 0.1f;
+    private static final float X_WALK_SPEED = 0.1f;
     private static final float LEFT_DIRECTION = 180f;
 
     private static final int X_RAND_MAX = 896;
@@ -95,7 +94,7 @@ public class EnemyBoss extends Enemy {
 
     private void initialWalk(int delta) {
         Vector2f velocity = new Vector2f(INIT_WALK_DIRECTION);
-        velocity.scale(INIT_WALK_VELOCITY * delta);
+        velocity.scale(INIT_WALK_SPEED * delta);
         location.add(velocity);
 
         //We reached our goal, ensure we're exactly at goal then move to next state
@@ -121,7 +120,7 @@ public class EnemyBoss extends Enemy {
 
     private void randomWalk(int delta, State nextState){
         Vector2f velocity = new Vector2f(LEFT_DIRECTION);
-        velocity.scale(X_WALK_VELOCITY * delta);
+        velocity.scale(X_WALK_SPEED * delta);
 
         if(xGoalHigher)
             velocity.scale(-1);

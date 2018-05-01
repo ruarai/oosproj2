@@ -5,7 +5,7 @@ import org.newdawn.slick.geom.Vector2f;
 public class Laser extends Sprite implements Collidable {
 
     //The speed that the laser moves upwards on the screen
-    private static final float VELOCITY_MAGNITUDE = 3f;
+    private static final float SPEED = 3f;
 ;
     private static final int LASER_EXPLOSION_SIZE = 200;
     private static final float LASER_EXPLOSION_SCALE = 0.4f;
@@ -26,7 +26,7 @@ public class Laser extends Sprite implements Collidable {
     public void update(Input input, int delta) {
 
         velocity = new Vector2f(rotation + DIRECTION_FORWARDS);
-        velocity.scale(VELOCITY_MAGNITUDE * delta);
+        velocity.scale(SPEED * delta);
 
         location.add(velocity);
 

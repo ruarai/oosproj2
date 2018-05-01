@@ -3,7 +3,7 @@ import org.newdawn.slick.geom.Vector2f;
 
 public class EnemySine extends Enemy {
 
-    private static final float VELOCITY_STRAIGHT = 0.15f;
+    private static final float SPEED = 0.15f;
     private static final float DIRECTION_STRAIGHT = 90f;
 
     private static final float AMPLITUDE = 96f;
@@ -25,7 +25,7 @@ public class EnemySine extends Enemy {
         timeElapsed += delta;
 
         Vector2f velocity = new Vector2f(DIRECTION_STRAIGHT);
-        velocity.scale(VELOCITY_STRAIGHT * delta);
+        velocity.scale(SPEED * delta);
 
         location.add(velocity);
 
