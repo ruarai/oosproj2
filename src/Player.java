@@ -48,7 +48,7 @@ class Player extends Sprite implements Collidable
             Vector2f recoil = new Vector2f(getRotation() + DIR_FORWARDS).scale(-RECOIL_ACCEL * delta);
             getVelocity().add(recoil);
 
-            //Reset the delay to SHOT_DELAY
+            //Reset the delay to whatever our default is
             shotDelay = parentWorld.getEntity(GameplayController.class).getCurrentShotDelay();
         }
 
