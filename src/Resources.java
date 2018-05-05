@@ -25,6 +25,7 @@ class Resources {
 
 
     public static Image spaceFar;
+    public static Image spaceDust;
 
     public static Image java;
     public static Image javaError1;
@@ -55,6 +56,7 @@ class Resources {
             spaceship = new Image("res/spaceship.png");
 
             spaceFar = new Image("res/space-far.png");
+            spaceDust = new Image("res/space-dust.png");
 
             java = new Image("res/java.png");
             javaError1 = new Image("res/java-err-1.png");

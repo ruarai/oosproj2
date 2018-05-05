@@ -32,6 +32,7 @@ public class World {
 	    Resources.loadResources();
 
 	    //We've made the background transparent so we can render multiple layers for some parallax effect
+        entities.add(new Background(Resources.spaceDust,0.125f,this));
         entities.add(new Background(Resources.spaceFar,BACKGROUND_SCROLL_FAR,this));
 	    entities.add(new Background(Resources.space,BACKGROUND_SCROLL_NEAR,this));
 
@@ -41,9 +42,9 @@ public class World {
         entities.add(new Player(PLAYER_LOCATION,this));
 
         //Load in the world from the waves.txt file
-        //entities.addAll(Resources.loadWaveData(this));
+        entities.addAll(Resources.loadWaveData(this));
 
-        entities.add(new EnemyBoss(new Vector2f(480,240),this));
+        //entities.add(new EnemyBoss(new Vector2f(480,240),this));
         //entities.add(new EnemyJava(new Vector2f(240,240),this));
         //entities.add(new EnemyJava(new Vector2f(480+240,240),this));
 	}

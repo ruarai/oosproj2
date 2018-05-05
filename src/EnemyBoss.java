@@ -271,7 +271,7 @@ public class EnemyBoss extends Enemy {
                 float dist = dist(x,y,impactPoint.x - getLocation().x,impactPoint.y - getLocation().y);
 
                 //Create our arbitrary shift value. Not much meaning here, but it looks cool
-                int shift = (int)((elapsedTime * (i/64) % BYTE_MAX) + Math.sinh(dist/32f) * 8) / 2;
+                int shift = (int)((elapsedTime * (i/64) % BYTE_MAX) + Math.sinh(dist/32f) * 8) / 4;
 
                 //Scale our shift down according to how much time the damage effect has elapsed
                 shift = (int)(shift * Math.pow((float)damagedTime / DAMAGE_DELAY,2));
