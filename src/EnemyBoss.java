@@ -242,6 +242,8 @@ public class EnemyBoss extends Enemy {
 
            Something worth noting is that Slick treats textures internally as squares, so we need to use the
            Width value here a lot as this is the longest side length and as such is the size of the internal square.
+
+           I recommend looking at this effect in slow motion.
          */
         try {
             //Find our normal image for reference
@@ -290,7 +292,9 @@ public class EnemyBoss extends Enemy {
             graphics.drawImage(outputImage.getImage(),getLocation().x,getLocation().y);
         } catch(SlickException e) {
             System.out.println("An error occurred whilst rendering the boss:");
-            System.out.println(e);
+            e.printStackTrace();
+
+            System.exit(0);
         }
 
     }
