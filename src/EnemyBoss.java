@@ -1,5 +1,7 @@
-import org.newdawn.slick.Input;
+import org.newdawn.slick.*;
 import org.newdawn.slick.geom.Vector2f;
+
+import java.nio.ByteBuffer;
 
 public class EnemyBoss extends Enemy {
 
@@ -27,7 +29,15 @@ public class EnemyBoss extends Enemy {
     private static final float DEATH_EXPLOSION_SCALE = 0.30f;
     private static final float DEATH_SCREEN_SHAKE = 3f;
 
-    private static final float LASER_HIT_SCREEN_SHAKE = 0.2f;
+    private static final float LASER_HIT_SCREEN_SHAKE = 0.1f;
+
+    private static final int DAMAGE_DELAY = 500;
+
+    private static final int TEXTURE_Y_OFFSET = 18;
+
+    //Byte.MAX_VALUE is 127, because Java somehow thinks that we would want signed bytes?
+    //So let's define a more useful one
+    private static final int BYTE_MAX = 255;
 
 
     public EnemyBoss(Vector2f location, World parent) {
@@ -43,6 +53,11 @@ public class EnemyBoss extends Enemy {
     private boolean xGoalHigher;
 
     private int hitLives = DEFAULT_SHOTS_TO_KILL;
+
+    private long elapsedTime = 0;
+
+    private int damagedTime = 0;
+    private Vector2f impactPoint;
 
     public void update(Input input, int delta) {
         super.update(input, delta);
@@ -90,6 +105,10 @@ public class EnemyBoss extends Enemy {
                 break;
         }
 
+        if(damagedTime > 0)
+            damagedTime -= delta;
+
+        elapsedTime += delta;
     }
 
     private void initialWalk(int delta) {
@@ -193,6 +212,10 @@ public class EnemyBoss extends Enemy {
                 //Otherwise, take away some life
                 hitLives--;
 
+                //And make sure we create our cool damaged effect
+                damagedTime = DAMAGE_DELAY;
+                impactPoint = collidingSprite.getLocation();
+
                 //Typically we don't care if the laser keeps existing, since it creates for a cool effect
                 //But we need to destroy it so that it can't collide with us again
                 parentWorld.killEntity(collidingSprite);
@@ -201,8 +224,81 @@ public class EnemyBoss extends Enemy {
                 parentWorld.getEntity(GameplayController.class).shakeScreen(LASER_HIT_SCREEN_SHAKE);
             }
         }
+    }
 
 
+    public void render(Graphics graphics) {
+        //First we check if we're in our damaged cooldown state
+        if(damagedTime <= 0){
+            //If not, render normally and ignore the special stuff below
+            super.render(graphics);
+            return;
+        }
+
+        /* This is some fun rendering code that produces a retro damage effect when the boss is hit
+           We take the boss's image and convert it into a ByteBuffer that we can read pixel-by-pixel
+           This ByteBuffer is read out and all red green and blue values shifted according to some arbitrary
+           value 'shift'. This is saved to an ImageBuffer that can then be rendered on screen normally.
+
+           Something worth noting is that Slick treats textures internally as squares, so we need to use the
+           Width value here a lot as this is the longest side length and as such is the size of the internal square.
+         */
+        try {
+            //Find our normal image for reference
+            Image image = getImage();
+
+            //Create a ByteBuffer that we will save the square texture of size width*width to, with each pixel
+            //having 4 bytes values of R,G,B,A
+            ByteBuffer buffer = ByteBuffer.allocateDirect(image.getWidth() * image.getWidth() * 4);
+
+            //Take the texture out of our Image and save it to our buffer
+            //The texture is shifted internally according to some apparently arbitrary offset
+            image.getGraphics().getArea(0, TEXTURE_Y_OFFSET,image.getWidth(),image.getWidth(),buffer);
+
+            //Create an ImageBuffer that we will save our edited image to
+            ImageBuffer outputImage = new ImageBuffer(image.getWidth(),image.getWidth());
+
+            //We need to iterate over our image 1-dimensionally, which can get confusing
+            for (int i = 0; i < image.getWidth() * image.getHeight(); i++) {
+                //Calculate our x and y coordinates based on our index i
+                //The image is traversed left to right, row by row
+                int x = i % image.getWidth();
+                int y = i / image.getWidth();
+
+                //Calculate the distance between this pixel on the sprite and where the laser hit the sprite
+                float dist = dist(x,y,impactPoint.x - getLocation().x,impactPoint.y - getLocation().y);
+
+                //Create our arbitrary shift value. Not much meaning here, but it looks cool
+                int shift = (int)((elapsedTime * (i/64) % BYTE_MAX) + Math.sinh(dist/32f) * 8) / 2;
+
+                //Scale our shift down according to how much time the damage effect has elapsed
+                shift = (int)(shift * Math.pow((float)damagedTime / DAMAGE_DELAY,2));
+
+                //Read our R, G, B values and shift them
+                int R = (buffer.get() + shift) % BYTE_MAX;
+                int G = (buffer.get() + shift) % BYTE_MAX;
+                int B = (buffer.get() + shift) % BYTE_MAX;
+
+                //Don't change the alpha value
+                int A =  buffer.get();
+
+                //Save our new values to the outputImage
+                outputImage.setRGBA(x, y, R, G, B, A);
+            }
+
+            //Then draw the image on the screen normally
+            graphics.drawImage(outputImage.getImage(),getLocation().x,getLocation().y);
+        } catch(SlickException e) {
+            System.out.println("An error occurred whilst rendering the boss:");
+            System.out.println(e);
+        }
+
+    }
+
+    private float dist(float x1, float y1, float x2, float y2) {
+        float dX = x1 - x2;
+        float dY = y1 - y2;
+        return (float)Math.sqrt(dX * dX + dY * dY);
     }
 
 

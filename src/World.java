@@ -1,6 +1,7 @@
 import org.newdawn.slick.*;
 import org.newdawn.slick.geom.Vector2f;
 
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
 
@@ -40,9 +41,9 @@ public class World {
         entities.add(new Player(PLAYER_LOCATION,this));
 
         //Load in the world from the waves.txt file
-        entities.addAll(Resources.loadWaveData(this));
+        //entities.addAll(Resources.loadWaveData(this));
 
-        //entities.add(new EnemyBoss(new Vector2f(480,0),this));
+        entities.add(new EnemyBoss(new Vector2f(480,240),this));
         //entities.add(new EnemyJava(new Vector2f(240,240),this));
         //entities.add(new EnemyJava(new Vector2f(480+240,240),this));
 	}
