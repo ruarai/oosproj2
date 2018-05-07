@@ -15,6 +15,7 @@ public class World {
 
     //Allow for debug rendering of the bounding boxes of any sprites
     private static final boolean RENDER_BOUNDING_BOX = false;
+
     private static final Color RENDER_BLUR_FILTER = new Color(1,1,1,0.8f);
     //most important feature do not delete (press A to activate)
     private static final Color SOLITAIRE_BLUR_FILTER = new Color(1,1,1,1f);
@@ -24,15 +25,16 @@ public class World {
     private static final Color FILTER_GREEN = new Color(0,1,0,0.333f);
     private static final Color FILTER_BLUE = new Color(0,0,1,0.333f);
 
-    private static final float BACKGROUND_SCROLL_NEAR = 0.17f;
+    private static final float BACKGROUND_SCROLL_DUST = 0.125f;
     private static final float BACKGROUND_SCROLL_FAR = 0.13f;
+    private static final float BACKGROUND_SCROLL_NEAR = 0.17f;
 
 	public World() {
 	    //Load in all the imagery
 	    Resources.loadResources();
 
 	    //We've made the background transparent so we can render multiple layers for some parallax effect
-        entities.add(new Background(Resources.spaceDust,0.125f,this));
+        entities.add(new Background(Resources.spaceDust,BACKGROUND_SCROLL_DUST,this));
         entities.add(new Background(Resources.spaceFar,BACKGROUND_SCROLL_FAR,this));
 	    entities.add(new Background(Resources.space,BACKGROUND_SCROLL_NEAR,this));
 
