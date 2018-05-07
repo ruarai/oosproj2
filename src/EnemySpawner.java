@@ -11,9 +11,10 @@ public class EnemySpawner extends Entity {
 
         this.timeDelay = timeDelay;
 
+        //Create a new vector based on the default INITIAL_Y and our given x position
         Vector2f location = new Vector2f(xPosition, INITIAL_Y);
 
-
+        //Read in our string value and create a new enemy of coresponding type
         switch (enemyName){
             case "EnemyBasic":
                 enemyEntity = new EnemyBasic(location,parentWorld);
@@ -34,14 +35,16 @@ public class EnemySpawner extends Entity {
     private Enemy enemyEntity;
 
     public void update(Input input, int delta) {
+        //Run down the time delay until we need to spawn the enemy
         timeDelay -= delta;
 
         //Once we run down the delay, we kill the spawner and spawn the enemy.
         if(timeDelay < 0)
         {
             parentWorld.addEntity(enemyEntity);
-            parentWorld.killEntity(this);
 
+            //Destroy ourselves, we are no longer needed
+            parentWorld.killEntity(this);
         }
     }
 
