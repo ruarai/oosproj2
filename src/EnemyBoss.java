@@ -44,7 +44,9 @@ public class EnemyBoss extends Enemy {
         super(Resources.boss, location, parent);
     }
 
+    //State that the boss is in
     private State currentState = State.InitialWalk;
+
     //The target x coordinate for the ship to move to
     private float xGoal;
 
@@ -52,11 +54,15 @@ public class EnemyBoss extends Enemy {
     //Used to tell when the goal has been reached
     private boolean xGoalHigher;
 
+    //How many hits the boss has left to take before it dies
     private int hitLives = DEFAULT_SHOTS_TO_KILL;
 
+    //How much deltaTime has elapsed since spawn, used for hit rendering
     private long elapsedTime = 0;
 
+    //How long until the damage rendering effect expires
     private int damagedTime = 0;
+    //Point at which the boss was hit by a laser
     private Vector2f impactPoint;
 
     public void update(Input input, int delta) {
@@ -299,13 +305,14 @@ public class EnemyBoss extends Enemy {
 
     }
 
+    //calculate the distance between two points
     private float dist(float x1, float y1, float x2, float y2) {
         float dX = x1 - x2;
         float dY = y1 - y2;
         return (float)Math.sqrt(dX * dX + dY * dY);
     }
 
-
+    //Holds the different possible states the boss can be in
     private enum State {
         InitialWalk,
         FirstWait,
