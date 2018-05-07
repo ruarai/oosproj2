@@ -2,11 +2,12 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 
-//The background is a separate entity that renders the scrolling background without sprite logic (e.g. fixed location)
+//The background is a separate entity that renders the scrolling background without sprite logic (e.g. singular location)
 class Background extends Entity {
 
     private Image backgroundImage;
 
+    //how far we push the background down the screen
     private float scroll = 0;
 
     //Number of times we must tile the background image to fill the screen entirely across each dimension
