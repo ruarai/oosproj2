@@ -12,6 +12,7 @@ public abstract class Powerup extends Sprite implements Collidable {
     }
 
     public void update(Input input, int delta) {
+        //Very simple movement logic
         setVelocity(new Vector2f(DIRECTION));
         getVelocity().scale(SPEED * delta);
 

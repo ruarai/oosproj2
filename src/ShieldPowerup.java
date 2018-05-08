@@ -11,6 +11,7 @@ public class ShieldPowerup extends Powerup {
     public void onCollision(Sprite sprite) {
         if(sprite instanceof Player)
         {
+            //If we collide with the Player, make their shield activate through the GameplayerController
             parentWorld.getEntity(GameplayController.class).setShieldTime(SHIELD_TIME);
             parentWorld.killEntity(this);
         }

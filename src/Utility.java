@@ -21,15 +21,16 @@ public class Utility {
         return false;
     }
 
-    public static Image getRandomSubImage(Image img)
+    //Samples a random subImage from a given image
+    public static Image getRandomSubImage(Image image)
     {
-        int x = random.nextInt(img.getWidth());
-        int y = random.nextInt(img.getHeight());
+        int x = random.nextInt(image.getWidth());
+        int y = random.nextInt(image.getHeight());
 
-        int width = random.nextInt(img.getWidth() - x);
-        int height = random.nextInt(img.getHeight() - y);
+        int width = random.nextInt(image.getWidth() - x);
+        int height = random.nextInt(image.getHeight() - y);
 
 
-        return img.getSubImage(x,y,width,height);
+        return image.getSubImage(x,y,width,height);
     }
 }

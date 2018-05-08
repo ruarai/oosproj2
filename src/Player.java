@@ -164,8 +164,10 @@ class Player extends Sprite implements Collidable
         if(collidingSprite instanceof Enemy) {
             Enemy enemy = (Enemy)collidingSprite;
 
+            //We bounce the player slightly when they hit an enemy
             getVelocity().add(new Vector2f(enemy.getVelocity()).scale(PLAYER_HIT_BOUNCE_SCALE));
 
+            //Trigger a player death in the gameplay controller
             parentWorld.getEntity(GameplayController.class).playerDeath();
         }
     }

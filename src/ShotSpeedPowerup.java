@@ -10,6 +10,7 @@ public class ShotSpeedPowerup extends Powerup {
 
     public void onCollision(Sprite sprite) {
         if(sprite instanceof Player){
+            //If we collide with the player, increase the players rate of fire for SHOT_SPEED_TIME number of ms
             parentWorld.getEntity(GameplayController.class).setShotSpeedTime(SHOT_SPEED_TIME);
             parentWorld.killEntity(this);
         }
