@@ -1,11 +1,10 @@
 import org.newdawn.slick.*;
-import org.newdawn.slick.geom.Vector2f;
 
 //A laser Sprite that moves upwards and destroys enemies
 public class Laser extends Sprite implements Collidable {
 
-    private static final float ACCEL = 0.1f;
-    private static final float INITIAL_SPEED = 15f;
+    private static final float ACCEL = 0.3f;
+    private static final float INITIAL_SPEED = 3f;
 
     private static final int LASER_EXPLOSION_SIZE = 200;
     private static final float LASER_EXPLOSION_SCALE = 0.4f;
@@ -25,16 +24,15 @@ public class Laser extends Sprite implements Collidable {
     }
 
     @Override
-    public void update(Input input, int delta) {
+    public void fixedUpdate(Input input) {
 
         Vector accel = new Vector(getRotation() + DIRECTION_FORWARDS);
-        accel = accel.scale(ACCEL*delta);
+        accel = accel.scale(ACCEL);
 
         addVelocity(accel);
-        addLocation(getVelocity());
 
         //If the laser goes off the screen, add it do the dead entities list
-        //This will remove it from memory once the update is complete
+        //This will remove it from memory once the fixedUpdate is complete
         if(Utility.offScreen(getLocation()))
             parentWorld.killEntity(this);
     }

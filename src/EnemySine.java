@@ -1,5 +1,4 @@
 import org.newdawn.slick.Input;
-import org.newdawn.slick.geom.Vector2f;
 
 public class EnemySine extends Enemy {
 
@@ -22,17 +21,13 @@ public class EnemySine extends Enemy {
         initialX = location.x;
     }
 
-
-    public void update(Input input, int delta) {
-        super.update(input, delta);
-
+    public void looseUpdate(Input input, int delta) {
         //increment the amount of time that has passed for use in our sine function
         timeElapsed += delta;
 
         float newX = initialX + AMPLITUDE * (float)Math.sin(((2*Math.PI)/(PERIOD))*timeElapsed);
 
         setLocation(new Vector(newX, getLocation().y + SPEED * delta));
-
 
         //Kill the enemy once it leaves the screen
         if(getLocation().y > App.SCREEN_HEIGHT)

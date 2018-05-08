@@ -35,7 +35,7 @@ public class GameplayController extends Entity {
 
     public GameplayController(World parentWorld) { super(parentWorld); }
 
-    public void update(Input input, int delta) {
+    public void looseUpdate(Input input, int delta) {
         if(shotSpeedTime > 0)
             shotSpeedTime -= delta;
 

@@ -2,14 +2,13 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
-import org.newdawn.slick.geom.Vector2f;
 
 
 public class Particle extends Sprite {
 
     private static final float ROTATION_SCALE = 0.5f;
 
-    private static final float FORCE_ADDED_SCALE = 0.01f;
+    private static final float FORCE_ADDED_SCALE = 0.16f;
 
     private static final float FULL_CIRCLE = 360f;
     private static final float DIRECTION_FORWARDS = -90f;
@@ -46,21 +45,24 @@ public class Particle extends Sprite {
         life = 1f + (Utility.random.nextFloat() - 0.5f) * LIFE_START_RANDOM_SCALE;
     }
 
-
-    public void update(Input input, int delta) {
-        //Scale our velocity down by some constant factor (unrealistic physics again lol)
-        Vector scaledVel = getVelocity().scale(delta);
-        addLocation(scaledVel);
-
-        //Adjust our rotation according to rotationSpeed
-        setRotation(getRotation() + rotationSpeed * delta);
+    public void looseUpdate(Input input, int delta){
+        super.looseUpdate(input, delta);
 
         //Decay our life
         life -= delta * lifeDecayRate;
 
+
         //Have we moved off the screen/ran out of life? We should remove ourselves so as to reduce cpu/memory usage
         if(Utility.offScreen(getLocation(), getImage()) || life < 0)
             parentWorld.killEntity(this);
+    }
+
+    public void fixedUpdate(Input input) {
+        //Scale our velocity down by some constant factor (unrealistic physics again lol)
+        setVelocity(getVelocity().scale(0.98f));
+
+        //Adjust our rotation according to rotationSpeed
+        setRotation(getRotation() + rotationSpeed * 16f);
     }
 
 

@@ -47,8 +47,9 @@ abstract class Sprite extends Entity {
     }
 
 
-    //We don't want to try and implement any base update code for sprites, make it abstract
-	abstract public void update(Input input, int delta);
+    public void looseUpdate(Input input, int delta) {
+        location = location.add(velocity.scale(delta));
+    }
 
 	//but rendering is the same across all sprites
 	public void render(Graphics graphics)
@@ -105,10 +106,6 @@ abstract class Sprite extends Entity {
 
     public void setLocation(Vector location){
 	    this.location = location;
-    }
-
-    public void addLocation(Vector change){
-	    location = location.add(change);
     }
 
     public Vector getVelocity() {

@@ -1,5 +1,4 @@
 import org.newdawn.slick.Input;
-import org.newdawn.slick.geom.Vector2f;
 
 public class EnemyJavaError extends Enemy {
 
@@ -17,8 +16,8 @@ public class EnemyJavaError extends Enemy {
         super(Resources.getRandomJavaError(), v, parent);
     }
 
-    public void update(Input input, int delta) {
-        super.update(input, delta);
+    public void fixedUpdate(Input input) {
+        super.fixedUpdate(input);
 
         //Determine the player so that we can find their location
         Player player = parentWorld.getEntity(Player.class);
@@ -42,11 +41,9 @@ public class EnemyJavaError extends Enemy {
         float rotationDiff = (towardsPlayer.getAngle() - DIRECTION_FORWARDS) - getRotation();
         setRotation(getRotation() + rotationDiff * ROTATION_SPEED);
 
-        thrust.scale(THRUST_SCALE * delta);
+        thrust.scale(THRUST_SCALE);
 
         addVelocity(thrust);
-
-        addLocation(getVelocity());
 
     }
 

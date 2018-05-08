@@ -1,5 +1,4 @@
 import org.newdawn.slick.Input;
-import org.newdawn.slick.geom.Vector2f;
 
 public class Solitaire extends Sprite {
 
@@ -19,19 +18,18 @@ public class Solitaire extends Sprite {
         setVelocity(new Vector(Utility.random.nextFloat() * ANGLE_START_RANGE).scale(INITIAL_SPEED));
     }
 
-    public void update(Input input, int delta) {
+    public void fixedUpdate(Input input) {
         //Calculate the friction vector and subtract it from our velocity
         Vector friction = getVelocity().scale(FRICTION_FACTOR);
 
         subVelocity(friction);
 
         //Calculate a gravity vector
-        Vector gravity = new Vector(GRAVITY_DIRECTION).scale(delta * GRAVITY_FACTOR);
+        Vector gravity = new Vector(GRAVITY_DIRECTION).scale(16 * GRAVITY_FACTOR);
         addVelocity(gravity);
 
-        //Update our location by scaling our velocity by delta
-        Vector update = getVelocity().scale(delta);
-        addLocation(update);
+        //Update our location by scaling our velocity by fixme
+        setVelocity(getVelocity().scale(0.08f));
 
         //Make sure we don't fly off the screen, add if we hit an edge, flip our velocity
         if(getLocation().y > App.SCREEN_HEIGHT - getImage().getHeight()){

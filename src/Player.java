@@ -6,7 +6,7 @@ class Player extends Sprite implements Collidable
 {
     private static final float MOVE_ACCEL = 0.01f;
     private static final float RECOIL_ACCEL = 0.01f;
-    private static final float ROTATION_SPEED = 0.1f;
+    private static final float ROTATION_SPEED = 1.6f;
     private static final float FRICTION_SCALE = 0.01f;
     private static final float DRIFT_SCALE = 1.7f;
 
@@ -24,15 +24,23 @@ class Player extends Sprite implements Collidable
     //indicates number of ms left until player can shoot a laser again
     private int shotDelay = 0;
 
-    public void update(Input input, int delta) {
-        move(input, delta);
+    public void looseUpdate(Input input, int delta) {
+        super.looseUpdate(input, delta);
+
+        //Run down the delay
+        if(shotDelay > 0)
+            shotDelay -= delta;
+    }
+
+    public void fixedUpdate(Input input) {
+
+        move(input);
 
         keepOnScreen();
 
-        tryShoot(input, delta);
+        tryShoot(input);
     }
-
-    private void tryShoot(Input input, int delta){
+    private void tryShoot(Input input){
         //See if we need to shoot a laser
         //Use isKeyPressed to ensure 1 laser per key press
         boolean tryShooting = input.isKeyDown(Input.KEY_SPACE) || input.isMouseButtonDown(Input.MOUSE_LEFT_BUTTON);
@@ -44,16 +52,13 @@ class Player extends Sprite implements Collidable
             parentWorld.addEntity(laser);
 
             //Calculate some amount of recoil
-            Vector recoil = new Vector(getRotation() + DIR_FORWARDS).scale(-RECOIL_ACCEL * delta);
+            Vector recoil = new Vector(getRotation() + DIR_FORWARDS).scale(-RECOIL_ACCEL);
             addVelocity(recoil);
 
             //Reset the delay to whatever our default is
             shotDelay = parentWorld.getEntity(GameplayController.class).getCurrentShotDelay();
         }
 
-        //Run down the delay
-        if(shotDelay > 0)
-            shotDelay -= delta;
     }
 
     public void render(Graphics graphics) {
@@ -69,15 +74,15 @@ class Player extends Sprite implements Collidable
 
 
     //Method to calculate movement
-    private void move(Input input, int delta)
+    private void move(Input input)
     {
         //Calculate a friction vector to remove from the velocity
         //This sadly isn't frame-independent, but implementing this correctly seems difficult
         Vector friction = getVelocity().scale(FRICTION_SCALE);
         subVelocity(friction);
 
-        Vector thrust = keyboardInput(input, delta);
-        thrust = thrust.add(mouseInput(input, delta));
+        Vector thrust = keyboardInput(input);
+        thrust = thrust.add(mouseInput(input));
 
         /*We now calculate a vector we'll call 'drift':
           This is kind of complicated, but here's a basic explanation,
@@ -97,15 +102,13 @@ class Player extends Sprite implements Collidable
         addVelocity(thrust);
         addVelocity(drift);
 
-        //Move our ship according to our now-updated velocity
-        addLocation(getVelocity());
 
         //Are we moving fast enough? Create some exhaust particles for fun.
         if(getVelocity().getLength() > EXHAUST_SPEED_REQUIRED)
             parentWorld.addEntity(new ExhaustParticle(getCentre().add(new Vector(getRotation() - DIR_FORWARDS).scale(EXHAUST_OFFSET_Y)),parentWorld, getVelocity()));
     }
 
-    private Vector keyboardInput(Input input, int delta){
+    private Vector keyboardInput(Input input){
         Vector thrust = new Vector();
 
         float speed = getVelocity().getLength();
@@ -115,19 +118,19 @@ class Player extends Sprite implements Collidable
 
         //respond to key inputs, changing the thrust vector
         if(input.isKeyDown(Input.KEY_UP))
-            thrust = new Vector(getRotation() + DIR_FORWARDS).scale(MOVE_ACCEL * delta);
+            thrust = new Vector(getRotation() + DIR_FORWARDS).scale(MOVE_ACCEL);
         if(input.isKeyDown(Input.KEY_DOWN))
-            thrust = new Vector(getRotation() + DIR_FORWARDS).scale(-MOVE_ACCEL * delta);
+            thrust = new Vector(getRotation() + DIR_FORWARDS).scale(-MOVE_ACCEL);
 
         if(input.isKeyDown(Input.KEY_LEFT))
-            setRotation(getRotation() + -ROTATION_SPEED * delta * rotationScale);
+            setRotation(getRotation() + -ROTATION_SPEED * rotationScale);
         if(input.isKeyDown(Input.KEY_RIGHT))
-            setRotation(getRotation() + ROTATION_SPEED * delta * rotationScale);
+            setRotation(getRotation() + ROTATION_SPEED * rotationScale);
 
         return thrust;
     }
 
-    private Vector mouseInput(Input input, int delta) {
+    private Vector mouseInput(Input input) {
         Vector toMouse = new Vector(input.getMouseX(),input.getMouseY()).sub(getCentre());
 
         if(input.isMouseButtonDown(Input.MOUSE_LEFT_BUTTON) || input.isMouseButtonDown(Input.MOUSE_RIGHT_BUTTON)){
@@ -135,7 +138,7 @@ class Player extends Sprite implements Collidable
         }
 
         if(toMouse.getLength() > 10f && input.isMouseButtonDown(Input.MOUSE_RIGHT_BUTTON))
-            return new Vector(getRotation() + DIR_FORWARDS).scale(MOVE_ACCEL * delta);
+            return new Vector(getRotation() + DIR_FORWARDS).scale(MOVE_ACCEL);
 
         return new Vector(0,0);
     }

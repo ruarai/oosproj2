@@ -1,6 +1,5 @@
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
-import org.newdawn.slick.geom.Vector2f;
 
 public class EnemySpawner extends Entity {
 
@@ -34,7 +33,7 @@ public class EnemySpawner extends Entity {
     private int timeDelay;
     private Enemy enemyEntity;
 
-    public void update(Input input, int delta) {
+    public void looseUpdate(Input input, int delta) {
         //Run down the time delay until we need to spawn the enemy
         timeDelay -= delta;
 

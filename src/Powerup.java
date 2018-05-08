@@ -1,6 +1,5 @@
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
-import org.newdawn.slick.geom.Vector2f;
 
 public abstract class Powerup extends Sprite implements Collidable {
 
@@ -11,11 +10,9 @@ public abstract class Powerup extends Sprite implements Collidable {
         super(img, v, parent);
     }
 
-    public void update(Input input, int delta) {
+    public void fixedUpdate(Input input) {
         //Very simple movement logic
-        setVelocity(new Vector(DIRECTION).scale(SPEED * delta));
-
-        addLocation(getVelocity());
+        setVelocity(new Vector(DIRECTION).scale(SPEED));
     }
 
     public abstract void onCollision(Sprite sprite);

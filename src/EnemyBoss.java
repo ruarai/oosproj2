@@ -1,5 +1,4 @@
 import org.newdawn.slick.*;
-import org.newdawn.slick.geom.Vector2f;
 
 import java.nio.ByteBuffer;
 
@@ -9,7 +8,7 @@ public class EnemyBoss extends Enemy {
     private static final int SECOND_WAIT_TIME = 2000;
     private static final int SHOOTING_WAIT_TIME = 3000;
 
-    private static final float INIT_WALK_SPEED = 0.05f;
+    private static final float INIT_WALK_SPEED = 0.05f * 16;
     private static final float INIT_WALK_DIRECTION = 90;
     private static final float INIT_WALK_GOAL = 72;
 
@@ -65,15 +64,11 @@ public class EnemyBoss extends Enemy {
     //Point at which the boss was hit by a laser
     private Vector impactPoint;
 
-    public void update(Input input, int delta) {
-        super.update(input, delta);
+    public void looseUpdate(Input input, int delta) {
+        super.looseUpdate(input, delta);
 
         //Check which state we are in
         switch (currentState) {
-            case InitialWalk:
-                //In this state, we perform a simple walk towards a y-value
-                initialWalk(delta);
-                break;
             case FirstWait:
                 //In this state, we wait 5000 milliseconds
                 if(waited(FIRST_WAIT_TIME, delta))
@@ -83,10 +78,6 @@ public class EnemyBoss extends Enemy {
                     xGoal = Utility.random.nextFloat() * (X_RAND_MAX-X_RAND_MIN) + X_RAND_MIN;
                     xGoalHigher =  getLocation().x < xGoal;
                 }
-                break;
-            case RandomXWalk:
-                //Perform a walk horizontally towards xGoal
-                randomWalk(delta, State.SecondWait);
                 break;
             case SecondWait:
                 if(waited(SECOND_WAIT_TIME, delta))
@@ -98,8 +89,6 @@ public class EnemyBoss extends Enemy {
                 }
                 break;
             case RandomXWalkShooting:
-                //Perform a walk horizontally towards xGoal, shooting whilst doing so
-                randomWalk(delta, State.ShootingWait);
                 shoot(delta);
                 break;
             case ShootingWait:
@@ -117,14 +106,38 @@ public class EnemyBoss extends Enemy {
         elapsedTime += delta;
     }
 
-    private void initialWalk(int delta) {
-        Vector velocity = new Vector(INIT_WALK_DIRECTION).scale(INIT_WALK_SPEED * delta);
-        addLocation(velocity);
+    public void fixedUpdate(Input input) {
+        //Check which state we are in
+        switch (currentState) {
+            case InitialWalk:
+                //In this state, we perform a simple walk towards a y-value
+                initialWalk();
+                break;
+            case FirstWait:
+                break;
+            case RandomXWalk:
+                //Perform a walk horizontally towards xGoal
+                randomWalk(State.SecondWait);
+                break;
+            case SecondWait:
+                break;
+            case RandomXWalkShooting:
+                //Perform a walk horizontally towards xGoal
+                randomWalk(State.ShootingWait);
+                break;
+            case ShootingWait:
+                break;
+        }
+    }
+
+    private void initialWalk() {
+        setVelocity(new Vector(INIT_WALK_DIRECTION).scale(INIT_WALK_SPEED));
 
         //We reached our goal, move to next state
         if(getLocation().y >= INIT_WALK_GOAL)
         {
             currentState = State.FirstWait;
+            setVelocity(new Vector(0,0));
         }
     }
 
@@ -141,18 +154,19 @@ public class EnemyBoss extends Enemy {
         return false;
     }
 
-    private void randomWalk(int delta, State nextState){
-        Vector velocity = new Vector(LEFT_DIRECTION).scale(X_WALK_SPEED * delta);
+    private void randomWalk(State nextState){
+        Vector velocity = new Vector(LEFT_DIRECTION).scale(X_WALK_SPEED);
 
         if(xGoalHigher)
             velocity = velocity.scale(-1);
 
-        addLocation(velocity);
+        setVelocity(velocity);
 
         if((xGoalHigher && getCentre().x > xGoal)||(!xGoalHigher && getCentre().x < xGoal))
         {
             //location.x = xGoal;
             currentState = nextState;
+            setVelocity(new Vector(0,0));
         }
     }
 

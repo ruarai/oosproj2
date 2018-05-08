@@ -1,7 +1,5 @@
 import org.newdawn.slick.*;
-import org.newdawn.slick.geom.Vector2f;
 
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
 
@@ -29,6 +27,9 @@ public class World {
     private static final float BACKGROUND_SCROLL_FAR = 0.13f;
     private static final float BACKGROUND_SCROLL_NEAR = 0.17f;
 
+    private static final int FIXED_UPDATE_RATE = 40;
+    public static final int FIXED_TIME = 1000 / FIXED_UPDATE_RATE;
+
 	public World() {
 	    //Load in all the imagery
 	    Resources.loadResources();
@@ -44,11 +45,11 @@ public class World {
         entities.add(new Player(PLAYER_LOCATION,this));
 
         //Load in the world from the waves.txt file
-        entities.addAll(Resources.loadWaveData(this));
+        //entities.addAll(Resources.loadWaveData(this));
 
-        //entities.add(new EnemyBoss(new Vector2f(480,240),this));
-        //entities.add(new EnemyJava(new Vector2f(240,240),this));
-        //entities.add(new EnemyJava(new Vector2f(480+240,240),this));
+        entities.add(new EnemyBoss(new Vector(480,240),this));
+        //entities.add(new EnemyJava(new Vector(240,240),this));
+        //entities.add(new EnemyJava(new Vector(480+240,240),this));
 	}
 
 	private static Image generateBlankImage(){
@@ -76,6 +77,8 @@ public class World {
         deadEntities.add(e);
     }
 
+    private int timeSinceFixedTimeUpdate;
+
     //Simple pause that lets you look at the current blur frame
     private boolean pause = false;
 
@@ -91,7 +94,7 @@ public class World {
         if(input.isKeyPressed(Input.KEY_P))
             pause = !pause;
 
-        //If we're paused, don't update anything
+        //If we're paused, don't fixedUpdate anything
         if(pause)
             return;
 
@@ -99,9 +102,11 @@ public class World {
         newEntities.clear();
         deadEntities.clear();
 
-	    //update each entity
+	    //loose update each entity
 	    for(Entity e : entities)
-            e.update(input, delta);
+            e.looseUpdate(input, delta);
+
+	    fixedTimeUpdate(input, delta);
 
 	    //After all the entities have updated, check for collisions between Collidable Spritess
 	    handleCollisions();
@@ -209,6 +214,21 @@ public class World {
         solitaireRendering = true;
 
         getEntity(GameplayController.class).enableSolitaireSpawning();
+    }
+
+    private void fixedTimeUpdate(Input input, int delta) {
+        timeSinceFixedTimeUpdate += delta;
+
+        int numPhysicsUpdates = timeSinceFixedTimeUpdate / FIXED_TIME;
+
+        if(numPhysicsUpdates > 0)
+            timeSinceFixedTimeUpdate = 0;
+
+        for (int i = 0; i < numPhysicsUpdates; i++){
+            for(Entity e : entities){
+                e.fixedUpdate(input);
+            }
+        }
     }
 
 	private void handleCollisions() {

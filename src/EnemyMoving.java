@@ -1,6 +1,5 @@
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
-import org.newdawn.slick.geom.Vector2f;
 
 public abstract class EnemyMoving extends Enemy {
 
@@ -11,13 +10,11 @@ public abstract class EnemyMoving extends Enemy {
     }
 
 
-    public final void update(Input input, int delta) {
-        super.update(input, delta);
+    public final void fixedUpdate(Input input) {
+        super.fixedUpdate(input);
 
         //Vector moving downwards
-        setVelocity(new Vector(DIRECTION).scale(getSpeed() * delta));
-
-        addLocation(getVelocity());
+        setVelocity(new Vector(DIRECTION).scale(getSpeed()));
 
         //Whilst we expect enemies to be off screen upwards, if they're off the screen downwards they should be killed
         if(getLocation().y > App.SCREEN_HEIGHT)

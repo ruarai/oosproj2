@@ -1,6 +1,5 @@
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
-import org.newdawn.slick.geom.Vector2f;
 
 abstract class Enemy extends Sprite implements Collidable {
     private static final int HIT_EXPLOSION_SIZE = 40;
@@ -21,7 +20,9 @@ abstract class Enemy extends Sprite implements Collidable {
     //How long until we should make an explosion again, so as to not make one 60 times a second
     private int explosionDelay = 0;
 
-    public void update(Input input, int delta) {
+    public void looseUpdate(Input input, int delta) {
+        super.looseUpdate(input, delta);
+
         //Run down the explosion delay for collisions
         if(explosionDelay > 0)
             explosionDelay -= delta;

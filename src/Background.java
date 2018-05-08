@@ -28,7 +28,7 @@ class Background extends Entity {
     }
 
 
-    public void update(Input input, int delta) {
+    public void looseUpdate(Input input, int delta) {
         //Increment the scroll value according to delta
         //We loop around the vertical dimension according to our calculated yRepeats
         scroll = (scroll + delta * scrollSpeed) % (yRepeats * backgroundImage.getHeight());

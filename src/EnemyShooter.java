@@ -1,5 +1,4 @@
 import org.newdawn.slick.Input;
-import org.newdawn.slick.geom.Vector2f;
 
 public class EnemyShooter extends Enemy {
 
@@ -24,20 +23,10 @@ public class EnemyShooter extends Enemy {
     private int shotDelay = 0;
 
 
-    public void update(Input input, int delta) {
-        super.update(input, delta);
+    public void looseUpdate(Input input, int delta) {
+        super.looseUpdate(input, delta);
 
-        //Are we at our target location yet?
-        if(getLocation().y < targetY)
-        {
-            //No, keep moving down:
-
-            //Vector moving downwards
-            Vector velocity = new Vector(DIRECTION).scale(SPEED * delta);
-
-            addLocation(velocity);
-        }
-        else {
+        if(getLocation().y >= targetY) {
             //Yes, let's try and shoot:
 
             //Is our delay until shot all used up?
@@ -52,7 +41,16 @@ public class EnemyShooter extends Enemy {
                 shotDelay -= delta;
             }
         }
+    }
+    public void fixedUpdate(Input input) {
+        //Are we at our target location yet?
+        if(getLocation().y < targetY)
+        {
+            //No, keep moving down:
 
+            //Vector moving downwards
+            setVelocity(new Vector(DIRECTION).scale(SPEED));
+        }
     }
 
     public int getScoreValue() {

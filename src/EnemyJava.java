@@ -1,5 +1,4 @@
 import org.newdawn.slick.Input;
-import org.newdawn.slick.geom.Vector2f;
 
 public class EnemyJava extends Enemy {
 
@@ -12,8 +11,8 @@ public class EnemyJava extends Enemy {
     //time in ms until enemy can shoot again
     private int shotDelay = 0;
 
-    public void update(Input input, int delta) {
-        super.update(input, delta);
+    public void looseUpdate(Input input, int delta) {
+        super.looseUpdate(input, delta);
 
         //Is our delay until shot all used up?
         if(shotDelay <= 0)
