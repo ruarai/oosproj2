@@ -5,7 +5,7 @@ public class EnemyShot extends EnemyMoving {
 
     private static final float SPEED = 0.7f;
 
-    public EnemyShot(Vector2f location, World parent) { super(Resources.enemyShot, location, parent);}
+    public EnemyShot(Vector location, World parent) { super(Resources.enemyShot, location, parent);}
 
 
 

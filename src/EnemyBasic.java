@@ -4,9 +4,8 @@ import org.newdawn.slick.geom.Vector2f;
 public class EnemyBasic extends EnemyMoving {
 
     private static final float SPEED = 0.2f;
-    private static final float DIRECTION = 90f;
 
-    public EnemyBasic(Vector2f location, World parent) {
+    public EnemyBasic(Vector location, World parent) {
         super(Resources.basicEnemy, location, parent);
     }
 

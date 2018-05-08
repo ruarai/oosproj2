@@ -4,7 +4,7 @@ public class ShieldPowerup extends Powerup {
 
     private static final int SHIELD_TIME = 5000;
 
-    public ShieldPowerup(Vector2f v, World parent) {
+    public ShieldPowerup(Vector v, World parent) {
         super(Resources.shieldPowerup, v, parent);
     }
 

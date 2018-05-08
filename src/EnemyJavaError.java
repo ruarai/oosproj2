@@ -13,7 +13,7 @@ public class EnemyJavaError extends Enemy {
     private static final float ROTATION_SPEED = 0.01f;
 
 
-    public EnemyJavaError(Vector2f v, World parent) {
+    public EnemyJavaError(Vector v, World parent) {
         super(Resources.getRandomJavaError(), v, parent);
     }
 
@@ -27,29 +27,26 @@ public class EnemyJavaError extends Enemy {
         if(player == null)
             return;
 
-        //Like in Player, we calculate some amount of friction
-        Vector2f friction = new Vector2f(getVelocity());
-
         //Calculate a friction vector to remove from the velocity
         //This sadly isn't frame-independent, but implementing this correctly seems difficult
-        friction.scale(FRICTION_FACTOR);
-        getVelocity().sub(friction);
+        Vector friction = getVelocity().scale(FRICTION_FACTOR);
+        subVelocity(friction);
 
         //Determine the vector from us to the player
-        Vector2f towardsPlayer = new Vector2f(player.getLocation()).sub(getLocation());
+        Vector towardsPlayer = player.getLocation().sub(getLocation());
 
         //Use our new vector to calculate some amount of thrust
-        Vector2f thrust = new Vector2f(towardsPlayer.getTheta() + (Utility.random.nextFloat()-0.5f) * RANDOM_SCALE);
+        Vector thrust = new Vector(towardsPlayer.getAngle() + (Utility.random.nextFloat()-0.5f) * RANDOM_SCALE);
 
         //Determine the difference in rotation between our front and the player and adjust so that we face them
-        float rotationDiff = ((float)towardsPlayer.getTheta() - DIRECTION_FORWARDS) - getRotation();
+        float rotationDiff = (towardsPlayer.getAngle() - DIRECTION_FORWARDS) - getRotation();
         setRotation(getRotation() + rotationDiff * ROTATION_SPEED);
 
         thrust.scale(THRUST_SCALE * delta);
 
-        getVelocity().add(thrust);
+        addVelocity(thrust);
 
-        getLocation().add(getVelocity());
+        addLocation(getVelocity());
 
     }
 

@@ -15,23 +15,23 @@ public class Laser extends Sprite implements Collidable {
 
     private static final int BLUR_STEPS = 10;
 
-    public Laser(Image img, Vector2f location, World parent, float rotation)
+    public Laser(Image img, Vector location, World parent, float rotation)
     {
         super(img, location, parent);
 
         this.setRotation(rotation);
-        setVelocity(new Vector2f(rotation + DIRECTION_FORWARDS));
+        setVelocity(new Vector(rotation + DIRECTION_FORWARDS));
         getVelocity().scale(INITIAL_SPEED);
     }
 
     @Override
     public void update(Input input, int delta) {
 
-        Vector2f accel = new Vector2f(getRotation() + DIRECTION_FORWARDS);
-        accel.scale(ACCEL*delta);
+        Vector accel = new Vector(getRotation() + DIRECTION_FORWARDS);
+        accel = accel.scale(ACCEL*delta);
 
-        getVelocity().add(accel);
-        getLocation().add(getVelocity());
+        addVelocity(accel);
+        addLocation(getVelocity());
 
         //If the laser goes off the screen, add it do the dead entities list
         //This will remove it from memory once the update is complete
@@ -42,8 +42,7 @@ public class Laser extends Sprite implements Collidable {
     //override rendering so that we can create a cool blur effect
     public void render(Graphics graphics) {
         //Create a vector pointing in opposite direction of velocity
-        Vector2f behind = new Vector2f(getVelocity());
-        behind.scale(-1f / (float)BLUR_STEPS);
+        Vector behind = getVelocity().scale(-1f / (float)BLUR_STEPS);
 
         for (int i = 0; i < BLUR_STEPS; i++)
         {
@@ -57,7 +56,7 @@ public class Laser extends Sprite implements Collidable {
         //Handle collision with an enemy, so that we can make some effects
         if(collidingSprite instanceof Enemy) {
             parentWorld.createExplosion(Resources.shot, getLocation(),LASER_EXPLOSION_SIZE,LASER_EXPLOSION_SCALE,
-                    new Vector2f(getVelocity()).scale(LASER_EXPLOSION_FORCE_SCALE));
+                    getVelocity().scale(LASER_EXPLOSION_FORCE_SCALE));
         }
     }
 }

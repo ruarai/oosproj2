@@ -22,8 +22,8 @@ public class EnemyBoss extends Enemy {
     private static final int DEFAULT_SHOTS_TO_KILL = 60;
 
     private static final int SHOT_DELAY = 200;
-    private static final Vector2f SHOT_OFFSET_INNER = new Vector2f(74,32);
-    private static final Vector2f SHOT_OFFSET_OUTER = new Vector2f(97,32);
+    private static final Vector SHOT_OFFSET_INNER = new Vector(74,32);
+    private static final Vector SHOT_OFFSET_OUTER = new Vector(97,32);
 
     private static final int DEATH_EXPLOSION_SIZE = 5000;
     private static final float DEATH_EXPLOSION_SCALE = 0.30f;
@@ -40,7 +40,7 @@ public class EnemyBoss extends Enemy {
     private static final int BYTE_MAX = 255;
 
 
-    public EnemyBoss(Vector2f location, World parent) {
+    public EnemyBoss(Vector location, World parent) {
         super(Resources.boss, location, parent);
     }
 
@@ -63,7 +63,7 @@ public class EnemyBoss extends Enemy {
     //How long until the damage rendering effect expires
     private int damagedTime = 0;
     //Point at which the boss was hit by a laser
-    private Vector2f impactPoint;
+    private Vector impactPoint;
 
     public void update(Input input, int delta) {
         super.update(input, delta);
@@ -118,14 +118,12 @@ public class EnemyBoss extends Enemy {
     }
 
     private void initialWalk(int delta) {
-        Vector2f velocity = new Vector2f(INIT_WALK_DIRECTION);
-        velocity.scale(INIT_WALK_SPEED * delta);
-        getLocation().add(velocity);
+        Vector velocity = new Vector(INIT_WALK_DIRECTION).scale(INIT_WALK_SPEED * delta);
+        addLocation(velocity);
 
-        //We reached our goal, ensure we're exactly at goal then move to next state
+        //We reached our goal, move to next state
         if(getLocation().y >= INIT_WALK_GOAL)
         {
-            getLocation().y = INIT_WALK_GOAL;
             currentState = State.FirstWait;
         }
     }
@@ -144,13 +142,12 @@ public class EnemyBoss extends Enemy {
     }
 
     private void randomWalk(int delta, State nextState){
-        Vector2f velocity = new Vector2f(LEFT_DIRECTION);
-        velocity.scale(X_WALK_SPEED * delta);
+        Vector velocity = new Vector(LEFT_DIRECTION).scale(X_WALK_SPEED * delta);
 
         if(xGoalHigher)
-            velocity.scale(-1);
+            velocity = velocity.scale(-1);
 
-        getLocation().add(velocity);
+        addLocation(velocity);
 
         if((xGoalHigher && getCentre().x > xGoal)||(!xGoalHigher && getCentre().x < xGoal))
         {
@@ -203,7 +200,7 @@ public class EnemyBoss extends Enemy {
                 parentWorld.getEntity(GameplayController.class).enemyDeath(this);
 
                 //This event requires an explosion
-                parentWorld.createExplosion(Resources.shot, getLocation(),DEATH_EXPLOSION_SIZE,DEATH_EXPLOSION_SCALE, new Vector2f(0,0));
+                parentWorld.createExplosion(Resources.shot, getLocation(),DEATH_EXPLOSION_SIZE,DEATH_EXPLOSION_SCALE, new Vector(0,0));
 
                 //Make the event even more dramatic
                 parentWorld.getEntity(GameplayController.class).slowTime();
@@ -211,8 +208,8 @@ public class EnemyBoss extends Enemy {
                 parentWorld.getEntity(GameplayController.class).shakeScreen(DEATH_SCREEN_SHAKE);
 
                 //Java is the true final boss, of course
-                parentWorld.addEntity(new EnemyJava(new Vector2f(240,240),parentWorld));
-                parentWorld.addEntity(new EnemyJava(new Vector2f(240 + 480,240),parentWorld));
+                parentWorld.addEntity(new EnemyJava(new Vector(240,240),parentWorld));
+                parentWorld.addEntity(new EnemyJava(new Vector(240 + 480,240),parentWorld));
 
             } else {
                 //Otherwise, take away some life
@@ -249,7 +246,7 @@ public class EnemyBoss extends Enemy {
            Something worth noting is that Slick treats textures internally as squares, so we need to use the
            Width value here a lot as this is the longest side length and as such is the size of the internal square.
 
-           I recommend looking at this effect in slow motion.
+           This looks cool in slow motion
          */
         try {
             //Find our normal image for reference

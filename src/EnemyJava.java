@@ -5,7 +5,7 @@ public class EnemyJava extends Enemy {
 
     private static final int SHOT_DELAY = 1500;
 
-    public EnemyJava(Vector2f v, World parent) {
+    public EnemyJava(Vector v, World parent) {
         super(Resources.java, v, parent);
     }
 

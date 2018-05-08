@@ -7,16 +7,15 @@ public abstract class Powerup extends Sprite implements Collidable {
     private static final float SPEED = 0.1f;
     private static final float DIRECTION = 90f;
 
-    public Powerup(Image img, Vector2f v, World parent) {
+    public Powerup(Image img, Vector v, World parent) {
         super(img, v, parent);
     }
 
     public void update(Input input, int delta) {
         //Very simple movement logic
-        setVelocity(new Vector2f(DIRECTION));
-        getVelocity().scale(SPEED * delta);
+        setVelocity(new Vector(DIRECTION).scale(SPEED * delta));
 
-        getLocation().add(getVelocity());
+        addLocation(getVelocity());
     }
 
     public abstract void onCollision(Sprite sprite);

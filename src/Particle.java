@@ -26,20 +26,21 @@ public class Particle extends Sprite {
 
     float lifeDecayRate = DEFAULT_LIFE_DECAY;
 
-    public Particle(Image img, Vector2f location, World parent, float randomScale, Vector2f force) {
+    public Particle(Image img, Vector location, World parent, float randomScale, Vector force) {
         super(img, location, parent);
 
-        //Set our default velocity and shift it by some random value
-        setVelocity(new Vector2f(Utility.random.nextFloat() * FULL_CIRCLE));
-        getVelocity().scale(randomScale * Utility.random.nextFloat());
+        Vector newVelocity = new Vector(Utility.random.nextFloat() * FULL_CIRCLE);
+        newVelocity = newVelocity.scale(randomScale * Utility.random.nextFloat());
+
+        setVelocity(newVelocity);
 
         //Add some scaled amount of force to our velocity, used to provide consistent movement to our particle
-        getVelocity().add(new Vector2f(force).scale(FORCE_ADDED_SCALE));
+        addVelocity(force.scale(FORCE_ADDED_SCALE));
         //Create a new rotation speed proportional to ROTATION_SCALE, randomly scaled in the positive or negative direction
         rotationSpeed = (Utility.random.nextFloat() - 0.5f) * ROTATION_SCALE;
 
-        //Set a rotation, fairly arbitrary
-        setRotation((float) getVelocity().getTheta() + DIRECTION_FORWARDS);
+        //Set a rotation, fairly arbitrarily
+        setRotation(getVelocity().getAngle() + DIRECTION_FORWARDS);
 
         //Shift our life value from 1 by some random number in the positive or negative direction
         life = 1f + (Utility.random.nextFloat() - 0.5f) * LIFE_START_RANDOM_SCALE;
@@ -48,8 +49,8 @@ public class Particle extends Sprite {
 
     public void update(Input input, int delta) {
         //Scale our velocity down by some constant factor (unrealistic physics again lol)
-        Vector2f scaledVel = new Vector2f(getVelocity()).scale(delta);
-        getLocation().add(scaledVel);
+        Vector scaledVel = getVelocity().scale(delta);
+        addLocation(scaledVel);
 
         //Adjust our rotation according to rotationSpeed
         setRotation(getRotation() + rotationSpeed * delta);

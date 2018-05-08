@@ -2,7 +2,6 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.geom.Polygon;
-import org.newdawn.slick.geom.Vector2f;
 
 //Sprites are basic entities with some kind of image and location
 abstract class Sprite extends Entity {
@@ -14,35 +13,37 @@ abstract class Sprite extends Entity {
     private Image image;
 
     //location of the sprite
-    private Vector2f location = new Vector2f();
+    private Vector location;
 
     //velocity of the sprite
     //not too much physical accuracy is present here, so it shouldn't be trusted beyond /cool/ effects
-    private Vector2f velocity = new Vector2f();
+    private Vector velocity = new Vector();
 
     //rotation of the sprite, affect rendering of the sprite
     private float rotation = 0f;
 
 
     //Create a new sprite from specified file with a default location vector v
-    public Sprite(Image img, Vector2f v, World parent) {
+    public Sprite(Image img, Vector v, World parent) {
         super(parent);
         this.image = img;
 
         //We will move the sprite such that its centre lay upon the vector coordinate
-        getLocation().x = v.x - img.getWidth() / 2;
-        getLocation().y = v.y - img.getHeight() / 2;
+        float x = v.x - img.getWidth() / 2;
+        float y = v.y - img.getHeight() / 2;
+
+        location = new Vector(x, y);
 
         parentWorld = parent;
     }
 
     //Returns the centre point of the image according to the size of the sprite
-    Vector2f getCentre()
+    Vector getCentre()
     {
-        float x = getLocation().x + getImage().getWidth() / 2;
-        float y = getLocation().y + getImage().getHeight() / 2;
+        float x = location.x + getImage().getWidth() / 2;
+        float y = location.y + getImage().getHeight() / 2;
 
-        return new Vector2f(x,y);
+        return new Vector(x,y);
     }
 
 
@@ -66,24 +67,24 @@ abstract class Sprite extends Entity {
         float halfHeight = getImage().getHeight() / 2;
 
         //Find the centre location, this is the same as our centre of rotation
-        Vector2f centre = getCentre();
+        Vector centre = getCentre();
 
         //Generate two vectors that are parallel/perpendicular to our /rotated/ image, of half lengths each
-        Vector2f left = new Vector2f(getRotation()).scale(halfWidth);
-        Vector2f down = new Vector2f(getRotation() + DIR_BEHIND).scale(halfHeight);
+        Vector left = new Vector(getRotation()).scale(halfWidth);
+        Vector down = new Vector(getRotation() + DIR_BEHIND).scale(halfHeight);
 
         //Calculate a simple vector that will adjust for the movement made between frames
         //Points in opposite direction of motion and is of length proportional to velocity
         //This really isn't a perfect solution, but helps a lot!
-        float currSpeed = getVelocity().length();
-        Vector2f extraBehind = new Vector2f(getRotation() + DIR_BEHIND).scale(currSpeed);
+        float currSpeed = getVelocity().getLength();
+        Vector extraBehind = new Vector(getRotation() + DIR_BEHIND).scale(currSpeed);
 
 
         //Calculate the four vectors by adding our new perpendicular vectors to our centre
-        Vector2f a = new Vector2f(centre).sub(left).sub(down);
-        Vector2f b = new Vector2f(centre).add(left).sub(down);
-        Vector2f c = new Vector2f(centre).add(left).add(down).add(extraBehind);
-        Vector2f d = new Vector2f(centre).sub(left).add(down).add(extraBehind);
+        Vector a = centre.sub(left).sub(down);
+        Vector b = centre.add(left).sub(down);
+        Vector c = centre.add(left).add(down).add(extraBehind);
+        Vector d = centre.sub(left).add(down).add(extraBehind);
 
         //Create a polygon from this
         polygon.addPoint(a.x,a.y);
@@ -98,16 +99,32 @@ abstract class Sprite extends Entity {
         return image;
     }
 
-    public Vector2f getLocation() {
+    public Vector getLocation() {
         return location;
     }
 
-    public Vector2f getVelocity() {
+    public void setLocation(Vector location){
+	    this.location = location;
+    }
+
+    public void addLocation(Vector change){
+	    location = location.add(change);
+    }
+
+    public Vector getVelocity() {
         return velocity;
     }
 
-    void setVelocity(Vector2f velocity) {
+    void setVelocity(Vector velocity) {
         this.velocity = velocity;
+    }
+
+    void addVelocity(Vector change) {
+	    velocity = velocity.add(change);
+    }
+
+    void subVelocity(Vector change) {
+	    velocity = velocity.sub(change);
     }
 
     float getRotation() {

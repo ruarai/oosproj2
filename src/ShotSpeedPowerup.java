@@ -4,7 +4,7 @@ public class ShotSpeedPowerup extends Powerup {
 
     private static final int SHOT_SPEED_TIME = 5000;
 
-    public ShotSpeedPowerup(Vector2f v, World parent) {
+    public ShotSpeedPowerup(Vector v, World parent) {
         super(Resources.shotSpeedPowerup, v, parent);
     }
 

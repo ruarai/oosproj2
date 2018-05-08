@@ -11,7 +11,7 @@ public class World {
 
     private static final float TIME_DILATION_FACTOR = 5f;
 
-    private static final Vector2f PLAYER_LOCATION = new Vector2f(480,488);
+    private static final Vector PLAYER_LOCATION = new Vector(480,488);
 
     //Allow for debug rendering of the bounding boxes of any sprites
     private static final boolean RENDER_BOUNDING_BOX = false;
@@ -241,7 +241,7 @@ public class World {
 
 	//Allows for the creation of an explosion
     //Obviously very important
-    public void createExplosion(Image img, Vector2f location, int num, float scale, Vector2f force)
+    public void createExplosion(Image img, Vector location, int num, float scale, Vector force)
     {
         /*This is done by generating a some num of particles, where each particle's image is a
           random sample of some img. This allows for cool looking explosion effects.*/

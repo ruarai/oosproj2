@@ -14,7 +14,7 @@ abstract class Enemy extends Sprite implements Collidable {
 
     private static final float POWERUP_CHANCE = 0.05f;
 
-    public Enemy(Image img, Vector2f v, World parent) {
+    public Enemy(Image img, Vector v, World parent) {
         super(img, v, parent);
     }
 

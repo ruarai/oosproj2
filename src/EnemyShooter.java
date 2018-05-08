@@ -12,7 +12,7 @@ public class EnemyShooter extends Enemy {
     private static final int SHOT_DELAY = 3500;
 
 
-    public EnemyShooter(Vector2f location, World parent) {
+    public EnemyShooter(Vector location, World parent) {
 
         super(Resources.basicShooter, location, parent);
         targetY = Utility.random.nextFloat() * (MAX_TARGET_Y-MIN_TARGET_Y) + MIN_TARGET_Y;
@@ -33,10 +33,9 @@ public class EnemyShooter extends Enemy {
             //No, keep moving down:
 
             //Vector moving downwards
-            Vector2f velocity = new Vector2f(DIRECTION);
-            velocity.scale(SPEED * delta);
+            Vector velocity = new Vector(DIRECTION).scale(SPEED * delta);
 
-            getLocation().add(velocity);
+            addLocation(velocity);
         }
         else {
             //Yes, let's try and shoot:

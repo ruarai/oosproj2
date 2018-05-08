@@ -6,7 +6,7 @@ public abstract class EnemyMoving extends Enemy {
 
     private static final float DIRECTION = 90f;
 
-    public EnemyMoving(Image image, Vector2f location, World parent) {
+    public EnemyMoving(Image image, Vector location, World parent) {
         super(image, location, parent);
     }
 
@@ -15,10 +15,9 @@ public abstract class EnemyMoving extends Enemy {
         super.update(input, delta);
 
         //Vector moving downwards
-        setVelocity(new Vector2f(DIRECTION));
-        getVelocity().scale(getSpeed() * delta);
+        setVelocity(new Vector(DIRECTION).scale(getSpeed() * delta));
 
-        getLocation().add(getVelocity());
+        addLocation(getVelocity());
 
         //Whilst we expect enemies to be off screen upwards, if they're off the screen downwards they should be killed
         if(getLocation().y > App.SCREEN_HEIGHT)

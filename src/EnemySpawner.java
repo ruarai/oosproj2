@@ -12,7 +12,7 @@ public class EnemySpawner extends Entity {
         this.timeDelay = timeDelay;
 
         //Create a new vector based on the default INITIAL_Y and our given x position
-        Vector2f location = new Vector2f(xPosition, INITIAL_Y);
+        Vector location = new Vector(xPosition, INITIAL_Y);
 
         //Read in our string value and create a new enemy of coresponding type
         switch (enemyName){

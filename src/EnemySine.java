@@ -14,7 +14,7 @@ public class EnemySine extends Enemy {
     //Time elapsed since spawn to change sine value
     private float timeElapsed = 0;
 
-    public EnemySine(Vector2f location, World parent) {
+    public EnemySine(Vector location, World parent) {
 
         super(Resources.sineEnemy, location, parent);
 
@@ -29,15 +29,9 @@ public class EnemySine extends Enemy {
         //increment the amount of time that has passed for use in our sine function
         timeElapsed += delta;
 
-        //Determine our basic velocity downwards
-        Vector2f velocity = new Vector2f(DIRECTION_STRAIGHT);
-        velocity.scale(SPEED * delta);
+        float newX = initialX + AMPLITUDE * (float)Math.sin(((2*Math.PI)/(PERIOD))*timeElapsed);
 
-        //Add this basic velocity
-        getLocation().add(velocity);
-
-        //Move in the x direction according to our sine function
-        getLocation().x = initialX + AMPLITUDE * (float)Math.sin(((2*Math.PI)/(PERIOD))*timeElapsed);
+        setLocation(new Vector(newX, getLocation().y + SPEED * delta));
 
 
         //Kill the enemy once it leaves the screen
