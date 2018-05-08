@@ -16,8 +16,10 @@ abstract class Sprite extends Entity {
     private Vector location;
 
     //velocity of the sprite
-    //not too much physical accuracy is present here, so it shouldn't be trusted beyond /cool/ effects
     private Vector velocity = new Vector();
+
+    //velocity of the sprite once adjusted for delta
+    private Vector scaledVelocity = new Vector();
 
     //rotation of the sprite, affect rendering of the sprite
     private float rotation = 0f;
@@ -46,9 +48,9 @@ abstract class Sprite extends Entity {
         return new Vector(x,y);
     }
 
-
     public void looseUpdate(Input input, int delta) {
-        location = location.add(velocity.scale(delta));
+        scaledVelocity = velocity.scale(delta);
+        location = location.add(scaledVelocity);
     }
 
 	//but rendering is the same across all sprites
@@ -77,7 +79,7 @@ abstract class Sprite extends Entity {
         //Calculate a simple vector that will adjust for the movement made between frames
         //Points in opposite direction of motion and is of length proportional to velocity
         //This really isn't a perfect solution, but helps a lot!
-        float currSpeed = getVelocity().getLength();
+        float currSpeed = scaledVelocity.getLength();
         Vector extraBehind = new Vector(getRotation() + DIR_BEHIND).scale(currSpeed);
 
 
@@ -111,6 +113,7 @@ abstract class Sprite extends Entity {
     public Vector getVelocity() {
         return velocity;
     }
+    public Vector getScaledVelocity() {return scaledVelocity;}
 
     void setVelocity(Vector velocity) {
         this.velocity = velocity;

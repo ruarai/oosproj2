@@ -7,7 +7,7 @@ public class Solitaire extends Sprite {
 
     private static final float FRICTION_FACTOR = 0.005f;
 
-    private static final float GRAVITY_FACTOR = 0.001f;
+    private static final float GRAVITY_FACTOR = 0.016f;
     private static final float GRAVITY_DIRECTION = 90f;
 
     public Solitaire(World parent) {
@@ -29,7 +29,7 @@ public class Solitaire extends Sprite {
         addVelocity(gravity);
 
         //Update our location by scaling our velocity by fixme
-        setVelocity(getVelocity().scale(0.08f));
+        setVelocity(getVelocity().scale(0.95f));
 
         //Make sure we don't fly off the screen, add if we hit an edge, flip our velocity
         if(getLocation().y > App.SCREEN_HEIGHT - getImage().getHeight()){

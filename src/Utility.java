@@ -1,4 +1,5 @@
 import org.newdawn.slick.Image;
+import org.newdawn.slick.Input;
 import org.newdawn.slick.geom.Vector2f;
 
 import java.util.Random;
@@ -32,5 +33,9 @@ public class Utility {
 
 
         return image.getSubImage(x,y,width,height);
+    }
+
+    public static Vector vectorToMouse(Input input, Vector start){
+        return new Vector(input.getMouseX(),input.getMouseY()).sub(start);
     }
 }

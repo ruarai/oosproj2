@@ -8,7 +8,7 @@ public class EnemyBoss extends Enemy {
     private static final int SECOND_WAIT_TIME = 2000;
     private static final int SHOOTING_WAIT_TIME = 3000;
 
-    private static final float INIT_WALK_SPEED = 0.05f * 16;
+    private static final float INIT_WALK_SPEED = 0.05f;
     private static final float INIT_WALK_DIRECTION = 90;
     private static final float INIT_WALK_GOAL = 72;
 

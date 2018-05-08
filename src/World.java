@@ -47,7 +47,7 @@ public class World {
         //Load in the world from the waves.txt file
         //entities.addAll(Resources.loadWaveData(this));
 
-        entities.add(new EnemyBoss(new Vector(480,240),this));
+        entities.add(new EnemyBoss(new Vector(480,0),this));
         //entities.add(new EnemyJava(new Vector(240,240),this));
         //entities.add(new EnemyJava(new Vector(480+240,240),this));
 	}

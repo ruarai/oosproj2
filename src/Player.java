@@ -30,6 +30,19 @@ class Player extends Sprite implements Collidable
         //Run down the delay
         if(shotDelay > 0)
             shotDelay -= delta;
+
+
+        float speed = getVelocity().getLength();
+        float rotationScale = Math.max(3 - (speed*speed) / 5f,1f);
+
+        if(input.isKeyDown(Input.KEY_LEFT))
+            setRotation(getRotation() + -ROTATION_SPEED * rotationScale);
+        if(input.isKeyDown(Input.KEY_RIGHT))
+            setRotation(getRotation() + ROTATION_SPEED * rotationScale);
+
+        if(input.isMouseButtonDown(Input.MOUSE_LEFT_BUTTON) || input.isMouseButtonDown(Input.MOUSE_RIGHT_BUTTON)){
+            setRotation(Utility.vectorToMouse(input, getCentre()).getAngle() - DIR_FORWARDS);
+        }
     }
 
     public void fixedUpdate(Input input) {
@@ -111,31 +124,18 @@ class Player extends Sprite implements Collidable
     private Vector keyboardInput(Input input){
         Vector thrust = new Vector();
 
-        float speed = getVelocity().getLength();
-
-
-        float rotationScale = Math.max(3 - (speed*speed) / 5f,1f);
-
         //respond to key inputs, changing the thrust vector
         if(input.isKeyDown(Input.KEY_UP))
             thrust = new Vector(getRotation() + DIR_FORWARDS).scale(MOVE_ACCEL);
         if(input.isKeyDown(Input.KEY_DOWN))
             thrust = new Vector(getRotation() + DIR_FORWARDS).scale(-MOVE_ACCEL);
 
-        if(input.isKeyDown(Input.KEY_LEFT))
-            setRotation(getRotation() + -ROTATION_SPEED * rotationScale);
-        if(input.isKeyDown(Input.KEY_RIGHT))
-            setRotation(getRotation() + ROTATION_SPEED * rotationScale);
 
         return thrust;
     }
 
     private Vector mouseInput(Input input) {
-        Vector toMouse = new Vector(input.getMouseX(),input.getMouseY()).sub(getCentre());
-
-        if(input.isMouseButtonDown(Input.MOUSE_LEFT_BUTTON) || input.isMouseButtonDown(Input.MOUSE_RIGHT_BUTTON)){
-            setRotation(toMouse.getAngle() - DIR_FORWARDS);
-        }
+        Vector toMouse = Utility.vectorToMouse(input, getCentre());
 
         if(toMouse.getLength() > 10f && input.isMouseButtonDown(Input.MOUSE_RIGHT_BUTTON))
             return new Vector(getRotation() + DIR_FORWARDS).scale(MOVE_ACCEL);
