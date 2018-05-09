@@ -17,6 +17,8 @@ public class Particle extends Sprite {
     private static final float LIFE_POWER = 4f;
     private static final float LIFE_START_RANDOM_SCALE = 0.3f;
 
+    private static final float VELOCITY_DECAY = 0.98f;
+
     //The constant speed we will rotate the particle at
     private float rotationSpeed;
 
@@ -58,8 +60,7 @@ public class Particle extends Sprite {
     }
 
     public void fixedUpdate(Input input) {
-        //Scale our velocity down by some constant factor (unrealistic physics again lol)
-        setVelocity(getVelocity().scale(0.98f));
+        setVelocity(getVelocity().scale(VELOCITY_DECAY));
 
         //Adjust our rotation according to rotationSpeed
         setRotation(getRotation() + rotationSpeed * 16f);
@@ -71,10 +72,10 @@ public class Particle extends Sprite {
         float alpha = (float)Math.pow(life, LIFE_POWER);
 
         //Create a filter based on our alpha
-        Color filter = new Color(1,1,1,alpha);
+        Color filter = new Color( 1, 1, 1, alpha);
 
         //Set our rotation and draw with our filter
         getImage().setRotation(getRotation());
-        getImage().draw(getLocation().x, getLocation().y,filter);
+        getImage().draw(getLocation().x, getLocation().y, filter);
     }
 }

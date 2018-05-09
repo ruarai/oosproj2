@@ -117,8 +117,11 @@ class Player extends Sprite implements Collidable
 
 
         //Are we moving fast enough? Create some exhaust particles for fun.
-        if(getVelocity().getLength() > EXHAUST_SPEED_REQUIRED)
-            parentWorld.addEntity(new ExhaustParticle(getCentre().add(new Vector(getRotation() - DIR_FORWARDS).scale(EXHAUST_OFFSET_Y)),parentWorld, getVelocity()));
+        if(getVelocity().getLength() > EXHAUST_SPEED_REQUIRED){
+            Vector exhaustVelocity = getCentre().add(new Vector(getRotation() - DIR_FORWARDS).scale(EXHAUST_OFFSET_Y));
+
+            parentWorld.addEntity(new ExhaustParticle(exhaustVelocity,parentWorld, getVelocity()));
+        }
     }
 
     private Vector keyboardInput(Input input){
