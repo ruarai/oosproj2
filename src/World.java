@@ -4,9 +4,9 @@ import java.util.ArrayList;
 
 
 public class World {
-
     private final ArrayList<Entity> entities = new ArrayList<>();
 
+    //How much holding S/D affects the time scaling
     private static final float TIME_DILATION_FACTOR = 5f;
 
     private static final Vector PLAYER_LOCATION = new Vector(480,488);
@@ -14,19 +14,24 @@ public class World {
     //Allow for debug rendering of the bounding boxes of any sprites
     private static final boolean RENDER_BOUNDING_BOX = false;
 
+    private static final boolean RENDER_ONLY_BLUR_FRAME_WHEN_PAUSED = false;
+
     private static final Color RENDER_BLUR_FILTER = new Color(1,1,1,0.8f);
     //most important feature do not delete (press A to activate)
     private static final Color SOLITAIRE_BLUR_FILTER = new Color(1,1,1,1f);
 
+    //Constants for the chromatic aberration effect
     private static final float CHROMATIC_ABERRATION_SCALE = 15f;
     private static final Color FILTER_RED = new Color(1,0,0,0.333f);
     private static final Color FILTER_GREEN = new Color(0,1,0,0.333f);
     private static final Color FILTER_BLUE = new Color(0,0,1,0.333f);
 
+    //Speeds of the layers of our background
     private static final float BACKGROUND_SCROLL_DUST = 0.125f;
     private static final float BACKGROUND_SCROLL_FAR = 0.13f;
     private static final float BACKGROUND_SCROLL_NEAR = 0.17f;
 
+    //Number of times a second we update the physics, higher -> things go faster
     private static final int FIXED_UPDATE_RATE = 40;
     public static final int FIXED_TIME = 1000 / FIXED_UPDATE_RATE;
 
@@ -45,7 +50,7 @@ public class World {
         entities.add(new Player(PLAYER_LOCATION,this));
 
         //Load in the world from the waves.txt file
-        //entities.addAll(Resources.loadWaveData(this));
+        entities.addAll(Resources.loadWaveData(this));
 
         //entities.add(new EnemyBoss(new Vector(480,0),this));
         //entities.add(new EnemyJava(new Vector(240,240),this));
@@ -94,7 +99,7 @@ public class World {
         if(input.isKeyPressed(Input.KEY_P))
             pause = !pause;
 
-        //If we're paused, don't fixedUpdate anything
+        //If we're paused, don't update anything
         if(pause)
             return;
 
@@ -134,7 +139,7 @@ public class World {
         graphics.setDrawMode(Graphics.MODE_NORMAL);
 
         //If we're paused, just draw the blur image and return
-        if(pause){
+        if(pause && RENDER_ONLY_BLUR_FRAME_WHEN_PAUSED){
             blurImage.draw(0,0);
             return;
         }
