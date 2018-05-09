@@ -6,7 +6,7 @@ class Player extends Sprite implements Collidable
 {
     private static final float MOVE_ACCEL = 0.01f;
     private static final float RECOIL_ACCEL = 0.01f;
-    private static final float ROTATION_SPEED = 1.6f;
+    private static final float ROTATION_SPEED = 0.1f;
     private static final float FRICTION_SCALE = 0.01f;
     private static final float DRIFT_SCALE = 1.7f;
 
@@ -36,9 +36,9 @@ class Player extends Sprite implements Collidable
         float rotationScale = Math.max(3 - (speed*speed) / 5f,1f);
 
         if(input.isKeyDown(Input.KEY_LEFT))
-            setRotation(getRotation() + -ROTATION_SPEED * rotationScale);
+            setRotation(getRotation() + -ROTATION_SPEED * rotationScale * delta);
         if(input.isKeyDown(Input.KEY_RIGHT))
-            setRotation(getRotation() + ROTATION_SPEED * rotationScale);
+            setRotation(getRotation() + ROTATION_SPEED * rotationScale * delta);
 
         if(input.isMouseButtonDown(Input.MOUSE_LEFT_BUTTON) || input.isMouseButtonDown(Input.MOUSE_RIGHT_BUTTON)){
             setRotation(Utility.vectorToMouse(input, getCentre()).getAngle() - DIR_FORWARDS);
