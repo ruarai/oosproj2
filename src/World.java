@@ -95,7 +95,7 @@ public class World {
         if(input.isKeyDown(Input.KEY_D))
             delta /= TIME_DILATION_FACTOR;
         if(input.isKeyPressed(Input.KEY_A))
-            activateSolitaireMode();
+            solitaireRendering = !solitaireRendering;
         if(input.isKeyPressed(Input.KEY_P))
             pause = !pause;
 

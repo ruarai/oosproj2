@@ -51,6 +51,8 @@ public class EnemyShooter extends Enemy {
             //Vector moving downwards
             setVelocity(new Vector(DIRECTION).scale(SPEED));
         }
+        else
+            setVelocity(new Vector(0,0));
     }
 
     public int getScoreValue() {
