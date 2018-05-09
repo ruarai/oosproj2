@@ -43,13 +43,12 @@ class Player extends Sprite implements Collidable
         if(input.isMouseButtonDown(Input.MOUSE_LEFT_BUTTON) || input.isMouseButtonDown(Input.MOUSE_RIGHT_BUTTON)){
             setRotation(Utility.vectorToMouse(input, getCentre()).getAngle() - DIR_FORWARDS);
         }
+
+        keepOnScreen();
     }
 
     public void fixedUpdate(Input input) {
-
         move(input);
-
-        keepOnScreen();
 
         tryShoot(input);
     }

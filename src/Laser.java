@@ -40,7 +40,7 @@ public class Laser extends Sprite implements Collidable {
     //override rendering so that we can create a cool blur effect
     public void render(Graphics graphics) {
         //Create a vector pointing in opposite direction of velocity
-        Vector behind = getScaledVelocity().scale(-1f / (float)BLUR_STEPS);
+        Vector behind = getVelocity().scale(-16f / (float)BLUR_STEPS);
 
         for (int i = 0; i < BLUR_STEPS; i++)
         {
