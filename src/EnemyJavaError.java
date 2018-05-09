@@ -3,7 +3,6 @@ import org.newdawn.slick.Input;
 public class EnemyJavaError extends Enemy {
 
     private static final float FRICTION_FACTOR = 0.006f;
-    private static final float RANDOM_SCALE = 20f;
 
     private static final float THRUST_SCALE = 0.01f;
 
@@ -17,8 +16,6 @@ public class EnemyJavaError extends Enemy {
     }
 
     public void fixedUpdate(Input input) {
-        super.fixedUpdate(input);
-
         //Determine the player so that we can find their location
         Player player = parentWorld.getEntity(Player.class);
 
@@ -27,7 +24,6 @@ public class EnemyJavaError extends Enemy {
             return;
 
         //Calculate a friction vector to remove from the velocity
-        //This sadly isn't frame-independent, but implementing this correctly seems difficult
         Vector friction = getVelocity().scale(FRICTION_FACTOR);
         subVelocity(friction);
 
@@ -35,13 +31,13 @@ public class EnemyJavaError extends Enemy {
         Vector towardsPlayer = player.getLocation().sub(getLocation());
 
         //Use our new vector to calculate some amount of thrust
-        Vector thrust = new Vector(towardsPlayer.getAngle() + (Utility.random.nextFloat()-0.5f) * RANDOM_SCALE);
+        Vector thrust = new Vector(towardsPlayer.getAngle() );
 
         //Determine the difference in rotation between our front and the player and adjust so that we face them
         float rotationDiff = (towardsPlayer.getAngle() - DIRECTION_FORWARDS) - getRotation();
         setRotation(getRotation() + rotationDiff * ROTATION_SPEED);
 
-        thrust.scale(THRUST_SCALE);
+        thrust = thrust.scale(THRUST_SCALE);
 
         addVelocity(thrust);
 
