@@ -113,7 +113,7 @@ public class World {
 
 	    fixedTimeUpdate(input, delta);
 
-	    //After all the entities have updated, check for collisions between Collidable Spritess
+	    //After all the entities have updated, check for collisions between Collidable Sprites
 	    handleCollisions();
 
         //Add/remove any new entities that have been added/removed by other entities
