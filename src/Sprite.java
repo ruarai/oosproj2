@@ -113,7 +113,6 @@ abstract class Sprite extends Entity {
     public Vector getVelocity() {
         return velocity;
     }
-    public Vector getScaledVelocity() {return scaledVelocity;}
 
     void setVelocity(Vector velocity) {
         this.velocity = velocity;
