@@ -47,7 +47,7 @@ public class World {
         //Load in the world from the waves.txt file
         //entities.addAll(Resources.loadWaveData(this));
 
-        entities.add(new EnemyBoss(new Vector(480,0),this));
+        //entities.add(new EnemyBoss(new Vector(480,0),this));
         //entities.add(new EnemyJava(new Vector(240,240),this));
         //entities.add(new EnemyJava(new Vector(480+240,240),this));
 	}
@@ -217,6 +217,10 @@ public class World {
     }
 
     private void fixedTimeUpdate(Input input, int delta) {
+        /* Here is a slightly overcomplicated solution to something that may not have deserved fixing.
+           Calculating physics normally proves to be difficult in a variable framerate case, as calculations
+           dependent upon acceleration
+        */
         timeSinceFixedTimeUpdate += delta;
 
         int numPhysicsUpdates = timeSinceFixedTimeUpdate / FIXED_TIME;

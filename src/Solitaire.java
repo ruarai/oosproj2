@@ -7,7 +7,7 @@ public class Solitaire extends Sprite {
 
     private static final float FRICTION_FACTOR = 0.005f;
 
-    private static final float GRAVITY_FACTOR = 0.016f;
+    private static final float GRAVITY_FACTOR = 0.008f;
     private static final float GRAVITY_DIRECTION = 90f;
 
     public Solitaire(World parent) {
