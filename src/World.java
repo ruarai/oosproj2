@@ -7,7 +7,7 @@ public class World {
     private final ArrayList<Entity> entities = new ArrayList<>();
 
     //How much holding S/D affects the time scaling
-    private static final float TIME_DILATION_FACTOR = 5f;
+    private static final float TIME_DILATION_FACTOR = 5fw;
 
     private static final Vector PLAYER_LOCATION = new Vector(480,488);
 
