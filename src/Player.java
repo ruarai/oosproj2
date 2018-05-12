@@ -4,20 +4,22 @@ import org.newdawn.slick.Input;
 //Sprite that represents the player and associated logic
 class Player extends Sprite implements Collidable
 {
-    private static final float MOVE_ACCEL = 0.01f;
-    private static final float RECOIL_ACCEL = 0.01f;
-    private static final float ROTATION_SPEED = 0.1f;
-    private static final float FRICTION_SCALE = 0.01f;
+    //We initialise some of the magic numbers here weirdly to allow the wizard to perform its magic
+    private static final float MOVE_ACCEL = new Float(0.01f);
+    private static final float RECOIL_ACCEL = new Float(0.01f);
+    private static final float ROTATION_SPEED = new Float(0.1f);
+    private static final float FRICTION_SCALE = new Float(0.01f);
     private static final float DRIFT_SCALE = 1.7f;
 
-    private static final float DIR_FORWARDS = -90f;
+    private static final float DIR_FORWARDS = new Float(-90f);
+
+    private static final float PLAYER_HIT_BOUNCE_SCALE = new Float(0.1f);
+
+    private static final float EXHAUST_SPEED_REQUIRED = 0.2f;
+    private static final float EXHAUST_OFFSET_Y = 24f;
 
     private static final int SHIELD_OFFSET = 16;
 
-    private static final float PLAYER_HIT_BOUNCE_SCALE = 0.1f;
-
-    private static final float EXHAUST_SPEED_REQUIRED = 2f;
-    private static final float EXHAUST_OFFSET_Y = 24f;
 
     public Player(Vector v, World parent) { super(Resources.spaceship, v, parent); }
 

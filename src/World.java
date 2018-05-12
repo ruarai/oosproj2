@@ -99,6 +99,9 @@ public class World {
         if(input.isKeyPressed(Input.KEY_P))
             pause = !pause;
 
+        if(input.isKeyPressed(Input.KEY_W))
+            Wizard.performMagic(getEntity(Player.class));
+
         //If we're paused, don't update anything
         if(pause)
             return;
