@@ -2,7 +2,9 @@ import org.newdawn.slick.*;
 
 import java.util.ArrayList;
 
-
+/**
+ * The game World, controlling all game updating and rendering
+ */
 public class World {
     private final ArrayList<Entity> entities = new ArrayList<>();
 

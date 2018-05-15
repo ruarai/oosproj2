@@ -1,6 +1,9 @@
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
+/**
+ * A helpful static class that can perform magic on a Player's magic numbers
+ */
 public class Wizard {
 
     private static final String[] MAGIC_NUMBERS = {
@@ -12,6 +15,10 @@ public class Wizard {
         "PLAYER_HIT_BOUNCE_SCALE"
     };
 
+    /**
+     * Performs magic on a given player
+     * @param player The player to perform magic upon
+     */
     static void performMagic(Player player){
         try{
             //Find a random magic number to edit
