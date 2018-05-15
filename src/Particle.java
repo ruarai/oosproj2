@@ -66,13 +66,13 @@ public class Particle extends Sprite {
         //Have we moved off the screen/ran out of life? We should remove ourselves so as to reduce cpu/memory usage
         if(Utility.offScreen(getLocation(), getImage()) || life < 0)
             parentWorld.killEntity(this);
+
+        //Adjust our rotation according to rotationSpeed
+        setRotation(getRotation() + rotationSpeed * delta);
     }
 
     public void fixedUpdate(Input input) {
         setVelocity(getVelocity().scale(VELOCITY_DECAY));
-
-        //Adjust our rotation according to rotationSpeed
-        setRotation(getRotation() + rotationSpeed * 16f);
     }
 
 
