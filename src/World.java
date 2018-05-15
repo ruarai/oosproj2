@@ -50,6 +50,8 @@ public class World {
 	    entities.add(new Background(Resources.space,BACKGROUND_SCROLL_NEAR,this));
 
 	    entities.add(new GameplayController(this));
+	    entities.add(new CollisionManager(this));
+	    entities.add(new Wizard(this));
 
 	    //Create a Player sprite centred on its default location
         entities.add(new Player(PLAYER_LOCATION,this));
@@ -64,7 +66,7 @@ public class World {
 
 	private static Image generateBlankImage(){
 	    try {
-	        return new Image(App.SCREEN_WIDTH,App.SCREEN_HEIGHT);
+	        return new Image(App.SCREEN_WIDTH, App.SCREEN_HEIGHT);
         } catch (SlickException e) { return null;}
     }
 
@@ -116,9 +118,6 @@ public class World {
         if(input.isKeyPressed(Input.KEY_P))
             pause = !pause;
 
-        if(input.isKeyPressed(Input.KEY_W))
-            Wizard.performMagic(getEntity(Player.class));
-
         //If we're paused, don't update anything
         if(pause)
             return;
@@ -132,9 +131,6 @@ public class World {
             e.looseUpdate(input, delta);
 
 	    fixedTimeUpdate(input, delta);
-
-	    //After all the entities have updated, check for collisions between Collidable Sprites
-	    handleCollisions();
 
         //Add/remove any new entities that have been added/removed by other entities
         entities.addAll(newEntities);
@@ -251,7 +247,9 @@ public class World {
     private void fixedTimeUpdate(Input input, int delta) {
         /* Here is a slightly overcomplicated solution to something that may not have deserved fixing.
            Calculating physics normally proves to be difficult in a variable framerate case, as calculations
-           dependent upon acceleration
+           dependent upon elements that themselves depend on time (i.e. acceleration in the case of friction)
+           would depend on the framerate rather than just delta. So we can make the framerate for physics fixed,
+           eliminating this problem.
         */
         timeSinceFixedTimeUpdate += delta;
 
@@ -263,34 +261,6 @@ public class World {
         for (int i = 0; i < numPhysicsUpdates; i++){
             for(Entity e : entities){
                 e.fixedUpdate(input);
-            }
-        }
-    }
-
-	private void handleCollisions() {
-	    //Create a list of all collidable objects, then take the list as an array
-	    ArrayList<Collidable> collidables = getEntities(Collidable.class);
-
-	    //PS: Java sucks at this
-        Collidable[] collidableArray = new Collidable[collidables.size()];
-        collidableArray = collidables.toArray(collidableArray);
-
-        //We perform this on an array such that the collision checks are not performed twice per Sprite
-        for (int x = 0; x < collidableArray.length; x++){
-            for(int y = x + 1; y < collidableArray.length; y++){
-                //Not pretty, but we need a copy of both the collidable and sprite reference
-                Collidable collidableA = collidableArray[x];
-                Collidable collidableB = collidableArray[y];
-
-                Sprite spriteA = (Sprite)collidableA;
-                Sprite spriteB = (Sprite)collidableB;
-
-                //Check if the sprites intersect
-                if(spriteA.getBoundingBox().intersects(spriteB.getBoundingBox())){
-                    //If they do, call the collision method on the collidables
-                    collidableA.onCollision(spriteB);
-                    collidableB.onCollision(spriteA);
-                }
             }
         }
     }
