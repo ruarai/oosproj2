@@ -29,7 +29,7 @@ public class Wizard extends Entity {
      * Performs magic based on key input
      * @param input The current game input
      */
-    public void fixedUpdate(Input input) {
+    public void looseUpdate(Input input, int delta) {
         if(input.isKeyPressed(Input.KEY_W)){
             Player player = parentWorld.getEntity(Player.class);
 
