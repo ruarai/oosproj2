@@ -15,10 +15,10 @@ public class Renderer {
     //Constants for the chromatic aberration effect
     private static final float CHROMATIC_ABERRATION_SCALE = 15f;
     private static final Color FILTER_RED = new Color(1,0,0,0.333f);
-    private static final Color FILTER_GREEN = new Color(0,1,0,0.333f);
-    private static final Color FILTER_BLUE = new Color(0,0,1,0.333f);
+    private static final Color FILTER_GREEN = new Color(0,0.3f,0.7f,0.333f);
+    private static final Color FILTER_BLUE = new Color(0,0.7f,0.3f,0.333f);
 
-    private static final Color RENDER_BLUR_FILTER = new Color(1,1,1,0.8f);
+    private static final Color RENDER_BLUR_FILTER = new Color(1,1,1,0.99f);
     //most important feature do not delete (press A to activate)
     private static final Color SOLITAIRE_BLUR_FILTER = new Color(1,1,1,1f);
 
