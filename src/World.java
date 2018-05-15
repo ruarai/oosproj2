@@ -224,6 +224,9 @@ public class World {
         return new ArrayList<>(entities);
     }
 
+    /**
+     * @return If the game is currently paused.
+     */
     public boolean getIsPaused(){
         return paused;
     }
