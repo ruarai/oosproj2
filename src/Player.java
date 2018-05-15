@@ -62,7 +62,7 @@ class Player extends Sprite implements Collidable
         if(tryShooting && shotDelay <= 0)
         {
             //So shoot a laser!
-            Laser laser = new Laser(Resources.shot,this.getCentre(),parentWorld, getRotation());
+            Laser laser = new Laser(this.getCentre(), getRotation(), parentWorld);
             parentWorld.addEntity(laser);
 
             //Calculate some amount of recoil
@@ -121,7 +121,7 @@ class Player extends Sprite implements Collidable
         if(getVelocity().getLength() > EXHAUST_SPEED_REQUIRED){
             Vector exhaustVelocity = getCentre().add(new Vector(getRotation() - DIR_FORWARDS).scale(EXHAUST_OFFSET_Y));
 
-            parentWorld.addEntity(new ExhaustParticle(exhaustVelocity,parentWorld, getVelocity()));
+            parentWorld.addEntity(new ExhaustParticle(exhaustVelocity, getVelocity(), parentWorld));
         }
     }
 
@@ -173,7 +173,7 @@ class Player extends Sprite implements Collidable
             addVelocity(enemy.getVelocity().scale(PLAYER_HIT_BOUNCE_SCALE));
 
             //Trigger a player death in the gameplay controller
-            parentWorld.getEntity(GameplayController.class).playerDeath();
+            parentWorld.getEntity(GameplayController.class).playerHit();
         }
     }
 }

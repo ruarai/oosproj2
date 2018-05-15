@@ -3,7 +3,9 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 
-
+/**
+ * A basic Sprite that moves according to some starting values and slowly fades out
+ */
 public class Particle extends Sprite {
 
     private static final float ROTATION_SCALE = 0.5f;
@@ -27,7 +29,14 @@ public class Particle extends Sprite {
 
     float lifeDecayRate = DEFAULT_LIFE_DECAY;
 
-    public Particle(Image img, Vector location, World parent, float randomScale, Vector force) {
+    /**
+     * @param img The Image that the Particle will render
+     * @param location The starting location of the Particle
+     * @param parent The parent game world
+     * @param randomScale The amount to scale the random velocity added in any direction
+     * @param addedVelocity The velocity to be added to the initial velocity
+     */
+    public Particle(Image img, Vector location, World parent, float randomScale, Vector addedVelocity) {
         super(img, location, parent);
 
         Vector newVelocity = new Vector(Utility.random.nextFloat() * FULL_CIRCLE);
@@ -36,7 +45,7 @@ public class Particle extends Sprite {
         setVelocity(newVelocity);
 
         //Add some scaled amount of force to our velocity, used to provide consistent movement to our particle
-        addVelocity(force.scale(FORCE_ADDED_SCALE));
+        addVelocity(addedVelocity.scale(FORCE_ADDED_SCALE));
         //Create a new rotation speed proportional to ROTATION_SCALE, randomly scaled in the positive or negative direction
         rotationSpeed = (Utility.random.nextFloat() - 0.5f) * ROTATION_SCALE;
 

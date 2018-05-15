@@ -1,5 +1,8 @@
 import org.newdawn.slick.Input;
 
+/**
+ * Implementation of Enemy that moves around on screen, tracking the Player
+ */
 public class EnemyJavaError extends Enemy {
 
     private static final float FRICTION_FACTOR = 0.006f;
@@ -11,10 +14,18 @@ public class EnemyJavaError extends Enemy {
     private static final float ROTATION_SPEED = 0.01f;
 
 
+    /**
+     * @param v The starting location of the EnemyJavaError
+     * @param parent The parent game world
+     */
     public EnemyJavaError(Vector v, World parent) {
         super(Resources.getRandomJavaError(), v, parent);
     }
 
+    /**
+     * Moves the EnemyJavaError on screen towards the Player
+     * @param input The current game input
+     */
     public void fixedUpdate(Input input) {
         //Determine the player so that we can find their location
         Player player = parentWorld.getEntity(Player.class);

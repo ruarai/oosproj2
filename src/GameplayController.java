@@ -2,6 +2,9 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.geom.Vector2f;
 
+/**
+ * Primarily non-graphical Entity that controls game logic.
+ */
 public class GameplayController extends Entity {
 
     private static final Vector2f SCORE_OFFSET = new Vector2f(20,738);
@@ -24,20 +27,30 @@ public class GameplayController extends Entity {
     private static final int SOLITAIRE_INITIAL_DELAY = 3500;
     private static final int SOLITAIRE_DELAY = 500;
 
+    private static final float PLAYER_SCORE_ICON_SCALE = 0.5f;
+
     private int playerScore = 0;
     private int playerLives = PLAYER_INIT_LIVES;
 
     private int shieldTime = PLAYER_INITIAL_SHIELD_TIME;
 
-    private int shotSpeedTime = 0;
+    private int shotSpeedPowerupTime = 0;
     private static final int DEFAULT_SHOT_DELAY = 250;
     private static final int POWERUP_SHOT_DELAY = 150;
 
+    /**
+     * @param parentWorld The parent game world
+     */
     public GameplayController(World parentWorld) { super(parentWorld); }
 
+    /**
+     * Updates game features like powerups, screen shake, slow motion and solitaire
+     * @param input The current game input
+     * @param delta The time since the last looseUpdate
+     */
     public void looseUpdate(Input input, int delta) {
-        if(shotSpeedTime > 0)
-            shotSpeedTime -= delta;
+        if(shotSpeedPowerupTime > 0)
+            shotSpeedPowerupTime -= delta;
 
         if(shieldTime > 0)
             shieldTime -= delta;
@@ -59,7 +72,7 @@ public class GameplayController extends Entity {
         if(spawnSolitaires){
             if(solitaireDelay > 0){
                 solitaireDelay -= delta;
-            }else {
+            } else {
                 parentWorld.addEntity(new Solitaire(parentWorld));
                 solitaireDelay = SOLITAIRE_DELAY;
             }
@@ -69,28 +82,44 @@ public class GameplayController extends Entity {
     private float timeElapsed = 0;
     private float shakeLife = 0;
 
-    //Method to allow shaking of the screen on some important event
+    /**
+     * Shakes the screen by some given amount
+     * @param shakeMagnitude The amount for the screen to shake
+     */
     public void shakeScreen(float shakeMagnitude)
     {
         shakeLife = shakeMagnitude;
     }
 
+    /**
+     * @return The magnitude/life of the current screen shake
+     */
     public float getCurrentScreenShake(){
         return shakeLife;
     }
 
     private float slowLife = 0;
 
+    /**
+     * Triggers the slow motion effect to begin
+     */
     public void slowTime(){
         //Starts the time dilation effect
-        //We can't set this to be too close to 1, since that will stop the game from updating and hence allowing it decay
+        //We can't set this to be too close to 1, since that will stop the game from updating and hence allowing the effect to decay
         slowLife = TIME_EFFECT_START;
     }
 
+    /**
+     * @return The current time scaling factor
+     */
     public float getCurrentTimeScale(){
         return 1 - slowLife;
     }
 
+    /**
+     * Renders the screen shake, player score and player lives onto graphics
+     * @param graphics The graphics to use to render on screen
+     */
     public void render(Graphics graphics) {
         //Calculate how much the screen will shake
         float xOffset = shakeLife * SCREEN_SHAKE_MAGNITUDE * (float)Math.sin(timeElapsed);
@@ -102,24 +131,29 @@ public class GameplayController extends Entity {
         //Draw in the players score
         graphics.drawString("Score:" + playerScore,SCORE_OFFSET.x,SCORE_OFFSET.y);
 
-        //Make sure the spaceship is upright:
+        //Make sure the spaceship is upright, so that we can use it to draw the player score
         Resources.spaceship.setRotation(0);
 
         //Draw in each of the player's lives
         for (int i = 0; i < playerLives; i ++)
         {
-            Resources.spaceship.draw(LIVES_OFFSET.x + LIVES_GAP * i,LIVES_OFFSET.y,0.5f);
+            Resources.spaceship.draw(LIVES_OFFSET.x + LIVES_GAP * i,LIVES_OFFSET.y,PLAYER_SCORE_ICON_SCALE);
         }
     }
 
 
-    //Method called when an enemy is killed, adds score to the player
+    /**
+     * To be called upon the death of an Enemy, will add to the Player's score
+     * @param e The enemy that has died
+     */
     public void enemyDeath(Enemy e) {
         playerScore += e.getScoreValue();
     }
 
-    //Method called when the player is killed
-    public void playerDeath(){
+    /**
+     * To be called upon the hit of the Player, will determine if they die
+     */
+    public void playerHit(){
 
         //Is the shield active?
         if(!getIsShieldActive()) {
@@ -145,27 +179,41 @@ public class GameplayController extends Entity {
 
     }
 
-    //Returns if the player's shield is active, allows for it to be rendered elsewhere
+    /**
+     * @return If the Player's shield should be active
+     */
     public boolean getIsShieldActive(){
         return shieldTime > 0;
     }
 
+    /**
+     * @param shieldTime How long the Player's shield should be active for
+     */
     public void setShieldTime(int shieldTime)
     {
         this.shieldTime = shieldTime;
     }
 
+    /**
+     * @return The current shot delay for the Player
+     */
     public int getCurrentShotDelay() {
-        return shotSpeedTime > 0 ? POWERUP_SHOT_DELAY : DEFAULT_SHOT_DELAY;
+        return shotSpeedPowerupTime > 0 ? POWERUP_SHOT_DELAY : DEFAULT_SHOT_DELAY;
     }
 
-    public void setShotSpeedTime(int shotSpeedTime) {
-        this.shotSpeedTime = shotSpeedTime;
+    /**
+     * @param shotSpeedPowerupTime How long the ShotSpeed powerup should be active for
+     */
+    public void setShotSpeedPowerupTime(int shotSpeedPowerupTime) {
+        this.shotSpeedPowerupTime = shotSpeedPowerupTime;
     }
 
     private boolean spawnSolitaires = false;
     private int solitaireDelay = SOLITAIRE_INITIAL_DELAY;
 
+    /**
+     * Enables spawning of the Solitaire entities according to some given delay
+     */
     public void enableSolitaireSpawning() {
         spawnSolitaires = true;
     }

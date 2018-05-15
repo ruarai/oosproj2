@@ -10,12 +10,22 @@ public abstract class Entity {
     //Pointer to allow entities to interact with world
     World parentWorld;
 
-    //called every fixed number of times a second, no delta, used to make sure physics consistent
+    /**
+     * Called a fixed number of times per second. Allows for simple realistic physics implementation.
+     * @param input The current game input
+     */
     public void fixedUpdate(Input input) { }
 
-    //called every update call, delta is dependent upon frame rate
+    /**
+     * Called a variable number of times per second. Should be used for general game logic
+     * @param input The current game input
+     * @param delta The time since the last looseUpdate
+     */
     public void looseUpdate(Input input, int delta) { }
 
-    //called every frame render
-    public abstract void render(Graphics g);
+    /**
+     * Called to render the Entity
+     * @param graphics The graphics to use to render on screen
+     */
+    public abstract void render(Graphics graphics);
 }

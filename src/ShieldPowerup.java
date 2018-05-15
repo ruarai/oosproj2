@@ -1,5 +1,6 @@
-import org.newdawn.slick.geom.Vector2f;
-
+/**
+ * A shield powerup that will create a shield effect of 5 seconds upon collision with player
+ */
 public class ShieldPowerup extends Powerup {
 
     private static final int SHIELD_TIME = 5000;

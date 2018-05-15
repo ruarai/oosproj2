@@ -3,7 +3,9 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.geom.Polygon;
 
-//Sprites are basic entities with some kind of image and location
+/**
+ * Basic implementation of Entity, with an explicit Image and on-screen location, rotation and velocity
+ */
 abstract class Sprite extends Entity {
 
     private static final float DIR_BEHIND = 90f;
@@ -25,7 +27,11 @@ abstract class Sprite extends Entity {
     private float rotation = 0f;
 
 
-    //Create a new sprite from specified file with a default location vector v
+    /**
+     * @param img The image to be used to render the Sprite
+     * @param v The starting location of the Sprite
+     * @param parent The parent game world
+     */
     public Sprite(Image img, Vector v, World parent) {
         super(parent);
         this.image = img;
@@ -39,7 +45,9 @@ abstract class Sprite extends Entity {
         parentWorld = parent;
     }
 
-    //Returns the centre point of the image according to the size of the sprite
+    /**
+     * @return Returns the centre of the Sprite on-screen according to the Sprite's Image
+     */
     Vector getCentre()
     {
         float x = location.x + getImage().getWidth() / 2;
@@ -48,19 +56,29 @@ abstract class Sprite extends Entity {
         return new Vector(x,y);
     }
 
+    /**
+     * Updates the Sprite game logic and moves it along the screen according to its velocity
+     * @param input The current game input
+     * @param delta The time since the last looseUpdate
+     */
     public void looseUpdate(Input input, int delta) {
         scaledVelocity = velocity.scale(delta);
         location = location.add(scaledVelocity);
     }
 
-	//but rendering is the same across all sprites
+    /**
+     * Renders the sprite from its Image and location
+     * @param graphics The graphics to use to render on screen
+     */
 	public void render(Graphics graphics)
     {
         getImage().setRotation(getRotation());
         getImage().draw(getLocation().x, getLocation().y);
 	}
 
-	//Method to get bounding box that accounts for rotation
+    /**
+     * @return A rectangular bounding box that accounts for rotation and how fast the sprite is moving on screen
+     */
 	public Polygon getBoundingBox()
     {
         Polygon polygon = new Polygon();
@@ -98,38 +116,65 @@ abstract class Sprite extends Entity {
         return polygon;
     }
 
+    /**
+     * @return The image of the Sprite
+     */
     public Image getImage() {
         return image;
     }
 
+    /**
+     * @return The location of the Sprite on screen
+     */
     public Vector getLocation() {
         return location;
     }
 
+    /**
+     * @param location The new location of the Sprite on screen
+     */
     public void setLocation(Vector location){
 	    this.location = location;
     }
 
+    /**
+     * @return The current velocity of the Sprite
+     */
     public Vector getVelocity() {
         return velocity;
     }
 
+    /**
+     * @param velocity The new velocity of the Sprite
+     */
     void setVelocity(Vector velocity) {
         this.velocity = velocity;
     }
 
+    /**
+     * @param change The difference in Velocity to be added to the current velocity
+     */
     void addVelocity(Vector change) {
 	    velocity = velocity.add(change);
     }
 
+    /**
+     * @param change The difference in Velocity to be subtracted from the current velocity
+     */
     void subVelocity(Vector change) {
 	    velocity = velocity.sub(change);
     }
 
+    /**
+     * @return The rotation of the Sprite
+     */
     float getRotation() {
         return rotation;
     }
 
+    /**
+     * @param rotation The new rotation of the Sprite
+     */
     void setRotation(float rotation) {
         this.rotation = rotation;
     }

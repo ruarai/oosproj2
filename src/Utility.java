@@ -4,16 +4,31 @@ import org.newdawn.slick.geom.Vector2f;
 
 import java.util.Random;
 
+/**
+ * Provides a number of useful tools for the game.
+ */
 public class Utility {
 
+    /**
+     * The common Random used by the game
+     */
     public static final Random random = new Random();
 
-    //Simple static method to indicate whether a given vector is outside the screen space
+    /**
+     * Determines if a given vector is outside of the screen view
+     * @param vector The vector to be tested
+     * @return If the vector is off the screen
+     */
     public static boolean offScreen(Vector vector) {
         return vector.x < 0 || vector.y < 0 || vector.x > App.SCREEN_WIDTH || vector.y > App.SCREEN_HEIGHT;
     }
 
-    //Similar, but can tell if an entire image is off the screen
+    /**
+     * Determines if a given vector and image is entirely off the screen
+     * @param vector The vector to some point on the screen
+     * @param image The image that will extend off the vector as a rectangle
+     * @return If the image at vector is off the screen
+     */
     public static boolean offScreen(Vector vector, Image image) {
         if(vector.x + image.getWidth() < 0 || vector.y + image.getHeight() < 0)
             return true;

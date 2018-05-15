@@ -1,10 +1,19 @@
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 
+/**
+ * An entity that will spawn a named Enemy after a given time period.
+ */
 public class EnemySpawner extends Entity {
 
     private final static float INITIAL_Y = -64;
 
+    /**
+     * @param enemyName The name of the enemy, either "EnemyBasic", "EnemySine", "BasicShooter" or "Boss"
+     * @param xPosition The starting x-coordinate of the enemy
+     * @param timeDelay The delay until the enemy is spawned in ms
+     * @param parentWorld The parent game world
+     */
     public EnemySpawner(String enemyName,int xPosition, int timeDelay, World parentWorld) {
         super(parentWorld);
 
@@ -33,6 +42,11 @@ public class EnemySpawner extends Entity {
     private int timeDelay;
     private Enemy enemyEntity;
 
+    /**
+     * Run down the delay of the spawner
+     * @param input The current game input
+     * @param delta The time since the last looseUpdate
+     */
     public void looseUpdate(Input input, int delta) {
         //Run down the time delay until we need to spawn the enemy
         timeDelay -= delta;

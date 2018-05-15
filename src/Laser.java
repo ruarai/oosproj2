@@ -1,6 +1,8 @@
 import org.newdawn.slick.*;
 
-//A laser Sprite that moves upwards and destroys enemies
+/**
+ * A laser that moves in some given direction, accelerating and destroying any destroyable Enemies
+ */
 public class Laser extends Sprite implements Collidable {
 
     private static final float ACCEL = 0.3f;
@@ -14,9 +16,14 @@ public class Laser extends Sprite implements Collidable {
 
     private static final int BLUR_STEPS = 10;
 
-    public Laser(Image img, Vector location, World parent, float rotation)
+    /**
+     * @param location The location of the Laser on the screen
+     * @param rotation The direction the laser moves and accelerates in
+     * @param parent The parent game world
+     */
+    public Laser(Vector location, float rotation, World parent)
     {
-        super(img, location, parent);
+        super(Resources.shot, location, parent);
 
         this.setRotation(rotation);
         setVelocity(new Vector(rotation + DIRECTION_FORWARDS));

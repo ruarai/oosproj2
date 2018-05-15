@@ -2,6 +2,9 @@ import org.newdawn.slick.*;
 
 import java.nio.ByteBuffer;
 
+/**
+ * The boss implementation of Enemy. Moves around on screen in a loop and shoots. Cannot be killed in one shot.
+ */
 public class EnemyBoss extends Enemy {
 
     private static final int FIRST_WAIT_TIME = 5000;
@@ -38,7 +41,10 @@ public class EnemyBoss extends Enemy {
     //So let's define a more useful one
     private static final int BYTE_MAX = 255;
 
-
+    /**
+     * @param location The location of the boss on screen (Should be upwards of the screen space)
+     * @param parent The parent game world
+     */
     public EnemyBoss(Vector location, World parent) {
         super(Resources.boss, location, parent);
     }
@@ -64,6 +70,11 @@ public class EnemyBoss extends Enemy {
     //Point at which the boss was hit by a laser
     private Vector impactPoint;
 
+    /**
+     * Updates the boss's logic and progresses its state
+     * @param input Current game input
+     * @param delta Time since last frame
+     */
     public void looseUpdate(Input input, int delta) {
         super.looseUpdate(input, delta);
 
@@ -106,6 +117,10 @@ public class EnemyBoss extends Enemy {
         elapsedTime += delta;
     }
 
+    /**
+     * Updates the boss's location based on its current state
+     * @param input The current game input
+     */
     public void fixedUpdate(Input input) {
         //Check which state we are in
         switch (currentState) {
@@ -201,6 +216,9 @@ public class EnemyBoss extends Enemy {
         return false;
     }
 
+    /**
+     * Handles collisions with Laser, to allow for it to be damaged
+     */
     public void onCollision(Sprite collidingSprite) {
         //Want to still call super onCollision so that we can create explosions!
         //The boss won't die immediately since it's defined as non-destroyable above
@@ -244,6 +262,9 @@ public class EnemyBoss extends Enemy {
     }
 
 
+    /**
+     * Renders the boss on screen, using a custom rendering technique if the boss has recently been damaged
+     */
     public void render(Graphics graphics) {
         //First we check if we're in our damaged cooldown state
         if(damagedTime <= 0){

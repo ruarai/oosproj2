@@ -1,6 +1,8 @@
 import org.newdawn.slick.Image;
-import org.newdawn.slick.geom.Vector2f;
 
+/**
+ * A specific Particle with some exhaust-like defaults
+ */
 public class ExhaustParticle extends Particle {
 
     private static final float LIFE_DECAY_RATE = 0.001f;
@@ -11,7 +13,12 @@ public class ExhaustParticle extends Particle {
     private static final Vector IMAGE_SIZE = new Vector(8,8);
 
 
-    public ExhaustParticle(Vector location, World parent, Vector force) {
+    /**
+     * @param location The starting location of the ExhaustParticle
+     * @param force The force that the exhaust particles will have added to them
+     * @param parent The parent game world
+     */
+    public ExhaustParticle(Vector location, Vector force, World parent) {
         super(generateImage(), location, parent, RANDOM_SCALE, force.scale(VELOCITY_SCALE));
 
         //Set the life decay rate according to the constant default

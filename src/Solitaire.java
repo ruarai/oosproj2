@@ -1,5 +1,8 @@
 import org.newdawn.slick.Input;
 
+/**
+ * A silly Sprite that moves around on screen, bouncing up and down.
+ */
 public class Solitaire extends Sprite {
 
     private static final float INITIAL_SPEED = 0.5f;

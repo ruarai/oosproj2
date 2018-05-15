@@ -7,8 +7,10 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.stream.Stream;
 
-//A class to simply hold all image files for the game
-//Meaning only one of each file is held in memory
+/**
+ * Static class to hold any resources used by the game, allowing them
+ * to only be read off disk/stored in memory once.
+ */
 class Resources {
     public static Image basicEnemy;
     public static Image basicShooter;
@@ -22,7 +24,6 @@ class Resources {
     public static Image sineEnemy;
     public static Image space;
     public static Image spaceship;
-
 
     public static Image spaceFar;
     public static Image spaceDust;
@@ -39,7 +40,9 @@ class Resources {
 
     private static final int NUM_JAVA_ERRORS = 6;
 
-    //Tries to load in all the resources from disk
+    /**
+     * Tries to load in all the Resources off the disk, must be performed before game begins.
+     */
     public static void loadResources(){
         try {
             basicEnemy = new Image("res/basic-enemy.png");
@@ -74,6 +77,9 @@ class Resources {
         }
     }
 
+    /**
+     * @return A random selection out of the image's of Java Errors
+     */
     public static Image getRandomJavaError(){
         int randInt = Utility.random.nextInt(NUM_JAVA_ERRORS) + 1;
 
@@ -92,6 +98,11 @@ class Resources {
     }
 
 
+    /**
+     * Generates a list of EnemySpawners from the waves.txt file
+     * @param world The parent game world for the created Entities to reference
+     * @return The list of EnemySpawners as dictated by waves.txt
+     */
     public static ArrayList<Entity> loadWaveData(World world){
         ArrayList<Entity> newEntities = new ArrayList<>();
 

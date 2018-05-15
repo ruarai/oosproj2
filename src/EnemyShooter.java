@@ -1,5 +1,8 @@
 import org.newdawn.slick.Input;
 
+/**
+ * Slightly advanced Enemy implementation that moves to a target Y location and shoots at a given frequency.
+ */
 public class EnemyShooter extends Enemy {
 
     private static final float SPEED = 0.2f;
@@ -11,6 +14,10 @@ public class EnemyShooter extends Enemy {
     private static final int SHOT_DELAY = 3500;
 
 
+    /**
+     * @param location The starting location of the EnemyShooter
+     * @param parent The parent game world
+     */
     public EnemyShooter(Vector location, World parent) {
 
         super(Resources.basicShooter, location, parent);
@@ -23,6 +30,11 @@ public class EnemyShooter extends Enemy {
     private int shotDelay = 0;
 
 
+    /**
+     * Handles shooting logic for the EnemyShooter
+     * @param input Current game input
+     * @param delta Time since last frame
+     */
     public void looseUpdate(Input input, int delta) {
         super.looseUpdate(input, delta);
 
@@ -42,6 +54,11 @@ public class EnemyShooter extends Enemy {
             }
         }
     }
+
+    /**
+     * Moves the EnemyShooter down on screen until its target y coordinate is reached
+     * @param input The current game input
+     */
     public void fixedUpdate(Input input) {
         //Are we at our target location yet?
         if(getLocation().y < targetY)

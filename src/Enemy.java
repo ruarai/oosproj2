@@ -1,6 +1,9 @@
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 
+/**
+ * Abstract class that provides basic Enemy logic
+ */
 abstract class Enemy extends Sprite implements Collidable {
     private static final int HIT_EXPLOSION_SIZE = 40;
     private static final int HIT_EXPLOSION_DELAY = 150;
@@ -13,6 +16,11 @@ abstract class Enemy extends Sprite implements Collidable {
 
     private static final float POWERUP_CHANCE = 0.05f;
 
+    /**
+     * @param img The image of the Enemy
+     * @param v The location of the Enemy on the game screen
+     * @param parent The parent game world
+     */
     public Enemy(Image img, Vector v, World parent) {
         super(img, v, parent);
     }
@@ -20,6 +28,11 @@ abstract class Enemy extends Sprite implements Collidable {
     //How long until we should make an explosion again, so as to not make one 60 times a second
     private int explosionDelay = 0;
 
+    /**
+     * Updates the non-physical elements of the Enemy
+     * @param input Current game input
+     * @param delta Time since last frame
+     */
     public void looseUpdate(Input input, int delta) {
         super.looseUpdate(input, delta);
 
@@ -29,13 +42,19 @@ abstract class Enemy extends Sprite implements Collidable {
     }
 
 
-
-    //Returns the score value of the enemy
+    /**
+     * @return The point value of this Enemy when the Player kills it
+     */
     public abstract int getScoreValue();
 
-    //Returns whether the enemy can be destroyed by the players laser shots
+    /**
+     * @return If the Enemy is destroyable by the Player's laser shots
+     */
     public abstract boolean getDestroyable();
 
+    /**
+     * Handles collision with the Player or the Laser
+     */
     public void onCollision(Sprite collidingSprite) {
         //The player death is handled within Player, so we just handle the cool effects
         if(collidingSprite instanceof Player) {
