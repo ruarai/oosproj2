@@ -35,6 +35,9 @@ public class World {
     private static final int FIXED_UPDATE_RATE = 40;
     public static final int FIXED_TIME = 1000 / FIXED_UPDATE_RATE;
 
+    /**
+     * Initialises a new game World
+     */
 	public World() {
 	    //Load in all the imagery
 	    Resources.loadResources();
@@ -71,12 +74,19 @@ public class World {
 	//similarly for removing entities, even allowing entities to remove themselves
     private final ArrayList<Entity> deadEntities = new ArrayList<>();
 
-	//Allows for the addition of entities from outside classes
+    /**
+     * Queues an entity to be added to the game's simulation upon the end of the current update
+     * @param e The entity that is added
+     */
 	public void addEntity(Entity e)
     {
         newEntities.add(e);
     }
 
+    /**
+     * Queues an entity to be removed from the game's simulation upon the end of the current update
+     * @param e The entity removed
+     */
     public void killEntity(Entity e)
     {
         deadEntities.add(e);
@@ -87,6 +97,11 @@ public class World {
     //Simple pause that lets you look at the current blur frame
     private boolean pause = false;
 
+    /**
+     * Performs a single update of the game world
+     * @param input The current user input
+     * @param delta The elapsed time since this method was last called, to ensure consistent simulation
+     */
 	public void update(Input input, int delta) {
 	    delta *= getEntity(GameplayController.class).getCurrentTimeScale();
 
@@ -137,6 +152,10 @@ public class World {
         return solitaireRendering ? SOLITAIRE_BLUR_FILTER : RENDER_BLUR_FILTER;
     }
 
+    /**
+     * Render a single game frame onto the provided Graphics object
+     * @param graphics The Graphics that will be drawn onto
+     */
     public void render(Graphics graphics) {
         //Make sure we're not drawing in some kind of weird way at the moment
         graphics.setDrawMode(Graphics.MODE_NORMAL);
@@ -217,6 +236,9 @@ public class World {
         frameImage.draw(-intensity,0,FILTER_BLUE);
     }
 
+    /**
+     * Activates Solitaire mode. Self explanatory.
+     */
 	public void activateSolitaireMode() {
         //Most important thing, enables solitaire rendering
         solitaireRendering = true;
@@ -271,8 +293,14 @@ public class World {
         }
     }
 
-	//Allows for the creation of an explosion
-    //Obviously very important
+    /**
+     * Creates a particle effect explosion on the screen
+     * @param img The image that will be randomly sampled to create the particles
+     * @param location The point that the particles will be spawned
+     * @param num The number of particles to be created
+     * @param scale The factor that the random movement of the explosion will be scaled by
+     * @param force An added force to create a consistent movement to the particles
+     */
     public void createExplosion(Image img, Vector location, int num, float scale, Vector force)
     {
         /*This is done by generating a some num of particles, where each particle's image is a
@@ -288,8 +316,11 @@ public class World {
         }
     }
 
-    //Generic method that allows us to query the entity list for entities of a certain type 'type'
-    //Really simplifies code elsewhere
+    /**
+     * Returns a list of any entities within the game world of provided type
+     * @param type The type that will be queried against
+     * @return An ArrayList<T> of entities of type 'type'
+     */
     public <T> ArrayList<T> getEntities(Class<T> type)
     {
         ArrayList<T> addedEntities = new ArrayList<>();
@@ -302,8 +333,11 @@ public class World {
         return addedEntities;
     }
 
-    //Similar to above, but only returns a single entity
-    //Useful for singular entities like player/gamecontroller
+    /**
+     * Returns the first entity within the game world of provided type
+     * @param type The type that will be queried against
+     * @return The first entity found of type 'type'
+     */
     public <T> T getEntity(Class<T> type)
     {
         for (Entity e : entities)
