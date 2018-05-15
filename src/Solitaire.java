@@ -10,6 +10,8 @@ public class Solitaire extends Sprite {
 
     private static final float FRICTION_FACTOR = 0.005f;
 
+    private static final float BOUNCE_FACTOR = 0.95f;
+
     private static final float GRAVITY_FACTOR = 0.008f;
     private static final float GRAVITY_DIRECTION = 90f;
 
@@ -37,15 +39,15 @@ public class Solitaire extends Sprite {
         //Make sure we don't fly off the screen, add if we hit an edge, flip our velocity
         if(getLocation().y > App.SCREEN_HEIGHT - getImage().getHeight()){
             setLocation(new Vector(getLocation().x, App.SCREEN_HEIGHT - getImage().getHeight()));
-            setVelocity(new Vector(getVelocity().x, -getVelocity().y));
+            setVelocity(new Vector(getVelocity().x, -getVelocity().y).scale(BOUNCE_FACTOR));
         }
         if(getLocation().x < 0){
             setLocation(new Vector(0,getLocation().y));
-            setVelocity(new Vector(-getVelocity().x, getVelocity().y));
+            setVelocity(new Vector(-getVelocity().x, getVelocity().y).scale(BOUNCE_FACTOR));
         }
         if(getLocation().x > App.SCREEN_WIDTH - getImage().getWidth()){
             setLocation(new Vector(App.SCREEN_WIDTH - getImage().getWidth(), getLocation().y));
-            setVelocity(new Vector(-getVelocity().x, getVelocity().y));
+            setVelocity(new Vector(-getVelocity().x, getVelocity().y).scale(BOUNCE_FACTOR));
         }
     }
 
