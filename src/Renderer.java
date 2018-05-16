@@ -12,11 +12,13 @@ public class Renderer {
 
     private static final boolean RENDER_ONLY_BLUR_FRAME_WHEN_PAUSED = false;
 
+
     //Constants for the chromatic aberration effect
     private static final float CHROMATIC_ABERRATION_SCALE = 15f;
     private static final Color FILTER_RED = new Color(1,0,0,0.333f);
     private static final Color FILTER_GREEN = new Color(0,0.3f,0.7f,0.333f);
     private static final Color FILTER_BLUE = new Color(0,0.7f,0.3f,0.333f);
+    private static final float CONSTANT_ABERRATION_SHIFT = 1;
 
     private static final Color RENDER_BLUR_FILTER = new Color(1,1,1,0.99f);
     //most important feature do not delete (press A to activate)
@@ -108,6 +110,8 @@ public class Renderer {
     private void chromaticAberration(Graphics graphics){
         //Find out our chromatic aberration intensity by taking the screen shake value from the gameplay controller
         float intensity = parentWorld.getEntity(GameplayController.class).getCurrentScreenShake() * CHROMATIC_ABERRATION_SCALE;
+
+        intensity += CONSTANT_ABERRATION_SHIFT;
 
         //Check if we should bother with producing chromatic aberration
         if(intensity <= 0)
