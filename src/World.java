@@ -33,25 +33,27 @@ public class World {
 
 	    renderer = new Renderer(this);
 
-	    //We've made the background transparent so we can render multiple layers for some parallax effect
+	    resetWorld();
+	}
+
+	private void resetWorld(){
+	    entities.clear();
+
+        //We've made the background transparent so we can render multiple layers for some parallax effect
         entities.add(new Background(Resources.spaceDust,BACKGROUND_SCROLL_DUST,this));
         entities.add(new Background(Resources.spaceFar,BACKGROUND_SCROLL_FAR,this));
-	    entities.add(new Background(Resources.space,BACKGROUND_SCROLL_NEAR,this));
+        entities.add(new Background(Resources.space,BACKGROUND_SCROLL_NEAR,this));
 
-	    entities.add(new GameplayController(this));
-	    entities.add(new CollisionManager(this));
-	    entities.add(new Wizard(this));
+        entities.add(new GameplayController(this));
+        entities.add(new CollisionManager(this));
+        entities.add(new Wizard(this));
 
-	    //Create a Player sprite centred on its default location
+        //Create a Player sprite centred on its default location
         entities.add(new Player(PLAYER_LOCATION,this));
 
         //Load in the world from the waves.txt file
         entities.addAll(Resources.loadWaveData(this));
-
-        //entities.add(new EnemyBoss(new Vector(480,0),this));
-        //entities.add(new EnemyJava(new Vector(240,240),this));
-        //entities.add(new EnemyJava(new Vector(480+240,240),this));
-	}
+    }
 
 
 
@@ -101,6 +103,8 @@ public class World {
             renderer.activateSolitaireRendering();
         if(input.isKeyPressed(Input.KEY_P))
             paused = !paused;
+        if(input.isKeyPressed(Input.KEY_R))
+            resetWorld();
 
         //If we're paused, don't update anything
         if(paused)
