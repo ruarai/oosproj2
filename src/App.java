@@ -20,6 +20,8 @@ public class App extends BasicGame {
     /** screen height, in pixels */
     public static final int SCREEN_HEIGHT = 768;
 
+    public static final int TARGET_UPDATE_PER_SECOND = 60;
+
     
     private World world;
 
@@ -59,6 +61,11 @@ public class App extends BasicGame {
         AppGameContainer app = new AppGameContainer(new App());
         app.setShowFPS(true);
         app.setDisplayMode(SCREEN_WIDTH, SCREEN_HEIGHT, false);
+
+        //delta gets weird at high fps if you don't ensure a nice target update rate
+        app.setMaximumLogicUpdateInterval(1000/TARGET_UPDATE_PER_SECOND);
+        app.setMinimumLogicUpdateInterval(1000/TARGET_UPDATE_PER_SECOND);
+
         app.start();
     }
 
