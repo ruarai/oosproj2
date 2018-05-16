@@ -3,11 +3,22 @@ import org.newdawn.slick.Input;
 
 import java.util.ArrayList;
 
+/**
+ * Handles collisions between Collidable sprites
+ */
 public class CollisionManager extends Entity {
+    /**
+     * @param parentWorld The parent game world
+     */
     public CollisionManager(World parentWorld) {
         super(parentWorld);
     }
 
+    /**
+     * Detects and calls onCollision on any colliding Collidables
+     * @param input The current game input
+     * @param delta The time since the last looseUpdate
+     */
     public void looseUpdate(Input input, int delta) {
         //Create a list of all collidable objects
         ArrayList<Collidable> collidables = parentWorld.getEntities(Collidable.class);
@@ -34,7 +45,6 @@ public class CollisionManager extends Entity {
     }
 
 
-    public void render(Graphics graphics) {
-
-    }
+    //No rendering occurs
+    public void render(Graphics graphics) { }
 }
