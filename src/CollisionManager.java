@@ -17,9 +17,8 @@ public class CollisionManager extends Entity {
     /**
      * Detects and calls onCollision on any colliding Collidables
      * @param input The current game input
-     * @param delta The time since the last looseUpdate
      */
-    public void looseUpdate(Input input, int delta) {
+    public void fixedUpdate(Input input) {
         //Create a list of all collidable objects
         ArrayList<Collidable> collidables = parentWorld.getEntities(Collidable.class);
 
