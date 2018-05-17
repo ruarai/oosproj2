@@ -20,7 +20,7 @@ public class World {
 
     //Number of times a second we update the physics
     private static final int FIXED_UPDATE_RATE = 40;
-    private static final int FIXED_TIME = 1000 / FIXED_UPDATE_RATE;
+    public static final int FIXED_TIME = 1000 / FIXED_UPDATE_RATE;
     private static final int MAX_FIXED_UPDATES_PER_UPDATE = 4;
 
     private Renderer renderer;

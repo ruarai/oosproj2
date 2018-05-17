@@ -20,9 +20,6 @@ abstract class Sprite extends Entity {
     //velocity of the sprite
     private Vector velocity = new Vector();
 
-    //velocity of the sprite once adjusted for delta
-    private Vector scaledVelocity = new Vector();
-
     //rotation of the sprite, affect rendering of the sprite
     private float rotation = 0f;
 
@@ -62,7 +59,7 @@ abstract class Sprite extends Entity {
      * @param delta The time since the last looseUpdate
      */
     public void looseUpdate(Input input, int delta) {
-        scaledVelocity = velocity.scale(delta);
+        Vector scaledVelocity = velocity.scale(delta);
         location = location.add(scaledVelocity);
     }
 
@@ -97,8 +94,8 @@ abstract class Sprite extends Entity {
         //Calculate a simple vector that will adjust for the movement made between frames
         //Points in opposite direction of motion and is of length proportional to velocity
         //This really isn't a perfect solution, but helps a lot!
-        float currSpeed = scaledVelocity.getLength();
-        Vector extraBehind = new Vector(getRotation() + DIR_BEHIND).scale(currSpeed);
+        float currSpeed = velocity.getLength();
+        Vector extraBehind = new Vector(getRotation() + DIR_BEHIND).scale(currSpeed * World.FIXED_TIME);
 
 
         //Calculate the four vectors by adding our new perpendicular vectors to our centre

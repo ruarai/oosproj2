@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class Renderer {
 
     //Allow for debug rendering of the bounding boxes of any sprites
-    private static final boolean RENDER_BOUNDING_BOX = false;
+    private static final boolean RENDER_BOUNDING_BOX = true;
 
     private static final boolean RENDER_ONLY_BLUR_FRAME_WHEN_PAUSED = false;
 
