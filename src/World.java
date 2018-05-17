@@ -20,7 +20,8 @@ public class World {
 
     //Number of times a second we update the physics, higher -> things go faster
     private static final int FIXED_UPDATE_RATE = 40;
-    public static final int FIXED_TIME = 1000 / FIXED_UPDATE_RATE;
+    private static final int FIXED_TIME = 1000 / FIXED_UPDATE_RATE;
+    private static final int MAX_FIXED_UPDATES_PER_UPDATE = 4;
 
     private Renderer renderer;
 
@@ -103,8 +104,12 @@ public class World {
             renderer.activateSolitaireRendering();
         if(input.isKeyPressed(Input.KEY_P))
             paused = !paused;
-        if(input.isKeyPressed(Input.KEY_R))
+        if(input.isKeyPressed(Input.KEY_R)){
             resetWorld();
+            renderer.disableSolitaireRendering();
+        }
+        if(input.isKeyPressed(Input.KEY_Q))
+            System.exit(0);
 
         //If we're paused, don't update anything
         if(paused)
@@ -156,6 +161,10 @@ public class World {
 
         if(numPhysicsUpdates > 0)
             timeSinceFixedTimeUpdate = 0;
+
+        //We don't want to perform too many updates, because then we can kind of skip ahead in time too far
+        if(numPhysicsUpdates > MAX_FIXED_UPDATES_PER_UPDATE)
+            numPhysicsUpdates = MAX_FIXED_UPDATES_PER_UPDATE;
 
         for (int i = 0; i < numPhysicsUpdates; i++){
             for(Entity e : entities){

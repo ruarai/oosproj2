@@ -135,8 +135,18 @@ public class Renderer {
         return solitaireRendering ? SOLITAIRE_BLUR_FILTER : RENDER_BLUR_FILTER;
     }
 
+    /**
+     * Enables Solitaire rendering effect
+     */
     public void activateSolitaireRendering(){
         solitaireRendering = true;
+    }
+
+    /**
+     * Disables Solitaire rendering effect
+     */
+    public void disableSolitaireRendering(){
+        solitaireRendering = false;
     }
 
 }
