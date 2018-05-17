@@ -64,11 +64,6 @@ public class App extends BasicGame {
 
         app.setTargetFrameRate(TARGET_FRAME_RATE);
 
-
-
-
-            
-
         app.start();
     }
 
