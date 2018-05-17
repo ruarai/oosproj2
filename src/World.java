@@ -18,7 +18,7 @@ public class World {
     private static final float BACKGROUND_SCROLL_FAR = 0.13f;
     private static final float BACKGROUND_SCROLL_NEAR = 0.17f;
 
-    //Number of times a second we update the physics, higher -> things go faster
+    //Number of times a second we update the physics
     private static final int FIXED_UPDATE_RATE = 40;
     private static final int FIXED_TIME = 1000 / FIXED_UPDATE_RATE;
     private static final int MAX_FIXED_UPDATES_PER_UPDATE = 4;
